@@ -1,14 +1,46 @@
 # main.py
 import time
 import datetime
+import argparse
 from utils.logging_utils import logger
 from browser.tor_browser import setup_tor_browser, test_tor_connection
-from scraper.entities import scrape_all_entities, update_entities_database
-from config.settings import LOCKBIT_MIRRORS, WAIT_TIME
+from scraper.lockbit_parser import LockBitParser
+from scraper.bashe_parser import BasheParser
+from config.settings import SITES
 
-def main():
-    """Main function to scrape LockBit and update the entities database"""
-    logger.info(f"Starting LockBit entity tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+# Parser mapping - each site name maps to its parser class
+PARSER_CLASSES = {
+    "lockbit": LockBitParser,
+    "bashe": BasheParser,
+    # Add more parsers here as they're implemented
+    # "blackcat": BlackCatParser,
+    # "clop": ClopParser,
+}
+
+def main(target_sites=None):
+    """
+    Main function to scrape multiple sites and update their databases
+    
+    Args:
+        target_sites (list): Optional list of site keys to process. If None, process all sites.
+    """
+    logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # If no specific sites requested, process all sites
+    if not target_sites:
+        target_sites = list(SITES.keys())
+    
+    # Validate requested sites
+    for site_key in target_sites:
+        if site_key not in SITES:
+            logger.error(f"Unknown site key: {site_key}. Skipping.")
+            target_sites.remove(site_key)
+    
+    if not target_sites:
+        logger.error("No valid sites to process. Exiting.")
+        return
+    
+    logger.info(f"Will process these sites: {', '.join(target_sites)}")
     
     driver = None
     try:
@@ -21,47 +53,28 @@ def main():
             logger.error("Cannot connect to Tor. Make sure Tor is running on port 9050.")
             return
         
-        # Connect to the site and save raw HTML for debugging
-        for mirror in LOCKBIT_MIRRORS:
-            url = f"http://{mirror}"
-            logger.info(f"Trying LockBit mirror: {mirror}")
+        # Process each site
+        for site_key in target_sites:
+            site_config = SITES[site_key]
+            logger.info(f"Processing site: {site_config['name']}")
             
-            try:
-                driver.get(url)
-                time.sleep(WAIT_TIME)  # Wait for the page to load
+            # Get the appropriate parser class for this site
+            if site_key in PARSER_CLASSES:
+                parser_class = PARSER_CLASSES[site_key]
+                parser = parser_class(driver, site_config)
                 
-                if "LockBit" in driver.page_source:
-                    logger.info(f"Successfully connected to {mirror}")
+                try:
+                    # Scrape the site
+                    html_content = parser.scrape_site()
                     
-                    # Save the raw HTML to a file for debugging
-                    html_content = driver.page_source
-                    with open("lockbit_raw_html.html", "w", encoding="utf-8") as f:
-                        f.write(html_content)
-                    
-                    logger.info("Raw HTML saved to lockbit_raw_html.html")
-                    break  # Exit the loop if we found a working mirror
-                else:
-                    logger.warning(f"Mirror {mirror} did not return LockBit content")
-            except Exception as e:
-                logger.error(f"Error accessing {mirror}: {e}")
-        
-        # Scrape all entities from the LockBit leak site
-        logger.info("Scraping LockBit leak site for all entities...")
-        entities = scrape_all_entities(driver)
-        
-        if not entities:
-            logger.error("No entities found or error occurred while scraping")
-            return
-        
-        # Update the entities database
-        logger.info(f"Found {len(entities)} entities, updating database...")
-        updated_db, added_count, updated_count = update_entities_database(entities)
-        
-        # Report results
-        if added_count > 0 or updated_count > 0:
-            logger.info(f"Successfully updated database: {added_count} new entities, {updated_count} field updates")
-        else:
-            logger.info("No changes detected in the entities list")
+                    if html_content:
+                        logger.info(f"Successfully captured {site_config['name']} site content")
+                    else:
+                        logger.error(f"Failed to capture {site_config['name']} site content")
+                except Exception as e:
+                    logger.error(f"Error processing {site_config['name']}: {e}")
+            else:
+                logger.warning(f"No parser implemented for {site_key}, skipping")
         
     except Exception as e:
         logger.error(f"Error in main function: {e}")
@@ -71,4 +84,10 @@ def main():
             driver.quit()
 
 if __name__ == "__main__":
-    main()
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Ransomware leak site tracker")
+    parser.add_argument('--sites', type=str, nargs='+', help='Specific sites to scrape (e.g., lockbit bashe)')
+    args = parser.parse_args()
+    
+    # Run the main function
+    main(args.sites)
