@@ -39,10 +39,71 @@ def parse_entity(entity_block):
     if domain_elem:
         entity['domain'] = domain_elem.text.strip()
     
-    # Extract status (published or countdown)
-    status_elem = entity_block.select_one('.post-timer-end')
-    if status_elem:
-        entity['status'] = status_elem.text.strip().lower()
+    # First check if there's a timer container
+    timer_container = entity_block.select_one('.post-timer')
+    if timer_container:
+        # This entity has a timer, so it's in countdown status
+        entity['status'] = 'countdown'
+        
+        # Extract the timer spans and parse their values
+        days_span = entity_block.select_one('.timer .days')
+        hours_span = entity_block.select_one('.timer .hours')
+        minutes_span = entity_block.select_one('.timer .minutes')
+        seconds_span = entity_block.select_one('.timer .seconds')
+        
+        countdown = {}
+        
+        if days_span:
+            # Extract just the number from "10D" format
+            days_text = days_span.text.strip()
+            days_match = re.search(r'(\d+)', days_text)
+            if days_match:
+                countdown['days'] = int(days_match.group(1))
+        
+        if hours_span:
+            # Extract just the number from "03h" format
+            hours_text = hours_span.text.strip()
+            hours_match = re.search(r'(\d+)', hours_text)
+            if hours_match:
+                countdown['hours'] = int(hours_match.group(1))
+        
+        if minutes_span:
+            # Extract just the number from "21m" format
+            minutes_text = minutes_span.text.strip()
+            minutes_match = re.search(r'(\d+)', minutes_text)
+            if minutes_match:
+                countdown['minutes'] = int(minutes_match.group(1))
+        
+        if seconds_span:
+            # Extract just the number from "20s" format
+            seconds_text = seconds_span.text.strip()
+            seconds_match = re.search(r'(\d+)', seconds_text)
+            if seconds_match:
+                countdown['seconds'] = int(seconds_match.group(1))
+        
+        if countdown:
+            entity['countdown_remaining'] = countdown
+            
+            # Calculate and store the estimated end date based on current time + countdown
+            if 'days' in countdown and 'hours' in countdown and 'minutes' in countdown and 'seconds' in countdown:
+                current_time = datetime.datetime.now()
+                delta = datetime.timedelta(
+                    days=countdown.get('days', 0),
+                    hours=countdown.get('hours', 0),
+                    minutes=countdown.get('minutes', 0),
+                    seconds=countdown.get('seconds', 0)
+                )
+                end_time = current_time + delta
+                entity['estimated_publish_date'] = end_time.strftime("%Y-%m-%d %H:%M:%S UTC")
+                
+                # Log what we found
+                logger.info(f"Countdown for {entity.get('domain')}: {countdown.get('days', 0)}d {countdown.get('hours', 0)}h {countdown.get('minutes', 0)}m {countdown.get('seconds', 0)}s")
+                logger.info(f"Estimated publish date: {entity['estimated_publish_date']}")
+    else:
+        # No timer container found, check for published status
+        status_elem = entity_block.select_one('.post-timer-end')
+        if status_elem and "d-none" not in status_elem.get('class', []):
+            entity['status'] = status_elem.text.strip().lower()
     
     # Extract description snippet
     desc_elem = entity_block.select_one('.post-block-text')
@@ -141,13 +202,18 @@ def update_entities_database(new_entities):
         else:
             # This is an existing entity, update its fields
             existing = entities_dict[entity_id]
+            changed = False
             
             # Update fields except first_seen
             for key, value in entity.items():
                 if key != 'first_seen':
                     if key not in existing or existing[key] != value:
                         existing[key] = value
-                        updated_count += 1
+                        changed = True
+            
+            if changed:
+                updated_count += 1
+                logger.info(f"Updated entity: {entity.get('domain')}")
     
     # Create updated database
     updated_db = {
