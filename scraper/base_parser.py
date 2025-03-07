@@ -93,4 +93,10 @@ class BaseParser(ABC):
         }
         
         # Save if there were changes
-        if added_
+        if added_count > 0 or updated_count > 0:
+            save_json(updated_db, self.json_file, self.output_dir)
+            logger.info(f"Database updated with {added_count} new entities and {updated_count} field updates")
+        else:
+            logger.info("No changes detected, database remains unchanged")
+        
+        return updated_db, added_count, updated_count
