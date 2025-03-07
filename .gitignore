@@ -175,6 +175,9 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
-website/*
+
 lockbit_raw_html.html
 html_snapshots/*
+.DS_Store
+html_snapshots/bashe/*
+html_snapshots/lockbit/*

@@ -96,31 +96,4 @@ def main(target_sites=None):
         logger.info("Setting up Tor browser...")
         driver = setup_tor_browser()
         
-        # Test Tor connectivity
-        if not test_tor_connection(driver):
-            logger.error("Cannot connect to Tor. Make sure Tor is running on port 9050.")
-            return
-        
-        # Process each requested site
-        for site_key in target_sites:
-            site_config = config_handler.get_site_config(site_key)
-            if site_config:
-                process_site(driver, site_config)
-            else:
-                logger.error(f"Configuration for site {site_key} not found or invalid")
-        
-    except Exception as e:
-        logger.error(f"Error in main function: {e}")
-    finally:
-        # Always close the browser properly
-        if driver:
-            driver.quit()
-
-if __name__ == "__main__":
-    # Parse command line arguments
-    parser = argparse.ArgumentParser(description="Ransomware leak site tracker")
-    parser.add_argument('--sites', type=str, nargs='+', help='Specific sites to scrape (e.g., lockbit bashe)')
-    args = parser.parse_args()
-    
-    # Run the main function
-    main(args.sites)
+        # Test
