@@ -177,3 +177,4 @@ pyrightconfig.json
 
 website/*
 lockbit_raw_html.html
+html_snapshots/*

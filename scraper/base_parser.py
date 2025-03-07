@@ -1,6 +1,7 @@
 # scraper/base_parser.py
 from abc import ABC, abstractmethod
 import datetime
+import os
 from utils.logging_utils import logger
 from utils.file_utils import load_json, save_json
 from browser.tor_browser import get_working_mirror, save_html_snapshot

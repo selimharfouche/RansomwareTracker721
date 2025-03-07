@@ -2,6 +2,10 @@
 import os
 import json
 import argparse
+from pathlib import Path
+
+# Get the project root directory
+PROJECT_ROOT = Path(__file__).parent.absolute()
 
 # Default configurations for sites
 DEFAULT_CONFIGS = {
@@ -290,7 +294,8 @@ def create_site_config(site_key, output_dir):
 def main():
     parser = argparse.ArgumentParser(description='Create site configuration files')
     parser.add_argument('--sites', type=str, nargs='+', help='Sites to create configuration for')
-    parser.add_argument('--output', type=str, default='config/sites', help='Output directory for configuration files')
+    parser.add_argument('--output', type=str, default=os.path.join(PROJECT_ROOT, 'data', 'config', 'sites'), 
+                      help='Output directory for configuration files')
     parser.add_argument('--all', action='store_true', help='Create configuration files for all available sites')
     
     args = parser.parse_args()

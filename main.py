@@ -4,15 +4,24 @@ import time
 import random
 import datetime
 import argparse
+import sys
+from pathlib import Path
+
+# Add the project root to the path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from utils.logging_utils import logger
 from browser.tor_browser import setup_tor_browser, test_tor_connection
 from scraper.generic_parser import GenericParser
 from config.config_handler import ConfigHandler
 
-# Constants
-CONFIG_DIR = "config/sites"
-OUTPUT_DIR = "website/public/data"
-HTML_SNAPSHOTS_DIR = "html_snapshots"
+# Get the project root directory
+PROJECT_ROOT = Path(__file__).parent.absolute()
+
+# Constants with relative paths
+CONFIG_DIR = os.path.join(PROJECT_ROOT, "data", "config", "sites")
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
+HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "html_snapshots")
 
 # Ensure directories exist
 os.makedirs(CONFIG_DIR, exist_ok=True)
@@ -62,7 +71,7 @@ def main(target_sites=None):
     available_sites = config_handler.get_all_site_keys()
     
     if not available_sites:
-        logger.error("No site configurations found. Please add configuration files to the config/sites directory.")
+        logger.error("No site configurations found. Please add configuration files to the data/config/sites directory.")
         return
     
     # If no specific sites requested, process all available sites
