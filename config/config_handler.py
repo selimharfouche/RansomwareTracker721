@@ -78,4 +78,6 @@ class ConfigHandler:
             logger.info(f"Saved configuration for site: {config.get('site_name', site_key)}")
             return True
         
-      
+        except Exception as e:
+            logger.error(f"Error saving config for {site_key}: {e}")
+            return False
