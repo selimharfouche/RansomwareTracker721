@@ -8,11 +8,14 @@ from browser.tor_browser import get_working_mirror, save_html_snapshot
 class BaseParser(ABC):
     """Base class for all site parsers"""
     
-    def __init__(self, driver, site_config):
+    def __init__(self, driver, site_config, output_dir, html_snapshots_dir):
         self.driver = driver
         self.site_config = site_config
-        self.site_name = site_config["name"]
-        self.json_file = site_config["json_file"]
+        self.site_name = site_config["name"] if "name" in site_config else site_config.get("site_name", "Unknown")
+        self.site_key = site_config.get("site_key", "unknown")
+        self.json_file = site_config.get("json_file", f"{self.site_key}_entities.json")
+        self.output_dir = output_dir
+        self.html_snapshots_dir = html_snapshots_dir
     
     def scrape_site(self):
         """Connect to the site, save HTML snapshot, and extract entities"""
@@ -23,7 +26,7 @@ class BaseParser(ABC):
             return None
         
         # Save HTML snapshot for analysis
-        html_file = save_html_snapshot(html_content, self.site_name)
+        html_file = save_html_snapshot(html_content, self.site_key, self.html_snapshots_dir)
         logger.info(f"Saved HTML snapshot to {html_file}")
         
         # Parse entities from HTML content
@@ -44,7 +47,7 @@ class BaseParser(ABC):
     def update_entities_database(self, new_entities):
         """Update the entities database with new information and track changes"""
         # Load existing entities if available
-        existing_entities = load_json(self.json_file)
+        existing_entities = load_json(self.json_file, self.output_dir)
         
         # Convert to dictionary for easier lookup
         entities_dict = {entity.get('id'): entity for entity in existing_entities.get('entities', [])}
@@ -90,7 +93,7 @@ class BaseParser(ABC):
         
         # Save if there were changes
         if added_count > 0 or updated_count > 0:
-            save_json(updated_db, self.json_file)
+            save_json(updated_db, self.json_file, self.output_dir)
             logger.info(f"Database updated with {added_count} new entities and {updated_count} field updates")
         else:
             logger.info("No changes detected, database remains unchanged")

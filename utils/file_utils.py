@@ -1,11 +1,10 @@
 # utils/file_utils.py
 import json
 import os
-from config.settings import OUTPUT_DIR
 
-def load_json(filename):
+def load_json(filename, output_dir):
     """Load JSON data from a file"""
-    filepath = os.path.join(OUTPUT_DIR, filename)
+    filepath = os.path.join(output_dir, filename)
     try:
         with open(filepath, 'r') as f:
             return json.load(f)
@@ -13,8 +12,8 @@ def load_json(filename):
         # Return empty dict if file doesn't exist or is invalid
         return {}
 
-def save_json(data, filename):
+def save_json(data, filename, output_dir):
     """Save JSON data to a file"""
-    filepath = os.path.join(OUTPUT_DIR, filename)
+    filepath = os.path.join(output_dir, filename)
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
