@@ -67,6 +67,9 @@ class ConfigHandler:
         file_path = os.path.join(self.config_dir, filename)
         
         try:
+            # Ensure directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            
             with open(file_path, 'w') as f:
                 json.dump(config, f, indent=2)
             
