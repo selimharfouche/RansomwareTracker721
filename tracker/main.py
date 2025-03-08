@@ -1,22 +1,23 @@
 # tracker/main.py
 import os
 import time
-import random
 import datetime
 import argparse
 import sys
 from pathlib import Path
 
-# Add project root to path to allow importing from tracker modules
+# Add the project root to the path
 PROJECT_ROOT = Path(__file__).parent.parent.absolute()
 sys.path.append(str(PROJECT_ROOT))
 
+# Import Tor manager first
+from tracker.utils.tor_manager import ensure_tor_running
 from tracker.utils.logging_utils import logger
 from tracker.browser.tor_browser import setup_tor_browser, test_tor_connection
 from tracker.scraper.generic_parser import GenericParser
 from tracker.config.config_handler import ConfigHandler
 
-# Define paths relative to project root
+# Constants with relative paths
 CONFIG_DIR = os.path.join(PROJECT_ROOT, "config", "sites")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
 HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "data", "html_snapshots")
@@ -25,10 +26,6 @@ HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "data", "html_snapshots")
 os.makedirs(CONFIG_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(HTML_SNAPSHOTS_DIR, exist_ok=True)
-
-def get_random_wait_time(min_time=10, max_time=20):
-    """Generate a random wait time to appear more human-like"""
-    return random.uniform(min_time, max_time)
 
 def process_site(driver, site_config):
     """Process a single site based on its configuration"""
@@ -63,6 +60,11 @@ def main(target_sites=None):
         target_sites (list): Optional list of site keys to process. If None, process all sites.
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Ensure Tor is running before proceeding
+    if not ensure_tor_running():
+        logger.error("Failed to start Tor. Exiting.")
+        return
     
     # Load site configurations
     config_handler = ConfigHandler(CONFIG_DIR)
