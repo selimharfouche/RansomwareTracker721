@@ -1,3 +1,4 @@
+// src/components/RansomwareGrid.tsx
 'use client';
 
 import React from 'react';
@@ -14,10 +15,10 @@ export default function RansomwareGrid({ sites }: RansomwareGridProps) {
 
   if (!sites || sites.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-100 dark:bg-gray-900 rounded-xl">
+      <div className="flex items-center justify-center h-64 bg-card bg-opacity-50 rounded-xl theme-transition">
         <div className="text-center">
-          <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300">{t('no_data')}</h3>
-          <p className="mt-2 text-gray-500 dark:text-gray-400">
+          <h3 className="text-xl font-medium text-primary">{t('no_data')}</h3>
+          <p className="mt-2 text-secondary">
             {t('no_data_description')}
           </p>
         </div>
