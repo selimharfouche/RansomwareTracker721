@@ -31,6 +31,7 @@ jobs:
 
       - name: Install Firefox and Geckodriver for Selenium
         run: |
+          sudo apt-get update
           sudo apt-get install -y firefox
           wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
           tar -xzf geckodriver-v0.33.0-linux64.tar.gz
@@ -98,14 +99,20 @@ jobs:
 
       - name: Commit and push if there are changes
         run: |
+          # Clean up geckodriver tarball to avoid tracking it
+          rm -f geckodriver-v0.33.0-linux64.tar.gz
+          
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # Add changes to data directory
+          # Add all changes in both config and data directories
+          git add -A config/code/
           git add -A data/
           
-          # Only commit if there are changes
-          git diff-index --quiet HEAD || git commit -m "Auto-update data from scheduled scrape"
-          
-          # Push changes
-          git push
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update data and config from scheduled scrape"
+            git push
+          fi
