@@ -181,6 +181,12 @@ def get_working_mirror(driver, site_config):
 
 def save_html_snapshot(html_content, site_key, html_snapshots_dir):
     """Save HTML content to a timestamped file for analysis"""
+    # Check if saving snapshots is enabled
+    scraping_config = load_scraping_config()
+    if not scraping_config.get("snapshots", {}).get("save_html", False):
+        logger.info("HTML snapshot saving is disabled in configuration. Skipping.")
+        return None
+    
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     site_snapshot_dir = os.path.join(html_snapshots_dir, site_key)
     os.makedirs(site_snapshot_dir, exist_ok=True)
@@ -191,4 +197,56 @@ def save_html_snapshot(html_content, site_key, html_snapshots_dir):
         f.write(html_content)
     
     logger.info(f"Raw HTML saved to {html_filename}")
+    
+    # Cleanup old snapshots if enabled
+    if scraping_config.get("snapshots", {}).get("cleanup_old_snapshots", True):
+        max_snapshots = scraping_config.get("snapshots", {}).get("max_snapshots_per_site", 5)
+        cleanup_old_snapshots(site_snapshot_dir, max_snapshots)
+    
     return html_filename
+
+def cleanup_old_snapshots(snapshot_dir, max_keep=5):
+    """Delete older snapshots to maintain only a fixed number of recent ones"""
+    try:
+        # List all snapshot files in the directory
+        snapshot_files = [f for f in os.listdir(snapshot_dir) if f.endswith('.html')]
+        
+        # If we have more files than the max to keep
+        if len(snapshot_files) > max_keep:
+            # Sort by modification time (oldest first)
+            snapshot_files.sort(key=lambda f: os.path.getmtime(os.path.join(snapshot_dir, f)))
+            
+            # Remove the oldest files
+            for old_file in snapshot_files[:-max_keep]:
+                os.remove(os.path.join(snapshot_dir, old_file))
+                logger.info(f"Removed old snapshot: {old_file}")
+    except Exception as e:
+        logger.error(f"Error cleaning up old snapshots: {e}")
+
+def load_scraping_config():
+    """Load scraping configuration from config file"""
+    PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
+    SCRAPING_CONFIG_PATH = os.path.join(PROJECT_ROOT, "config", "code", "scraping_config.json")
+    
+    try:
+        if not os.path.exists(SCRAPING_CONFIG_PATH):
+            logger.warning(f"Scraping config file not found at {SCRAPING_CONFIG_PATH}. Using default values.")
+            return {
+                "snapshots": {
+                    "save_html": False,
+                    "max_snapshots_per_site": 5,
+                    "cleanup_old_snapshots": True
+                }
+            }
+        
+        with open(SCRAPING_CONFIG_PATH, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading scraping config: {e}. Using default values.")
+        return {
+            "snapshots": {
+                "save_html": False,
+                "max_snapshots_per_site": 5,
+                "cleanup_old_snapshots": True
+            }
+        }

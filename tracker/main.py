@@ -61,10 +61,16 @@ def main(target_sites=None):
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
-    # Ensure Tor is running before proceeding
-    if not ensure_tor_running():
-        logger.error("Failed to start Tor. Exiting.")
-        return
+    # Check if we're running in GitHub Actions
+    in_github_actions = os.environ.get('GITHUB_ACTIONS') == 'true'
+    
+    if not in_github_actions:
+        # Only try to start Tor if we're not in GitHub Actions
+        if not ensure_tor_running():
+            logger.error("Failed to start Tor. Exiting.")
+            return
+    else:
+        logger.info("Running in GitHub Actions environment. Assuming Tor is already running.")
     
     # Load site configurations
     config_handler = ConfigHandler(CONFIG_DIR)
@@ -94,7 +100,7 @@ def main(target_sites=None):
     try:
         # Initialize Selenium with Tor
         logger.info("Setting up Tor browser...")
-        driver = setup_tor_browser()
+        driver = setup_tor_browser(headless=in_github_actions)  # Use headless mode in GitHub Actions
         
         # Test Tor connectivity
         if not test_tor_connection(driver):
@@ -120,6 +126,7 @@ if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Ransomware leak site tracker")
     parser.add_argument('--sites', type=str, nargs='+', help='Specific sites to scrape (e.g., lockbit bashe)')
+    parser.add_argument('--headless', action='store_true', help='Run browser in headless mode')
     args = parser.parse_args()
     
     # Run the main function
