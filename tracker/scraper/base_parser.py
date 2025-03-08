@@ -1,10 +1,11 @@
-# tracker/scraper/base_parser.py
+# scraper/base_parser.py
 from abc import ABC, abstractmethod
 import datetime
+import json
 import os
-from tracker.utils.logging_utils import logger
-from tracker.utils.file_utils import load_json, save_json
-from tracker.browser.tor_browser import get_working_mirror, save_html_snapshot
+from utils.logging_utils import logger
+from utils.file_utils import load_json, save_json
+from browser.tor_browser import get_working_mirror, save_html_snapshot
 
 class BaseParser(ABC):
     """Base class for all site parsers"""
@@ -17,6 +18,7 @@ class BaseParser(ABC):
         self.json_file = site_config.get("json_file", f"{self.site_key}_entities.json")
         self.output_dir = output_dir
         self.html_snapshots_dir = html_snapshots_dir
+        self.new_entities_file = "new_entities.json"
     
     def scrape_site(self):
         """Connect to the site, save HTML snapshot, and extract entities"""
@@ -57,6 +59,9 @@ class BaseParser(ABC):
         added_count = 0
         updated_count = 0
         
+        # Newly discovered entities to be added to the central tracking file
+        newly_discovered = []
+        
         # Process new entities
         for entity in new_entities:
             entity_id = entity.get('id')
@@ -69,6 +74,12 @@ class BaseParser(ABC):
                 entities_dict[entity_id] = entity
                 added_count += 1
                 logger.info(f"New entity added: {entity.get('domain', entity_id)}")
+                
+                # Add to newly discovered list with ransomware group attribution
+                entity_copy = entity.copy()
+                entity_copy['ransomware_group'] = self.site_name
+                entity_copy['group_key'] = self.site_key
+                newly_discovered.append(entity_copy)
             else:
                 # This is an existing entity, update its fields
                 existing = entities_dict[entity_id]
@@ -99,4 +110,62 @@ class BaseParser(ABC):
         else:
             logger.info("No changes detected, database remains unchanged")
         
+        # Update the new_entities.json file if we discovered new entities
+        if newly_discovered:
+            self.update_new_entities_file(newly_discovered)
+        
         return updated_db, added_count, updated_count
+    
+    def update_new_entities_file(self, newly_discovered):
+        """Update the central new_entities.json file with newly discovered entities"""
+        new_entities_path = os.path.join(self.output_dir, self.new_entities_file)
+        
+        # Load existing new entities file or create a new one
+        try:
+            if os.path.exists(new_entities_path):
+                with open(new_entities_path, 'r') as f:
+                    new_entities_db = json.load(f)
+            else:
+                new_entities_db = {
+                    'entities': [],
+                    'last_updated': '',
+                    'total_count': 0
+                }
+        except Exception as e:
+            logger.error(f"Error loading new entities file: {e}. Creating a new one.")
+            new_entities_db = {
+                'entities': [],
+                'last_updated': '',
+                'total_count': 0
+            }
+        
+        # Get existing entities as a dictionary for quick lookup
+        existing_ids = {entity.get('id'): True for entity in new_entities_db.get('entities', [])}
+        
+        # Add new entities if they don't already exist in the file
+        added_to_file = 0
+        for entity in newly_discovered:
+            entity_id = entity.get('id')
+            if entity_id and entity_id not in existing_ids:
+                new_entities_db['entities'].append(entity)
+                existing_ids[entity_id] = True
+                added_to_file += 1
+        
+        # Update metadata
+        if added_to_file > 0:
+            new_entities_db['last_updated'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+            new_entities_db['total_count'] = len(new_entities_db['entities'])
+            
+            # Save the updated file
+            try:
+                # Ensure directory exists
+                os.makedirs(self.output_dir, exist_ok=True)
+                
+                with open(new_entities_path, 'w') as f:
+                    json.dump(new_entities_db, f, indent=4)
+                
+                logger.info(f"Added {added_to_file} new entities to the central tracking file")
+            except Exception as e:
+                logger.error(f"Error saving new entities file: {e}")
+        else:
+            logger.info("No new entities to add to the central tracking file")

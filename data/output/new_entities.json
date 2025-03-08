@@ -1,0 +1,41 @@
+{
+    "entities": [
+        {
+            "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
+            "domain": "mitchellmcnutt.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "4D 15h 39m 38s",
+                "days": 4,
+                "hours": 15,
+                "minutes": 39,
+                "seconds": 38
+            },
+            "updated": "2025-03-06 15:45:25",
+            "estimated_publish_date": "2025-03-13 12:00:00 UTC",
+            "first_seen": "2025-03-08 20:20:22 UTC",
+            "ransomware_group": "RansomHub",
+            "group_key": "ransomhub"
+        },
+        {
+            "id": "post/C1J0mMR9dcwtKgRm67c49364dd1c8",
+            "domain": "gruppocogesi.org",
+            "status": "countdown",
+            "description_preview": "CO.GE.S.I. si \u00e8 specializzata nel supporto tecnico \u2013 amministrativo finalizzato alla definizione delle istanze di condono edilizio e delle istanze edilizie presentate ai sensi del D.p.r. n. 380/2001.",
+            "updated": "02 Mar, 2025,\u00a0\u00a0 17:20 UTC",
+            "views": 3461,
+            "countdown_remaining": {
+                "days": 7,
+                "hours": 19,
+                "minutes": 59,
+                "seconds": 59
+            },
+            "estimated_publish_date": "2025-03-16 16:20:36 UTC",
+            "first_seen": "2025-03-08 20:20:38 UTC",
+            "ransomware_group": "LockBit",
+            "group_key": "lockbit"
+        }
+    ],
+    "last_updated": "2025-03-08 20:20:38 UTC",
+    "total_count": 2
+}
