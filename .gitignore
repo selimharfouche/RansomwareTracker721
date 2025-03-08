@@ -177,3 +177,35 @@ pyrightconfig.json
 
 data/html_snapshots/*
 .DS_Store
+# Ignore geckodriver files
+geckodriver
+geckodriver.log
+*.tar.gz
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ignore environment files
+.env
+.venv
+venv/
+ENV/
