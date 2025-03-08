@@ -209,3 +209,4 @@ var/
 .venv
 venv/
 ENV/
+.dockerignore
