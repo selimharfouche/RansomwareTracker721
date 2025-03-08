@@ -220,35 +220,7 @@ def is_tor_running():
 
 def ensure_tor_running():
     """Ensure Tor is running, starting it if necessary"""
-    # Check if we're running in Docker (common Docker environment variable)
-    in_docker = os.environ.get('RUNNING_IN_DOCKER') == 'true' or os.path.exists('/.dockerenv')
-    
-    # Check if we're running in GitHub Actions
-    in_github_actions = os.environ.get('GITHUB_ACTIONS') == 'true'
-    
-    if in_docker:
-        logger.info("Running in Docker environment. Assuming Tor is managed by supervisord.")
-        if is_tor_running():
-            logger.info("Tor is running in Docker environment.")
-            return True
-        else:
-            logger.error("Tor does not appear to be running in Docker environment.")
-            logger.error("The Tor service should be managed by supervisord.")
-            return False
-    
-    if in_github_actions:
-        logger.info("Running in GitHub Actions environment. Checking if Tor is available...")
-        if is_tor_running():
-            return True
-        else:
-            logger.error("Tor does not appear to be running in GitHub Actions environment")
-            return False
-    
-    # Normal flow for non-Docker, non-GitHub environments
     if is_tor_running():
-        logger.info("Tor is already running.")
         return True
     
-    # If Tor is not running, try to start it
-    logger.info("Tor is not running. Attempting to start it...")
     return start_tor()
