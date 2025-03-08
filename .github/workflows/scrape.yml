@@ -11,7 +11,7 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  
+      contents: write  #
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,13 +31,16 @@ jobs:
           sleep 5  # Give Tor time to start
           netstat -tulpn | grep 9050 || echo "Warning: Tor might not be running on port 9050"
 
-      - name: Install Firefox and Geckodriver for Selenium
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: 'latest'
+
+      - name: Install Geckodriver
         run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox
-          # Install a compatible geckodriver version (0.36.0) for Firefox 136
-          wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz
-          tar -xzf geckodriver-v0.36.0-linux64.tar.gz
+          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '"' -f 4)
+          wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz
+          tar -xzf geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz
           sudo mv geckodriver /usr/local/bin/
           geckodriver --version
 
@@ -75,7 +78,7 @@ jobs:
             }
           }' > config/code/proxy_config.json
           
-          # Create browser_config.json
+          # Create browser_config.json with Firefox binary path
           echo '{
             "timing": {
               "min_wait_time": 10,
@@ -87,8 +90,15 @@ jobs:
               "enabled": true,
               "randomize_timing": true
             },
-            "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
+            "firefox_binary": "'$(which firefox)'"
           }' > config/code/browser_config.json
+          
+          # Print Firefox and Geckodriver information for debugging
+          echo "Firefox path: $(which firefox)"
+          firefox --version
+          echo "Geckodriver path: $(which geckodriver)"
+          geckodriver --version
 
       - name: Run scraper
         run: |
@@ -96,8 +106,9 @@ jobs:
           mkdir -p data/output
           mkdir -p data/html_snapshots
           
-          # Run the scraper
+          # Run the scraper with verbose output
           cd tracker
+          python -c "import os; print(os.environ.get('GITHUB_ACTIONS')); print('Is GitHub Actions:', os.environ.get('GITHUB_ACTIONS') == 'true')"
           python main.py
 
       - name: Commit and push if there are changes

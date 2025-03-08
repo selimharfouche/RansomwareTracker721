@@ -57,10 +57,19 @@ BROWSER_CONFIG = load_browser_config()
 def setup_tor_browser(headless=False):
     """Configure Firefox to use Tor"""
     options = Options()
+    
+    # Get proxy settings from config
+    proxy = PROXY_CONFIG.get("proxy", {})
+    proxy_type = proxy.get("type", "socks")
+    proxy_host = proxy.get("host", "127.0.0.1")
+    proxy_port = proxy.get("port", 9050)
+    remote_dns = proxy.get("remote_dns", True)
+    
+    # Set proxy preferences
     options.set_preference('network.proxy.type', 1)
-    options.set_preference('network.proxy.socks', '127.0.0.1')
-    options.set_preference('network.proxy.socks_port', 9050)
-    options.set_preference('network.proxy.socks_remote_dns', True)
+    options.set_preference('network.proxy.socks', proxy_host)
+    options.set_preference('network.proxy.socks_port', proxy_port)
+    options.set_preference('network.proxy.socks_remote_dns', remote_dns)
     
     # Get user agent from config
     user_agent = BROWSER_CONFIG.get("user_agent", "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0")
@@ -78,8 +87,24 @@ def setup_tor_browser(headless=False):
     if headless:
         options.add_argument("--headless")
     
+    # Check for GitHub Actions environment
+    in_github_actions = os.environ.get('GITHUB_ACTIONS') == 'true'
+    
+    # If we're in GitHub Actions and have a firefox binary path, use it
+    firefox_binary = None
+    if in_github_actions and "firefox_binary" in BROWSER_CONFIG:
+        firefox_binary_path = BROWSER_CONFIG.get("firefox_binary")
+        if firefox_binary_path and os.path.exists(firefox_binary_path):
+            from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+            firefox_binary = FirefoxBinary(firefox_binary_path)
+            logger.info(f"Using Firefox binary at: {firefox_binary_path}")
+    
     # Create the driver
-    driver = webdriver.Firefox(options=options)
+    if firefox_binary:
+        options.binary = firefox_binary
+        driver = webdriver.Firefox(options=options)
+    else:
+        driver = webdriver.Firefox(options=options)
     
     # Set page load timeout from config
     page_load_timeout = BROWSER_CONFIG.get("timing", {}).get("page_load_timeout", 120)
