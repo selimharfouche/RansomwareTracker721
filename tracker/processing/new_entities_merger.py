@@ -2,9 +2,12 @@
 """
 New Entities Merger Script
 
-This script specifically merges newly discovered entities from all ransomware groups
-into a standardized format and saves the result as new_entities_merged.json in the
-data/processed directory.
+This script:
+1. Processes the central new_entities.json file from the output directory
+2. Standardizes all entities and saves them to new_entities_merged.json in the processed directory
+3. Resets the original new_entities.json file by emptying its entities array
+
+The script ensures all entities have a consistent format with standardized fields.
 """
 
 import os
@@ -28,9 +31,9 @@ OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# The expected new entities file name
-NEW_ENTITIES_FILE = "new_entities.json"
-OUTPUT_FILE = "new_entities_merged.json"
+# Define file paths
+INPUT_FILE = os.path.join(INPUT_DIR, "new_entities.json")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "new_entities_merged.json")
 
 # Define the fields we want to standardize across all entities
 STANDARD_FIELDS = [
@@ -78,7 +81,7 @@ def save_json_file(data, file_path):
         logger.error(f"Error saving to {file_path}: {e}")
         return False
 
-def standardize_entity(entity, group_key=None, group_name=None):
+def standardize_entity(entity):
     """
     Standardize an entity by ensuring all required fields exist.
     Missing fields are set to null.
@@ -91,13 +94,6 @@ def standardize_entity(entity, group_key=None, group_name=None):
             standardized[field] = entity[field]
         else:
             standardized[field] = None
-    
-    # Add group attribution if not present and provided
-    if standardized["group_key"] is None and group_key:
-        standardized["group_key"] = group_key
-    
-    if standardized["ransomware_group"] is None and group_name:
-        standardized["ransomware_group"] = group_name
     
     # For countdown_remaining, ensure it's a dictionary with standard fields if present
     if standardized["countdown_remaining"] is not None:
@@ -120,59 +116,79 @@ def standardize_entity(entity, group_key=None, group_name=None):
     
     return standardized
 
+def reset_central_file():
+    """Reset the central new_entities.json file by emptying its entities array."""
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+    empty_db = {
+        'entities': [],
+        'last_updated': current_time,
+        'total_count': 0
+    }
+    
+    return save_json_file(empty_db, INPUT_FILE)
+
 def process_new_entities():
     """
-    Process the new_entities.json file and standardize all entities within it.
+    Process the central new_entities.json file, standardize all entities,
+    save them to the output file, and reset the original file.
     """
-    # Check if the new entities file exists
-    new_entities_path = os.path.join(INPUT_DIR, NEW_ENTITIES_FILE)
-    
-    if not os.path.exists(new_entities_path):
-        logger.warning(f"New entities file not found: {new_entities_path}")
+    # Check if the input file exists
+    if not os.path.exists(INPUT_FILE):
+        logger.warning(f"Input file not found: {INPUT_FILE}")
         return False
     
-    # Load the new entities file
-    data = load_json_file(new_entities_path)
+    # Load the input file
+    data = load_json_file(INPUT_FILE)
     
     if not data or "entities" not in data:
-        logger.warning(f"No valid entities found in {NEW_ENTITIES_FILE}")
+        logger.warning(f"No valid entities found in {INPUT_FILE}")
         return False
     
-    # Process all entities in the file
-    standardized_entities = []
+    # Check if there are entities to process
+    if not data["entities"]:
+        logger.info(f"No entities found in {INPUT_FILE}, nothing to process")
+        return True
     
-    logger.info(f"Processing {len(data['entities'])} new entities")
+    # Process all entities
+    standardized_entities = []
+    entity_count = 0
+    
+    logger.info(f"Processing {len(data['entities'])} entities from {INPUT_FILE}")
     
     for entity in data["entities"]:
         # Only process if we have a valid entity with at least an ID and domain
         if isinstance(entity, dict) and "id" in entity and "domain" in entity:
-            # The new_entities.json should already have group attribution,
-            # but we'll extract it to use as a fallback if needed
-            group_key = entity.get("group_key")
-            group_name = entity.get("ransomware_group")
-            
-            standardized = standardize_entity(entity, group_key, group_name)
+            standardized = standardize_entity(entity)
             standardized_entities.append(standardized)
+            entity_count += 1
     
     # Create the merged file
     if standardized_entities:
         merged_data = {
             "entities": standardized_entities,
             "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC"),
-            "total_count": len(standardized_entities)
+            "total_count": entity_count
         }
         
-        # Save to the output directory
-        output_path = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
-        save_json_file(merged_data, output_path)
-        
-        logger.info(f"Successfully processed {len(standardized_entities)} new entities")
-        return True
+        # Save to the output file
+        if save_json_file(merged_data, OUTPUT_FILE):
+            logger.info(f"Successfully processed {entity_count} entities")
+            
+            # Reset the central file
+            if reset_central_file():
+                logger.info(f"Successfully reset the central file {INPUT_FILE}")
+            else:
+                logger.error(f"Failed to reset the central file {INPUT_FILE}")
+            
+            return True
+        else:
+            logger.error(f"Failed to save to {OUTPUT_FILE}")
+            return False
     else:
-        logger.warning("No valid entities found to process")
+        logger.warning("No valid entities to process")
         return False
 
 if __name__ == "__main__":
-    logger.info("Starting new entities merging process")
+    logger.info("Starting new entities processing")
     process_new_entities()
-    logger.info("New entities merging process completed")
+    logger.info("New entities processing completed")
