@@ -2,11 +2,57 @@
 import time
 import os
 import datetime
+import json
+import random
+from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from tracker.utils.logging_utils import logger
 
+# Get the project root directory
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
+BROWSER_CONFIG_PATH = os.path.join(PROJECT_ROOT, "config", "code", "browser_config.json")
+
+def load_browser_config():
+    """Load browser configuration from config file"""
+    try:
+        if not os.path.exists(BROWSER_CONFIG_PATH):
+            logger.warning(f"Browser config file not found at {BROWSER_CONFIG_PATH}. Using default values.")
+            return {
+                "timing": {
+                    "min_wait_time": 10,
+                    "max_wait_time": 20,
+                    "tor_check_wait_time": 3,
+                    "page_load_timeout": 120
+                },
+                "anti_bot": {
+                    "enabled": True,
+                    "randomize_timing": True
+                },
+                "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
+            }
+        
+        with open(BROWSER_CONFIG_PATH, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading browser config: {e}. Using default values.")
+        return {
+            "timing": {
+                "min_wait_time": 10,
+                "max_wait_time": 20,
+                "tor_check_wait_time": 3,
+                "page_load_timeout": 120
+            },
+            "anti_bot": {
+                "enabled": True,
+                "randomize_timing": True
+            },
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
+        }
+
+# Load browser configuration
+BROWSER_CONFIG = load_browser_config()
 
 def setup_tor_browser(headless=False):
     """Configure Firefox to use Tor"""
@@ -16,8 +62,11 @@ def setup_tor_browser(headless=False):
     options.set_preference('network.proxy.socks_port', 9050)
     options.set_preference('network.proxy.socks_remote_dns', True)
     
+    # Get user agent from config
+    user_agent = BROWSER_CONFIG.get("user_agent", "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0")
+    
     # Additional settings to make us look more like a normal browser
-    options.set_preference('general.useragent.override', 'Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0')
+    options.set_preference('general.useragent.override', user_agent)
     options.set_preference('javascript.enabled', True)
     options.set_preference('dom.webnotifications.enabled', False)
     options.set_preference('app.shield.optoutstudies.enabled', False)
@@ -31,7 +80,10 @@ def setup_tor_browser(headless=False):
     
     # Create the driver
     driver = webdriver.Firefox(options=options)
-    driver.set_page_load_timeout(120)  # Longer timeout for onion sites
+    
+    # Set page load timeout from config
+    page_load_timeout = BROWSER_CONFIG.get("timing", {}).get("page_load_timeout", 120)
+    driver.set_page_load_timeout(page_load_timeout)
     
     return driver
 
@@ -39,7 +91,11 @@ def test_tor_connection(driver):
     """Test if we can connect through Tor"""
     try:
         driver.get('https://check.torproject.org/')
-        time.sleep(3)  # Give page time to load
+        
+        # Get wait time from config
+        tor_check_wait_time = BROWSER_CONFIG.get("timing", {}).get("tor_check_wait_time", 3)
+        time.sleep(tor_check_wait_time)  # Give page time to load
+        
         if "Congratulations" in driver.page_source:
             logger.info("Successfully connected to Tor!")
             return True
@@ -50,26 +106,38 @@ def test_tor_connection(driver):
         logger.error(f"Failed to connect to Tor: {e}")
         return False
 
+def get_wait_time():
+    """Get a wait time based on configuration settings"""
+    timing_config = BROWSER_CONFIG.get("timing", {})
+    anti_bot_config = BROWSER_CONFIG.get("anti_bot", {})
+    
+    min_wait_time = timing_config.get("min_wait_time", 10)
+    max_wait_time = timing_config.get("max_wait_time", 20)
+    
+    if anti_bot_config.get("enabled", True) and anti_bot_config.get("randomize_timing", True):
+        return random.uniform(min_wait_time, max_wait_time)
+    else:
+        return min_wait_time
+
 def browse_with_selenium(driver, url, site_config, wait_time=None):
     """Browse to a URL with Selenium, handling anti-bot measures"""
-    import random
-    
     site_name = site_config.get('site_name', 'Unknown')
     site_verification = site_config.get('site_verification', {})
     verification_type = site_verification.get('type', 'text')
     verification_value = site_verification.get('value', '')
     
-    # Use random wait time if not specified
+    # Use configured wait time if not specified
     if wait_time is None:
-        wait_time = random.uniform(10, 20)
+        wait_time = get_wait_time()
     
     try:
         logger.info(f"Navigating to {url}...")
         driver.get(url)
         
-        # Wait for initial page load to handle anti-bot measures
-        logger.info(f"Waiting {wait_time:.2f} seconds for anti-bot measures...")
-        time.sleep(wait_time)
+        # Only wait if anti-bot measures are enabled
+        if BROWSER_CONFIG.get("anti_bot", {}).get("enabled", True):
+            logger.info(f"Waiting {wait_time:.2f} seconds for anti-bot measures...")
+            time.sleep(wait_time)
         
         # Check if the page has content we expect based on verification type
         if verification_type == 'text':
