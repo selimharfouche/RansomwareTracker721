@@ -10,20 +10,10 @@
             "first_seen": "2025-03-08 21:47:55 UTC",
             "ransomware_group": "LockBit",
             "group_key": "lockbit"
-        },
-        {
-            "id": "40",
-            "domain": "trifecta.com",
-            "status": "published",
-            "country": "USA",
-            "description_preview": "Information: Trifecta is a trusted advisor for some of the most widely recognized and successful ...",
-            "updated": "2024/04/05 07:37:45",
-            "views": 65799,
-            "first_seen": "2025-03-08 21:51:12 UTC",
-            "ransomware_group": "Bashe",
-            "group_key": "bashe"
         }
     ],
-    "last_updated": "2025-03-08 21:51:12 UTC",
-    "total_count": 2
+    "last_updated": "2025-03-08 21:47:55 UTC",
+    "total_count": 1,
+    "ransomware_group": "LockBit",
+    "group_key": "lockbit"
 }
