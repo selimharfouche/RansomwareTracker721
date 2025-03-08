@@ -1,4 +1,4 @@
-# tracker/scraper/generic_parser.py 
+# tracker/scraper/generic_parser.py
 import re
 import datetime
 from bs4 import BeautifulSoup
@@ -73,7 +73,7 @@ class GenericParser(BaseParser):
                 else:
                     logger.warning(f"Error extracting field '{field_name}': {e}")
         
-        # Add timestamp for countdown entities
+        # Add timestamp for countdown entities (for sites like LockBit)
         if 'status' in entity and entity['status'] == 'countdown' and 'countdown_remaining' in entity:
             countdown = entity['countdown_remaining']
             if all(key in countdown for key in ['days', 'hours', 'minutes', 'seconds']):
@@ -90,6 +90,67 @@ class GenericParser(BaseParser):
                 except Exception as e:
                     logger.warning(f"Error calculating estimated publish date: {e}")
         
+        # Special handler for RansomHub's countdown format (e.g., "5D 21h 16m 8s")
+        if 'status' in entity and entity['status'] == 'countdown' and 'countdown_remaining' in entity:
+            countdown = entity['countdown_remaining']
+            if 'countdown_text' in countdown:
+                try:
+                    countdown_text = countdown['countdown_text']
+                    
+                    # Extract days, hours, minutes, seconds using regex patterns
+                    days = 0
+                    hours = 0
+                    minutes = 0
+                    seconds = 0
+                    
+                    days_match = re.search(r'(\d+)D', countdown_text)
+                    if days_match:
+                        days = int(days_match.group(1))
+                        
+                    hours_match = re.search(r'(\d+)h', countdown_text)
+                    if hours_match:
+                        hours = int(hours_match.group(1))
+                        
+                    minutes_match = re.search(r'(\d+)m', countdown_text)
+                    if minutes_match:
+                        minutes = int(minutes_match.group(1))
+                        
+                    seconds_match = re.search(r'(\d+)s', countdown_text)
+                    if seconds_match:
+                        seconds = int(seconds_match.group(1))
+                    
+                    # Update countdown object with parsed values
+                    countdown['days'] = days
+                    countdown['hours'] = hours
+                    countdown['minutes'] = minutes
+                    countdown['seconds'] = seconds
+                    
+                    # Calculate the estimated publish date
+                    current_time = datetime.datetime.now()
+                    delta = datetime.timedelta(
+                        days=days,
+                        hours=hours,
+                        minutes=minutes,
+                        seconds=seconds
+                    )
+                    end_time = current_time + delta
+                    entity['estimated_publish_date'] = end_time.strftime("%Y-%m-%d %H:%M:%S UTC")
+                    
+                    logger.info(f"Parsed RansomHub countdown: {countdown_text} → {entity['estimated_publish_date']}")
+                except Exception as e:
+                    logger.warning(f"Error parsing RansomHub countdown format: {e}")
+        
+        # For sites that provide an exact countdown date (like some other sites might)
+        if 'status' in entity and entity['status'] == 'countdown' and 'countdown_date' in entity:
+            try:
+                countdown_date = entity['countdown_date']
+                # Parse the date string (assuming YYYY-MM-DD HH:MM:SS format)
+                date_obj = datetime.datetime.strptime(countdown_date, "%Y-%m-%d %H:%M:%S")
+                # Format with UTC suffix
+                entity['estimated_publish_date'] = date_obj.strftime("%Y-%m-%d %H:%M:%S UTC")
+            except Exception as e:
+                logger.warning(f"Error parsing countdown date: {e}")
+        
         return entity
     
     def _extract_text_field(self, entity, entity_block, field_config):
@@ -99,6 +160,22 @@ class GenericParser(BaseParser):
         regex = field_config.get('regex')
         regex_group = field_config.get('regex_group', 0)
         convert = field_config.get('convert')
+        
+        # Check for condition if present
+        condition = field_config.get('condition')
+        if condition:
+            cond_selector = condition.get('selector')
+            cond_exists = condition.get('exists', True)
+            
+            # Handle 'self' selector for condition
+            if cond_selector == 'self':
+                element = entity_block
+            else:
+                element = entity_block.select_one(cond_selector)
+            
+            # Skip if condition not met
+            if (cond_exists and not element) or (not cond_exists and element):
+                return
         
         # Handle 'self' selector specially
         if selector == 'self':
