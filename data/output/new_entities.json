@@ -1,29 +1,5 @@
 {
-    "entities": [
-        {
-            "id": "post/QOw8kGIJW4FPxkr466b8a2bd9afc4",
-            "domain": "equinoxinc.org",
-            "status": "published",
-            "description_preview": "Equinox serves adolescents and adults struggling with chemical dependency; survivors of domestic violence and their children as well as elderly victims of domestic abuse; adolescents and adults, along with their families, who are living with mental i...",
-            "updated": "11 Aug, 2024,\u00a0\u00a0 11:38 UTC",
-            "views": 23933,
-            "first_seen": "2025-03-08 21:47:55 UTC",
-            "ransomware_group": "LockBit",
-            "group_key": "lockbit"
-        },
-        {
-            "id": "40",
-            "domain": "trifecta.com",
-            "status": "published",
-            "country": "USA",
-            "description_preview": "Information: Trifecta is a trusted advisor for some of the most widely recognized and successful ...",
-            "updated": "2024/04/05 07:37:45",
-            "views": 65799,
-            "first_seen": "2025-03-08 21:51:12 UTC",
-            "ransomware_group": "Bashe",
-            "group_key": "bashe"
-        }
-    ],
-    "last_updated": "2025-03-08 21:51:12 UTC",
-    "total_count": 2
+  "entities": [],
+  "last_updated": "2025-03-08 21:58:09 UTC",
+  "total_count": 0
 }
