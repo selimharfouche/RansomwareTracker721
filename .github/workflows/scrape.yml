@@ -11,7 +11,7 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  #
+      contents: write  # This grants permission to write to the repository
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -51,8 +51,10 @@ jobs:
 
       - name: Configure for GitHub Actions
         run: |
-          # Create scraping_config.json to disable HTML snapshots
-          mkdir -p config/code
+          # Create temporary GitHub Actions configuration
+          mkdir -p /tmp/github_configs/code
+          
+          # Create scraping_config.json for GitHub Actions (but don't overwrite repo version)
           echo '{
             "snapshots": {
               "save_html": false,
@@ -63,9 +65,9 @@ jobs:
               "frequency_hours": 6,
               "randomize_start_time": true
             }
-          }' > config/code/scraping_config.json
+          }' > /tmp/github_configs/code/scraping_config.json
           
-          # Create proxy_config.json to use GitHub Actions Tor
+          # Create proxy_config.json for GitHub Actions
           echo '{
             "proxy": {
               "type": "socks",
@@ -76,7 +78,7 @@ jobs:
             "tor": {
               "auto_start": false
             }
-          }' > config/code/proxy_config.json
+          }' > /tmp/github_configs/code/proxy_config.json
           
           # Create browser_config.json with Firefox binary path
           echo '{
@@ -92,7 +94,7 @@ jobs:
             },
             "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
             "firefox_binary": "'$(which firefox)'"
-          }' > config/code/browser_config.json
+          }' > /tmp/github_configs/code/browser_config.json
           
           # Print Firefox and Geckodriver information for debugging
           echo "Firefox path: $(which firefox)"
@@ -106,27 +108,28 @@ jobs:
           mkdir -p data/output
           mkdir -p data/html_snapshots
           
+          # Export environment variable to point to temporary config
+          export GITHUB_CONFIG_PATH="/tmp/github_configs"
+          
           # Run the scraper with verbose output
           cd tracker
-          python -c "import os; print(os.environ.get('GITHUB_ACTIONS')); print('Is GitHub Actions:', os.environ.get('GITHUB_ACTIONS') == 'true')"
           python main.py
 
       - name: Commit and push if there are changes
         run: |
-          # Clean up geckodriver tarball to avoid tracking it
+          # Clean up geckodriver tarball
           rm -f geckodriver-*.tar.gz
           
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # Add all changes in both config and data directories
-          git add -A config/code/
+          # Only commit changes to data directory, not config
           git add -A data/
           
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-update data and config from scheduled scrape"
+            git commit -m "Auto-update data from scheduled scrape"
             git push
           fi

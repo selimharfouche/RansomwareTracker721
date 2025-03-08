@@ -4,6 +4,7 @@ import datetime
 from bs4 import BeautifulSoup
 from tracker.scraper.base_parser import BaseParser
 from tracker.utils.logging_utils import logger
+
 class GenericParser(BaseParser):
     """Generic parser that uses configuration to parse any site"""
     
