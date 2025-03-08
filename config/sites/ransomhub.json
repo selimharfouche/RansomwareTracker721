@@ -1,0 +1,94 @@
+{
+    "site_key": "ransomhub",
+    "site_name": "RansomHub",
+    "json_file": "ransomhub_entities.json",
+    "mirrors": [
+      "ransomxifxwc5eteopdobynonjctkxxvap77yqifu2emfbecgbqdw6qd.onion"
+    ],
+    "site_verification": {
+      "type": "text",
+      "value": "RansomHub"
+    },
+    "parsing": {
+      "entity_selector": "a.index-anchor",
+      "fields": [
+        {
+          "name": "id",
+          "type": "attribute",
+          "selector": "self",
+          "attribute": "href",
+          "regex": "^(.+?)/$",
+          "regex_group": 1
+        },
+        {
+          "name": "domain",
+          "type": "text",
+          "selector": ".card-title strong"
+        },
+        {
+          "name": "status",
+          "type": "conditional",
+          "conditions": [
+            {
+              "selector": ".post-status-timer",
+              "exists": true,
+              "value": "countdown"
+            },
+            {
+              "selector": ".post-status-published",
+              "exists": true,
+              "value": "published"
+            }
+          ],
+          "default": "unknown"
+        },
+        {
+          "name": "countdown_remaining",
+          "type": "complex",
+          "condition": {
+            "selector": ".post-status-timer",
+            "exists": true
+          },
+          "fields": [
+            {
+              "name": "countdown_text",
+              "type": "text",
+              "selector": ".countdown-date",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "visits",
+          "type": "text",
+          "selector": ".card-body p",
+          "regex": "Visits: (\\d+)",
+          "regex_group": 1,
+          "convert": "int",
+          "optional": true
+        },
+        {
+          "name": "data_size",
+          "type": "text",
+          "selector": ".card-body p",
+          "regex": "Data Size: ([\\d\\.]+ \\w+)",
+          "regex_group": 1,
+          "optional": true
+        },
+        {
+          "name": "last_view",
+          "type": "text",
+          "selector": ".card-body p",
+          "regex": "Last View: ([\\d\\-\\s\\:]+)",
+          "regex_group": 1,
+          "optional": true
+        },
+        {
+          "name": "updated",
+          "type": "text",
+          "selector": ".card-footer",
+          "optional": true
+        }
+      ]
+    }
+  }
