@@ -1,3 +1,4 @@
+// src/contexts/LanguageContext.tsx
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -24,7 +25,6 @@ const translations = {
     'language': 'Language',
     'light': 'Light',
     'dark': 'Dark',
-    'system': 'System',
     'no_data': 'No data available',
     'no_data_description': 'No ransomware data has been found. Make sure the data directory exists and has JSON files.',
     'unknown': 'Unknown',
@@ -42,7 +42,6 @@ const translations = {
     'language': 'Langue',
     'light': 'Clair',
     'dark': 'Sombre',
-    'system': 'Système',
     'no_data': 'Aucune donnée disponible',
     'no_data_description': 'Aucune donnée de ransomware n\'a été trouvée. Assurez-vous que le répertoire de données existe et contient des fichiers JSON.',
     'unknown': 'Inconnu',
@@ -62,16 +61,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   // Load saved language preference
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language | null;
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fr')) {
-      setLanguage(savedLanguage);
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language') as Language | null;
+      if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fr')) {
+        setLanguage(savedLanguage);
+      }
     }
   }, []);
 
   // Save language preference when it changes
   useEffect(() => {
-    localStorage.setItem('language', language);
-    document.documentElement.lang = language;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', language);
+      document.documentElement.lang = language;
+    }
   }, [language]);
 
   return (

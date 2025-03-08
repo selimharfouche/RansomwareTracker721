@@ -1,8 +1,9 @@
+// src/contexts/ThemeContext.tsx
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
@@ -12,33 +13,47 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Default to system theme
-  const [theme, setTheme] = useState<Theme>('system');
-
-  // Apply theme changes
-  useEffect(() => {
+  const [theme, setTheme] = useState<Theme>('light');
+  
+  // Function to update document with the correct theme
+  const updateDocumentClass = useCallback((theme: Theme) => {
+    if (typeof window === 'undefined') return;
+    
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
     
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
+    // Remove both theme classes first
+    root.classList.remove('light');
+    root.classList.remove('dark');
     
-    // Save theme preference
+    // Add the current theme class
+    root.classList.add(theme);
+    
+    // Update color scheme for system integration
+    root.style.colorScheme = theme;
+  }, []);
+  
+  // Effect to handle theme changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    // Set the theme based on user preference
+    updateDocumentClass(theme);
+    
+    // Save theme to localStorage
     localStorage.setItem('theme', theme);
-  }, [theme]);
-
+  }, [theme, updateDocumentClass]);
+  
   // Load saved theme on initial render
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
+    if (savedTheme && ['light', 'dark'].includes(savedTheme)) {
       setTheme(savedTheme);
+      updateDocumentClass(savedTheme);
     }
-  }, []);
-
+  }, [updateDocumentClass]);
+  
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}

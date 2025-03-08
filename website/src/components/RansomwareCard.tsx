@@ -1,3 +1,4 @@
+// src/components/RansomwareCard.tsx
 'use client';
 
 import React from 'react';
@@ -33,32 +34,32 @@ export default function RansomwareCard({ site }: RansomwareCardProps) {
   };
   
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
+    <div className="bg-card rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl theme-transition">
       <div className="p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">{name}</h2>
-          <span className="px-3 py-1 text-sm rounded-full bg-ransomware-600 text-white font-medium">
+          <h2 className="text-2xl font-bold text-primary mb-2">{name}</h2>
+          <span className="px-3 py-1 text-sm rounded-full bg-ransomware font-medium">
             {data.total_count} {t('entities')}
           </span>
         </div>
         
         <div className="mt-4 space-y-3">
           <div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">{t('latest_target')}</div>
+            <div className="text-sm text-secondary">{t('latest_target')}</div>
             {latestTarget ? (
-              <div className="font-mono text-lg font-semibold text-ransomware-700 dark:text-ransomware-300">
+              <div className="font-mono text-lg font-semibold text-ransomware">
                 {latestTarget.domain}
               </div>
             ) : (
-              <div className="font-mono text-lg text-gray-400 dark:text-gray-500">{t('no_targets')}</div>
+              <div className="font-mono text-lg text-tertiary">{t('no_targets')}</div>
             )}
           </div>
           
-          <div className="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex justify-between items-center border-t border-theme pt-3 mt-3">
+            <div className="text-sm text-secondary">
               {t('status')}: {latestTarget?.status || t('unknown')}
             </div>
-            <div className="text-xs text-gray-400 dark:text-gray-500">
+            <div className="text-xs text-tertiary">
               {t('updated')}: {getTimeSinceUpdate()}
             </div>
           </div>

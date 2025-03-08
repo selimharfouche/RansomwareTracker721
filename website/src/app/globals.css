@@ -1,44 +1,99 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Theme configuration - this replaces tailwind.config.js */
-@theme {
-  /* Custom colors for your ransomware tracker */
-  --color-ransomware-50: oklch(0.99 0.02 240);
-  --color-ransomware-100: oklch(0.98 0.04 240);
-  --color-ransomware-200: oklch(0.95 0.08 240);
-  --color-ransomware-300: oklch(0.9 0.12 240);
-  --color-ransomware-400: oklch(0.84 0.16 240);
-  --color-ransomware-500: oklch(0.78 0.2 240);
-  --color-ransomware-600: oklch(0.7 0.18 240);
-  --color-ransomware-700: oklch(0.6 0.15 240);
-  --color-ransomware-800: oklch(0.5 0.12 240);
-  --color-ransomware-900: oklch(0.4 0.1 240);
-  --color-ransomware-950: oklch(0.3 0.08 240);
-}
-
-/* Your base styles */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 248, 250, 252;
-  --background-end-rgb: 241, 245, 249;
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 248, 250, 252;
+  --card-bg: 255, 255, 255;
+  --card-text: 15, 23, 42;
+  --text-primary: 30, 41, 59;
+  --text-secondary: 71, 85, 105;
+  --text-tertiary: 100, 116, 139;
+  --border-color: 226, 232, 240;
+  --ransomware-primary: 79, 70, 229;
+  --ransomware-light: 99, 102, 241;
+  --ransomware-dark: 67, 56, 202;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 17, 24, 39;
-    --background-end-rgb: 15, 23, 42;
-  }
+.dark {
+  --foreground-rgb: 248, 250, 252;
+  --background-rgb: 15, 23, 42;
+  --card-bg: 30, 41, 59;
+  --card-text: 248, 250, 252;
+  --text-primary: 248, 250, 252;
+  --text-secondary: 226, 232, 240;
+  --text-tertiary: 203, 213, 225;
+  --border-color: 51, 65, 85;
+  --ransomware-primary: 99, 102, 241;
+  --ransomware-light: 165, 180, 252;
+  --ransomware-dark: 79, 70, 229;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+/* Card styles */
+.bg-card {
+  background-color: rgb(var(--card-bg));
+  color: rgb(var(--card-text));
+}
+
+/* Text colors */
+.text-primary {
+  color: rgb(var(--text-primary));
+}
+
+.text-secondary {
+  color: rgb(var(--text-secondary));
+}
+
+.text-tertiary {
+  color: rgb(var(--text-tertiary));
+}
+
+/* Border color */
+.border-theme {
+  border-color: rgb(var(--border-color));
+}
+
+/* Ransomware theme colors */
+.text-ransomware {
+  color: rgb(var(--ransomware-primary));
+}
+
+.bg-ransomware {
+  background-color: rgb(var(--ransomware-primary));
+  color: white;
+}
+
+.text-ransomware-light {
+  color: rgb(var(--ransomware-light));
+}
+
+.text-ransomware-dark {
+  color: rgb(var(--ransomware-dark));
+}
+
+/* Animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Transition utilities */
+.theme-transition {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -61,16 +116,14 @@ body {
   background: rgba(0, 0, 0, 0.3);
 }
 
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
