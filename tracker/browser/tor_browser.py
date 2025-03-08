@@ -7,18 +7,29 @@ import random
 from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from tracker.utils.logging_utils import logger
 
-# Get the project root directory
-PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
-BROWSER_CONFIG_PATH = os.path.join(PROJECT_ROOT, "config", "code", "browser_config.json")
+# Determine the configuration directory based on environment
+def get_config_dir():
+    # Check if we're running in GitHub Actions with a custom config path
+    github_config = os.environ.get('GITHUB_CONFIG_PATH')
+    if github_config:
+        return github_config
+    
+    # Default to the project's config directory
+    return os.path.join(Path(__file__).parent.parent.parent.absolute(), "config")
 
+# Load configuration files
 def load_browser_config():
     """Load browser configuration from config file"""
+    config_dir = get_config_dir()
+    browser_config_path = os.path.join(config_dir, "code", "browser_config.json")
+    
     try:
-        if not os.path.exists(BROWSER_CONFIG_PATH):
-            logger.warning(f"Browser config file not found at {BROWSER_CONFIG_PATH}. Using default values.")
+        if not os.path.exists(browser_config_path):
+            logger.warning(f"Browser config file not found at {browser_config_path}. Using default values.")
             return {
                 "timing": {
                     "min_wait_time": 10,
@@ -33,7 +44,7 @@ def load_browser_config():
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
             }
         
-        with open(BROWSER_CONFIG_PATH, 'r') as f:
+        with open(browser_config_path, 'r') as f:
             return json.load(f)
     except Exception as e:
         logger.error(f"Error loading browser config: {e}. Using default values.")
@@ -51,8 +62,74 @@ def load_browser_config():
             "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
 
-# Load browser configuration
+def load_proxy_config():
+    """Load proxy configuration from config file"""
+    config_dir = get_config_dir()
+    proxy_config_path = os.path.join(config_dir, "code", "proxy_config.json")
+    
+    try:
+        if not os.path.exists(proxy_config_path):
+            logger.warning(f"Proxy config file not found at {proxy_config_path}. Using default values.")
+            return {
+                "proxy": {
+                    "type": "socks",
+                    "host": "127.0.0.1",
+                    "port": 9050,
+                    "remote_dns": True
+                },
+                "tor": {
+                    "auto_start": False
+                }
+            }
+        
+        with open(proxy_config_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading proxy config: {e}. Using default values.")
+        return {
+            "proxy": {
+                "type": "socks",
+                "host": "127.0.0.1",
+                "port": 9050,
+                "remote_dns": True
+            },
+            "tor": {
+                "auto_start": False
+            }
+        }
+
+def load_scraping_config():
+    """Load scraping configuration from config file"""
+    config_dir = get_config_dir()
+    scraping_config_path = os.path.join(config_dir, "code", "scraping_config.json")
+    
+    try:
+        if not os.path.exists(scraping_config_path):
+            logger.warning(f"Scraping config file not found at {scraping_config_path}. Using default values.")
+            return {
+                "snapshots": {
+                    "save_html": False,
+                    "max_snapshots_per_site": 5,
+                    "cleanup_old_snapshots": True
+                }
+            }
+        
+        with open(scraping_config_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading scraping config: {e}. Using default values.")
+        return {
+            "snapshots": {
+                "save_html": False,
+                "max_snapshots_per_site": 5,
+                "cleanup_old_snapshots": True
+            }
+        }
+
+# Load configurations - make sure these are defined at module level
 BROWSER_CONFIG = load_browser_config()
+PROXY_CONFIG = load_proxy_config()
+SCRAPING_CONFIG = load_scraping_config()
 
 def setup_tor_browser(headless=False):
     """Configure Firefox to use Tor"""
@@ -92,25 +169,35 @@ def setup_tor_browser(headless=False):
     
     # If we're in GitHub Actions and have a firefox binary path, use it
     firefox_binary = None
-    if in_github_actions and "firefox_binary" in BROWSER_CONFIG:
+    if "firefox_binary" in BROWSER_CONFIG:
         firefox_binary_path = BROWSER_CONFIG.get("firefox_binary")
         if firefox_binary_path and os.path.exists(firefox_binary_path):
-            from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
             firefox_binary = FirefoxBinary(firefox_binary_path)
             logger.info(f"Using Firefox binary at: {firefox_binary_path}")
     
     # Create the driver
-    if firefox_binary:
-        options.binary = firefox_binary
-        driver = webdriver.Firefox(options=options)
-    else:
-        driver = webdriver.Firefox(options=options)
-    
-    # Set page load timeout from config
-    page_load_timeout = BROWSER_CONFIG.get("timing", {}).get("page_load_timeout", 120)
-    driver.set_page_load_timeout(page_load_timeout)
-    
-    return driver
+    try:
+        if firefox_binary:
+            options.binary = firefox_binary
+            driver = webdriver.Firefox(options=options)
+        else:
+            driver = webdriver.Firefox(options=options)
+        
+        # Set page load timeout from config
+        page_load_timeout = BROWSER_CONFIG.get("timing", {}).get("page_load_timeout", 120)
+        driver.set_page_load_timeout(page_load_timeout)
+        
+        return driver
+    except Exception as e:
+        logger.error(f"Error setting up Firefox browser: {e}")
+        # More detailed error information
+        if in_github_actions:
+            logger.error("This error occurred in GitHub Actions environment.")
+            logger.error(f"Firefox binary path in config: {BROWSER_CONFIG.get('firefox_binary', 'Not set')}")
+            logger.error(f"Firefox path from which command: {os.popen('which firefox').read().strip()}")
+            logger.error(f"Firefox version: {os.popen('firefox --version').read().strip()}")
+            logger.error(f"Geckodriver version: {os.popen('geckodriver --version').read().strip()}")
+        raise
 
 def test_tor_connection(driver):
     """Test if we can connect through Tor"""
@@ -207,8 +294,7 @@ def get_working_mirror(driver, site_config):
 def save_html_snapshot(html_content, site_key, html_snapshots_dir):
     """Save HTML content to a timestamped file for analysis"""
     # Check if saving snapshots is enabled
-    scraping_config = load_scraping_config()
-    if not scraping_config.get("snapshots", {}).get("save_html", False):
+    if not SCRAPING_CONFIG.get("snapshots", {}).get("save_html", False):
         logger.info("HTML snapshot saving is disabled in configuration. Skipping.")
         return None
     
@@ -224,8 +310,8 @@ def save_html_snapshot(html_content, site_key, html_snapshots_dir):
     logger.info(f"Raw HTML saved to {html_filename}")
     
     # Cleanup old snapshots if enabled
-    if scraping_config.get("snapshots", {}).get("cleanup_old_snapshots", True):
-        max_snapshots = scraping_config.get("snapshots", {}).get("max_snapshots_per_site", 5)
+    if SCRAPING_CONFIG.get("snapshots", {}).get("cleanup_old_snapshots", True):
+        max_snapshots = SCRAPING_CONFIG.get("snapshots", {}).get("max_snapshots_per_site", 5)
         cleanup_old_snapshots(site_snapshot_dir, max_snapshots)
     
     return html_filename
@@ -247,31 +333,3 @@ def cleanup_old_snapshots(snapshot_dir, max_keep=5):
                 logger.info(f"Removed old snapshot: {old_file}")
     except Exception as e:
         logger.error(f"Error cleaning up old snapshots: {e}")
-
-def load_scraping_config():
-    """Load scraping configuration from config file"""
-    PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
-    SCRAPING_CONFIG_PATH = os.path.join(PROJECT_ROOT, "config", "code", "scraping_config.json")
-    
-    try:
-        if not os.path.exists(SCRAPING_CONFIG_PATH):
-            logger.warning(f"Scraping config file not found at {SCRAPING_CONFIG_PATH}. Using default values.")
-            return {
-                "snapshots": {
-                    "save_html": False,
-                    "max_snapshots_per_site": 5,
-                    "cleanup_old_snapshots": True
-                }
-            }
-        
-        with open(SCRAPING_CONFIG_PATH, 'r') as f:
-            return json.load(f)
-    except Exception as e:
-        logger.error(f"Error loading scraping config: {e}. Using default values.")
-        return {
-            "snapshots": {
-                "save_html": False,
-                "max_snapshots_per_site": 5,
-                "cleanup_old_snapshots": True
-            }
-        }
