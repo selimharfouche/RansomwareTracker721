@@ -101,8 +101,27 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "post/M0BKXzqFcDfi9oOg67c05184b35e8",
+      "domain": "jtu.com.br",
+      "status": "published",
+      "description_preview": "Greetings!\n\nToday we are posting here the new company, \"JACAREI TRANSPORTE URBANO LTDA\".\n\nCompany Description: JACAREÍ TRANSPORTE URBANO was founded with the corporate objective of providing public passenger transport services. JACAREÍ TRANSPORTE...",
+      "updated": "2025-02-27 11:51:00 UTC",
+      "views": 6930,
+      "countdown_remaining": null,
+      "estimated_publish_date": null,
+      "first_seen": "2025-03-09 10:38:57 UTC",
+      "ransomware_group": "LockBit",
+      "group_key": "lockbit",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-09 10:15:05 UTC",
-  "total_count": 5
+  "last_updated": "2025-03-09 09:40:00 UTC",
+  "total_count": 6,
+  "description": "Complete archive of all discovered ransomware entities"
 }
