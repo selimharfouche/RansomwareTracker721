@@ -1,0 +1,20 @@
+{
+    "entities": [
+        {
+            "id": "124",
+            "domain": "tni.mil.id",
+            "status": "published",
+            "country": "Indonesia",
+            "description_preview": "DATABASE OF NATIONAL INDONESIAN ARMY | NAMA  NRP  PANGKAT  KORPS  GRADE  SATUAN  JABATAN  TGL LAH...",
+            "updated": "2025/02/28 10:00:00",
+            "views": 10809,
+            "first_seen": "2025-03-09 10:14:53 UTC",
+            "ransomware_group": "Bashe",
+            "group_key": "bashe"
+        }
+    ],
+    "last_updated": "2025-03-09 10:14:53 UTC",
+    "total_count": 1,
+    "ransomware_group": "Bashe",
+    "group_key": "bashe"
+}
