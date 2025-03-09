@@ -1,0 +1,48 @@
+{
+    "entities": [
+        {
+            "id": "post/C1J0mMR9dcwtKgRm67c49364dd1c8",
+            "domain": "gruppocogesi.org",
+            "status": "countdown",
+            "description_preview": "CO.GE.S.I. si \u00e8 specializzata nel supporto tecnico \u2013 amministrativo finalizzato alla definizione delle istanze di condono edilizio e delle istanze edilizie presentate ai sensi del D.p.r. n. 380/2001.",
+            "updated": "02 Mar, 2025,\u00a0\u00a0 17:20 UTC",
+            "views": 3889,
+            "countdown_remaining": {
+                "days": 7,
+                "hours": 5,
+                "minutes": 41,
+                "seconds": 40
+            },
+            "estimated_publish_date": "2025-03-16 16:20:37 UTC",
+            "first_seen": "2025-03-09 10:38:57 UTC",
+            "ransomware_group": "LockBit",
+            "group_key": "lockbit"
+        },
+        {
+            "id": "post/QXQ5PfOboqLa3nkG67c051d0b1617",
+            "domain": "ahn.org",
+            "status": "published",
+            "description_preview": "Greetings!\n\nToday we are posting here the new company, \"West Penn Allegheny Health System .Inc\".\n\nCompany Description: West Penn Hospital, centrally located in Pittsburgh\u2019s Bloomfield neighborhood since 1848, is regionally and nationally known fo...",
+            "updated": "27 Feb, 2025,\u00a0\u00a0 11:53 UTC",
+            "views": 6777,
+            "first_seen": "2025-03-09 10:38:57 UTC",
+            "ransomware_group": "LockBit",
+            "group_key": "lockbit"
+        },
+        {
+            "id": "post/M0BKXzqFcDfi9oOg67c05184b35e8",
+            "domain": "jtu.com.br",
+            "status": "published",
+            "description_preview": "Greetings!\n\nToday we are posting here the new company, \"JACAREI TRANSPORTE URBANO LTDA\".\n\nCompany Description: JACARE\u00cd TRANSPORTE URBANO was founded with the corporate objective of providing public passenger transport services. JACARE\u00cd TRANSPORTE...",
+            "updated": "27 Feb, 2025,\u00a0\u00a0 11:51 UTC",
+            "views": 6930,
+            "first_seen": "2025-03-09 10:38:57 UTC",
+            "ransomware_group": "LockBit",
+            "group_key": "lockbit"
+        }
+    ],
+    "last_updated": "2025-03-09 10:38:57 UTC",
+    "total_count": 3,
+    "ransomware_group": "LockBit",
+    "group_key": "lockbit"
+}
