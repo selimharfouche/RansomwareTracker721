@@ -1,23 +1,5 @@
 {
-    "entities": [
-        {
-            "id": "27e87e01-e3c7-4018-8db2-df4fbf216611",
-            "domain": "www.dcarosolutions.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "9D 10h 54m 45s",
-                "days": 9,
-                "hours": 10,
-                "minutes": 54,
-                "seconds": 45
-            },
-            "updated": "2025-03-08 17:36:11",
-            "estimated_publish_date": "2025-03-18 12:00:01 UTC",
-            "first_seen": "2025-03-09 01:05:16 UTC",
-            "ransomware_group": "RansomHub",
-            "group_key": "ransomhub"
-        }
-    ],
-    "last_updated": "2025-03-09 01:05:16 UTC",
-    "total_count": 1
+  "entities": [],
+  "last_updated": "2025-03-09 10:07:40 UTC",
+  "total_count": 0
 }
