@@ -1,0 +1,902 @@
+[
+  {
+    "domain": "www.avalon-hotel.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Avalon"
+    },
+    "organization": {
+      "name": "Avalon Hotel",
+      "industry": "Hospitality",
+      "sub_industry": "Hotel",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.black-star.fr",
+    "geography": {
+      "country_code": "FRA",
+      "region": "Île-de-France",
+      "city": "Paris"
+    },
+    "organization": {
+      "name": "Black Star",
+      "industry": "Media",
+      "sub_industry": "Entertainment",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "gruppocogesi.org",
+    "geography": {
+      "country_code": "ITA",
+      "region": "Lombardia",
+      "city": "Milan"
+    },
+    "organization": {
+      "name": "Gruppo Cogesi",
+      "industry": "Non-profit",
+      "sub_industry": "Social Services",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Non-profit"
+    }
+  },
+  {
+    "domain": "ahn.org",
+    "geography": {
+      "country_code": "USA",
+      "region": "Pennsylvania",
+      "city": "Pittsburgh"
+    },
+    "organization": {
+      "name": "Allegheny Health Network",
+      "industry": "Healthcare",
+      "sub_industry": "Hospital & Integrated Health Care",
+      "size": {
+        "employees_range": "5000+",
+        "revenue_range": ">$1B"
+      },
+      "status": "Non-profit"
+    }
+  },
+  {
+    "domain": "tni.mil.id",
+    "geography": {
+      "country_code": "IDN",
+      "region": "Jakarta",
+      "city": "Jakarta"
+    },
+    "organization": {
+      "name": "Tentara Nasional Indonesia",
+      "industry": "Government",
+      "sub_industry": "Military Defense",
+      "size": {
+        "employees_range": "5000+",
+        "revenue_range": ">$1B"
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "jtu.com.br",
+    "geography": {
+      "country_code": "BRA",
+      "region": "São Paulo",
+      "city": "São Paulo"
+    },
+    "organization": {
+      "name": "JTU Corporation",
+      "industry": "Technology",
+      "sub_industry": "IT Services",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.dcarosolutions.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "New York"
+    },
+    "organization": {
+      "name": "DCARO Solutions",
+      "industry": "Technology",
+      "sub_industry": "Software Consulting",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "mitchellmcnutt.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Los Angeles"
+    },
+    "organization": {
+      "name": "Mitchell McNutt Consulting",
+      "industry": "Consulting",
+      "sub_industry": "Management Consulting",
+      "size": {
+        "employees_range": "1-9",
+        "revenue_range": "<$1M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.jpwindustries.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Ohio",
+      "city": "Cincinnati"
+    },
+    "organization": {
+      "name": "JPW Industries",
+      "industry": "Manufacturing",
+      "sub_industry": "Industrial Manufacturing",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "srmg.com.au",
+    "geography": {
+      "country_code": "AUS",
+      "region": "New South Wales",
+      "city": "Sydney"
+    },
+    "organization": {
+      "name": "SRMG",
+      "industry": "Media",
+      "sub_industry": "Digital Media",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "wheats.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Kansas",
+      "city": "Wichita"
+    },
+    "organization": {
+      "name": "Wheats Inc.",
+      "industry": "Agriculture",
+      "sub_industry": "Grain Production",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "lovesac.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Connecticut",
+      "city": "Stamford"
+    },
+    "organization": {
+      "name": "Lovesac",
+      "industry": "Retail",
+      "sub_industry": "Home Furnishings",
+      "size": {
+        "employees_range": "500-999",
+        "revenue_range": "$100M-$500M"
+      },
+      "status": "Public"
+    }
+  },
+  {
+    "domain": "hickorylaw.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "North Carolina",
+      "city": "Hickory"
+    },
+    "organization": {
+      "name": "Hickory Law",
+      "industry": "Legal",
+      "sub_industry": "Law Practice",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.convention.qc.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Quebec",
+      "city": "Montreal"
+    },
+    "organization": {
+      "name": "Convention Quebec",
+      "industry": "Hospitality",
+      "sub_industry": "Convention & Event Planning",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Public"
+    }
+  },
+  {
+    "domain": "www.centersheetmetal.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Texas",
+      "city": "Houston"
+    },
+    "organization": {
+      "name": "Center Sheet Metal",
+      "industry": "Manufacturing",
+      "sub_industry": "Sheet Metal Fabrication",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.hinton.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Alberta",
+      "city": "Hinton"
+    },
+    "organization": {
+      "name": "Hinton Inc.",
+      "industry": "Construction",
+      "sub_industry": "Engineering & Construction",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.portlandschools.org",
+    "geography": {
+      "country_code": "USA",
+      "region": "Oregon",
+      "city": "Portland"
+    },
+    "organization": {
+      "name": "Portland Schools",
+      "industry": "Education",
+      "sub_industry": "K-12 Education",
+      "size": {
+        "employees_range": "5000+",
+        "revenue_range": ">$1B"
+      },
+      "status": "Educational"
+    }
+  },
+  {
+    "domain": "www.sunsweet.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Yuba City"
+    },
+    "organization": {
+      "name": "Sunsweet Growers Inc.",
+      "industry": "Food & Beverage",
+      "sub_industry": "Dried Fruit Production",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "andreyevengineering.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "New York"
+    },
+    "organization": {
+      "name": "Andreyev Engineering",
+      "industry": "Engineering",
+      "sub_industry": "Structural Engineering",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "familychc.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Los Angeles"
+    },
+    "organization": {
+      "name": "Family CHC",
+      "industry": "Healthcare",
+      "sub_industry": "Community Health Center",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Non-profit"
+    }
+  },
+  {
+    "domain": "www.casinoessentials.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Nevada",
+      "city": "Las Vegas"
+    },
+    "organization": {
+      "name": "Casino Essentials",
+      "industry": "Hospitality",
+      "sub_industry": "Casino Supplies",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.nasonptc.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Minnesota",
+      "city": "Minneapolis"
+    },
+    "organization": {
+      "name": "Nason PTC",
+      "industry": "Technology",
+      "sub_industry": "Product Testing & Certification",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.emeryair.net",
+    "geography": {
+      "country_code": "USA",
+      "region": "Georgia",
+      "city": "Atlanta"
+    },
+    "organization": {
+      "name": "Emery Air",
+      "industry": "Services",
+      "sub_industry": "HVAC Services",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.amerasphalt.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Texas",
+      "city": "Houston"
+    },
+    "organization": {
+      "name": "Amer Asphalt",
+      "industry": "Construction",
+      "sub_industry": "Road Construction",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.cmsg.cl",
+    "geography": {
+      "country_code": "CHL",
+      "region": "Santiago Metropolitan",
+      "city": "Santiago"
+    },
+    "organization": {
+      "name": "CMSG",
+      "industry": "Healthcare",
+      "sub_industry": "Medical Services",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.obrienavocats.qc.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Quebec",
+      "city": "Montreal"
+    },
+    "organization": {
+      "name": "O'Brien Avocats",
+      "industry": "Legal",
+      "sub_industry": "Law Practice",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.bwdtechnology.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "San Jose"
+    },
+    "organization": {
+      "name": "BWD Technology",
+      "industry": "Technology",
+      "sub_industry": "Software Solutions",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.confabca.com",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Ontario",
+      "city": "Toronto"
+    },
+    "organization": {
+      "name": "Confab CA",
+      "industry": "Media",
+      "sub_industry": "Conference & Event Management",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.ateliermonarque.com",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Quebec",
+      "city": "Montreal"
+    },
+    "organization": {
+      "name": "Atelier Monarque",
+      "industry": "Arts",
+      "sub_industry": "Design Studio",
+      "size": {
+        "employees_range": "1-9",
+        "revenue_range": "<$1M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.wpisd.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Texas",
+      "city": "Wichita Falls"
+    },
+    "organization": {
+      "name": "WPISD",
+      "industry": "Education",
+      "sub_industry": "K-12 Education",
+      "size": {
+        "employees_range": "5000+",
+        "revenue_range": ">$1B"
+      },
+      "status": "Educational"
+    }
+  },
+  {
+    "domain": "www.cda.be",
+    "geography": {
+      "country_code": "GBR",
+      "region": "Flanders",
+      "city": "Antwerp"
+    },
+    "organization": {
+      "name": "CDA",
+      "industry": "Consulting",
+      "sub_industry": "Business Consulting",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.japanrebuilt.jp",
+    "geography": {
+      "country_code": "JPN",
+      "region": "Tokyo",
+      "city": "Tokyo"
+    },
+    "organization": {
+      "name": "Japan Rebuilt",
+      "industry": "Construction",
+      "sub_industry": "Renovation & Restoration",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "dsrny.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "New York"
+    },
+    "organization": {
+      "name": "DSR NY",
+      "industry": "Media",
+      "sub_industry": "Digital Design",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.journeyoilfield.net",
+    "geography": {
+      "country_code": "USA",
+      "region": "Texas",
+      "city": "Houston"
+    },
+    "organization": {
+      "name": "Journey Oilfield",
+      "industry": "Energy",
+      "sub_industry": "Oil & Gas Services",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.townofbourne.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Massachusetts",
+      "city": "Bourne"
+    },
+    "organization": {
+      "name": "Town of Bourne",
+      "industry": "Government",
+      "sub_industry": "Municipal Government",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "www.kppm.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Los Angeles"
+    },
+    "organization": {
+      "name": "KPPM",
+      "industry": "Engineering",
+      "sub_industry": "Architectural Services",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.envirolabsinc.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "San Diego"
+    },
+    "organization": {
+      "name": "Envirolabs Inc",
+      "industry": "Environmental",
+      "sub_industry": "Environmental Testing Services",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.newburghhealthcarecenter.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "Newburgh"
+    },
+    "organization": {
+      "name": "Newburgh Healthcare Center",
+      "industry": "Healthcare",
+      "sub_industry": "Medical Center/Hospital",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Non-profit"
+    }
+  },
+  {
+    "domain": "welcompanies.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Ohio",
+      "city": "Cleveland"
+    },
+    "organization": {
+      "name": "Wel Companies",
+      "industry": "Conglomerate",
+      "sub_industry": "Diversified Industrials",
+      "size": {
+        "employees_range": "500-999",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "hgmlegal.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Illinois",
+      "city": "Chicago"
+    },
+    "organization": {
+      "name": "HGM Legal",
+      "industry": "Legal",
+      "sub_industry": "Law Practice",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.famcomachine.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Michigan",
+      "city": "Detroit"
+    },
+    "organization": {
+      "name": "Famco Machine",
+      "industry": "Manufacturing",
+      "sub_industry": "Machine Manufacturing",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "compactmould.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Ohio",
+      "city": "Cleveland"
+    },
+    "organization": {
+      "name": "Compact Mould",
+      "industry": "Manufacturing",
+      "sub_industry": "Plastic Injection Molding",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "saulttribe.com/kewadin.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Michigan",
+      "city": "Sault Ste. Marie"
+    },
+    "organization": {
+      "name": "Kewadin",
+      "industry": "Government",
+      "sub_industry": "Tribal Government",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "denbyco.co.uk",
+    "geography": {
+      "country_code": "GBR",
+      "region": "Derbyshire",
+      "city": "Denby"
+    },
+    "organization": {
+      "name": "Denby Co.",
+      "industry": "Manufacturing",
+      "sub_industry": "Ceramics",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "ondaralogistica.com",
+    "geography": {
+      "country_code": "ESP",
+      "region": "Andalusia",
+      "city": "Seville"
+    },
+    "organization": {
+      "name": "Ondara Logistica",
+      "industry": "Transportation & Logistics",
+      "sub_industry": "Logistics Services",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.witheyaddison.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "New York"
+    },
+    "organization": {
+      "name": "Withey Addison",
+      "industry": "Legal",
+      "sub_industry": "Law Practice",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.midwestvascular.net",
+    "geography": {
+      "country_code": "USA",
+      "region": "Illinois",
+      "city": "Chicago"
+    },
+    "organization": {
+      "name": "Midwest Vascular",
+      "industry": "Healthcare",
+      "sub_industry": "Vascular Health Services",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.electro-fusion.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Indiana",
+      "city": "Indianapolis"
+    },
+    "organization": {
+      "name": "Electro-Fusion",
+      "industry": "Manufacturing",
+      "sub_industry": "Electrical Equipment Manufacturing",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "jindalgroup.com",
+    "geography": {
+      "country_code": "IND",
+      "region": "Haryana",
+      "city": "New Delhi"
+    },
+    "organization": {
+      "name": "Jindal Group",
+      "industry": "Conglomerate",
+      "sub_industry": "Steel & Energy",
+      "size": {
+        "employees_range": "5000+",
+        "revenue_range": ">$1B"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "guadeloupeformation.com",
+    "geography": {
+      "country_code": "FRA",
+      "region": "Guadeloupe",
+      "city": "Basse-Terre"
+    },
+    "organization": {
+      "name": "Guadeloupe Formation",
+      "industry": "Education",
+      "sub_industry": "Professional Training",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Educational"
+    }
+  }
+]
