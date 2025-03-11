@@ -1,0 +1,902 @@
+[
+  {
+    "domain": "www.avalon-hotel.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.black-star.fr",
+    "geography": {
+      "country_code": "FRA",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "gruppocogesi.org",
+    "geography": {
+      "country_code": "ITA",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "ahn.org",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "tni.mil.id",
+    "geography": {
+      "country_code": "IDN",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": "Tentara Nasional Indonesia",
+      "industry": "Defense",
+      "sub_industry": "Military",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "jtu.com.br",
+    "geography": {
+      "country_code": "BRA",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.dcarosolutions.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "mitchellmcnutt.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.jpwindustries.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "srmg.com.au",
+    "geography": {
+      "country_code": "AUS",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "wheats.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "lovesac.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Connecticut",
+      "city": "Stamford"
+    },
+    "organization": {
+      "name": "Lovesac",
+      "industry": "Furniture",
+      "sub_industry": "Home Furnishings",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "hickorylaw.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.convention.qc.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Quebec",
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.centersheetmetal.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.hinton.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Alberta",
+      "city": "Hinton"
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.portlandschools.org",
+    "geography": {
+      "country_code": "USA",
+      "region": "Oregon",
+      "city": "Portland"
+    },
+    "organization": {
+      "name": null,
+      "industry": "Education",
+      "sub_industry": "K-12 Education",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "www.sunsweet.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "California",
+      "city": "Yuba City"
+    },
+    "organization": {
+      "name": "Sunsweet Growers Inc.",
+      "industry": "Food",
+      "sub_industry": "Agriculture",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "andreyevengineering.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "familychc.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.casinoessentials.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.nasonptc.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.emeryair.net",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.amerasphalt.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.cmsg.cl",
+    "geography": {
+      "country_code": "CHL",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.obrienavocats.qc.ca",
+    "geography": {
+      "country_code": "CAN",
+      "region": "Quebec",
+      "city": null
+    },
+    "organization": {
+      "name": "O'Brien Avocats",
+      "industry": "Legal",
+      "sub_industry": "Law Firm",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.bwdtechnology.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.confabca.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.ateliermonarque.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.wpisd.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.cda.be",
+    "geography": {
+      "country_code": "BEL",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.japanrebuilt.jp",
+    "geography": {
+      "country_code": "JPN",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "dsrny.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.journeyoilfield.net",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.townofbourne.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Massachusetts",
+      "city": "Bourne"
+    },
+    "organization": {
+      "name": null,
+      "industry": "Government",
+      "sub_industry": "Local Government",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "www.kppm.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.envirolabsinc.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": "Environmental Testing",
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.newburghhealthcarecenter.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "New York",
+      "city": "Newburgh"
+    },
+    "organization": {
+      "name": "Newburgh Healthcare Center",
+      "industry": "Healthcare",
+      "sub_industry": "Long-term Care",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "welcompanies.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "hgmlegal.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.famcomachine.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "compactmould.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "saulttribe.com/kewadin.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Michigan",
+      "city": "Sault Ste. Marie"
+    },
+    "organization": {
+      "name": "Sault Ste. Marie Tribe of Chippewa Indians",
+      "industry": "Government",
+      "sub_industry": "Tribal Government",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Government"
+    }
+  },
+  {
+    "domain": "denbyco.co.uk",
+    "geography": {
+      "country_code": "GBR",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "ondaralogistica.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.witheyaddison.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "www.midwestvascular.net",
+    "geography": {
+      "country_code": "USA",
+      "region": "Midwest",
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": "Healthcare",
+      "sub_industry": "Vascular Health",
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "www.electro-fusion.com",
+    "geography": {
+      "country_code": null,
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  },
+  {
+    "domain": "jindalgroup.com",
+    "geography": {
+      "country_code": "IND",
+      "region": null,
+      "city": null
+    },
+    "organization": {
+      "name": "Jindal Group",
+      "industry": "Conglomerate",
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "guadeloupeformation.com",
+    "geography": {
+      "country_code": "FRA",
+      "region": "Guadeloupe",
+      "city": null
+    },
+    "organization": {
+      "name": null,
+      "industry": null,
+      "sub_industry": null,
+      "size": {
+        "employees_range": null,
+        "revenue_range": null
+      },
+      "status": null
+    }
+  }
+]
