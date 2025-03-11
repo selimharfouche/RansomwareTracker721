@@ -21671,9 +21671,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "f984b763-0b0c-4c36-86c9-03d0b646e9e6",
+      "domain": "dccsagroup.com&csahome.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-02-14 19:33:44 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "6D 5h 36m 54s",
+        "days": 6,
+        "hours": 5,
+        "minutes": 36,
+        "seconds": 54
+      },
+      "estimated_publish_date": "2025-03-17 12:00:00 UTC",
+      "first_seen": "2025-03-11 06:23:07 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-10 18:22:49 UTC",
-  "total_count": 1194,
+  "last_updated": "2025-03-11 06:27:03 UTC",
+  "total_count": 1195,
   "description": "Complete archive of all discovered ransomware entities"
 }
