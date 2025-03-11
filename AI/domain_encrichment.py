@@ -83,7 +83,16 @@ def batch_domains(domains: List[str], batch_size: int = BATCH_SIZE) -> List[List
 
 def create_enrichment_prompt(domains: List[str]) -> str:
     """Create a prompt for OpenAI API to request enrichment data."""
-    prompt = """For each of the following domain names, provide structured data about the organization in this exact JSON format:
+    prompt = """Your task is to provide detailed organizational information for each domain.
+
+For each domain name:
+1. Thoroughly research the organization to ensure accuracy
+2. Determine the headquarters location, industry classification, and company attributes
+3. Provide data in the exact JSON format shown below
+
+IMPORTANT: Accuracy is critical, especially for country codes and industry classifications. Use your knowledge of global businesses and organizations. When information isn't explicitly known, determine the most likely values based on contextual indicators in the domain name, company structure, or industry patterns.
+
+Required JSON format for each domain:
 {
   "domain": "example.com",
   "geography": {
@@ -93,8 +102,8 @@ def create_enrichment_prompt(domains: List[str]) -> str:
   },
   "organization": {
     "name": "Example Corporation",
-    "industry": "Technology",  // Primary industry sector
-    "sub_industry": "Software Development",
+    "industry": "Technology",  // Primary industry sector - be specific and accurate
+    "sub_industry": "Software Development",  // More specialized classification
     "size": {
       "employees_range": "100-499",  // Use ranges: 1-9, 10-49, 50-99, 100-499, 500-999, 1000-4999, 5000+
       "revenue_range": "$10M-$50M"   // Use ranges: <$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$500M, $500M-$1B, >$1B
@@ -103,16 +112,15 @@ def create_enrichment_prompt(domains: List[str]) -> str:
   }
 }
 
-Only include factual information. If information is unknown, use null value. Return a valid JSON array with an object for each domain.
+For domains where specific data cannot be determined with confidence, provide the most likely value while ensuring fields are never empty. Return a valid JSON array containing an object for each domain.
 
-Domains to enrich:
+Domains to research and enrich:
 """
     # Add the list of domains to the prompt
     for domain in domains:
         prompt += f"- {domain}\n"
     
     return prompt
-
 def save_raw_response(response, content, batch_index: int):
     """Save the raw API response to a file for inspection."""
     timestamp = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
