@@ -13,138 +13,134 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1  # Shallow clone - only latest commit
 
+      # Caching strategy
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pip'
-
-      # Cache Tor installation
-      - name: Cache Tor
-        id: cache-tor
+      
+      # Try to use cached binaries for everything
+      - name: Setup Cached Environment
+        id: cache-env
         uses: actions/cache@v3
         with:
-          path: ~/.cache/tor-binary
-          key: ${{ runner.os }}-tor-${{ hashFiles('requirements.txt') }}
+          path: |
+            ~/.cache/pip
+            ~/.cache/tor-binary
+            ~/.cache/firefox
+            ~/.cache/geckodriver
+            /tmp/github_configs
+          key: ${{ runner.os }}-env-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-env-
 
-      - name: Install Tor
-        if: steps.cache-tor.outputs.cache-hit != 'true'
+      # Install core requirements together to reduce install steps
+      - name: Setup dependencies
+        if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tor
+          # Install all dependencies in a single apt-get command
+          sudo apt-get update && sudo apt-get install -y tor
+
+          # Create cache directories
           mkdir -p ~/.cache/tor-binary
           cp $(which tor) ~/.cache/tor-binary/
-      
+          
+          # Create config files 
+          mkdir -p /tmp/github_configs/code
+          echo '{"snapshots":{"save_html":false,"max_snapshots_per_site":5,"cleanup_old_snapshots":true},"scheduling":{"frequency_hours":6,"randomize_start_time":true}}' > /tmp/github_configs/code/scraping_config.json
+          echo '{"proxy":{"type":"socks","host":"127.0.0.1","port":9050,"remote_dns":true},"tor":{"auto_start":false}}' > /tmp/github_configs/code/proxy_config.json
+          echo '{"timing":{"min_wait_time":5,"max_wait_time":10,"tor_check_wait_time":2,"page_load_timeout":90},"anti_bot":{"enabled":true,"randomize_timing":true},"user_agent":"Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"}' > /tmp/github_configs/code/browser_config.json
+          
+          # Install Python dependencies with minimal output
+          pip install --quiet --no-cache-dir --upgrade -r requirements.txt || pip install --quiet selenium beautifulsoup4 requests
+
+      # Start services in parallel with other setup
       - name: Start Tor Service
         run: |
-          sudo service tor start
-          sleep 3
-          netstat -tulpn | grep 9050 || echo "Warning: Tor might not be running on port 9050"
+          sudo service tor start &
+          # Continue with other steps while Tor starts up
 
-      - name: Setup Firefox
+      # Use optimized browser setup actions with caching
+      - name: Setup Firefox and Geckodriver
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: 'latest'
-
+      
       - name: Setup Geckodriver
         uses: browser-actions/setup-geckodriver@latest
         with:
           token: ${{ github.token }}
+      
+      # Create directories only once if they don't exist
+      - name: Prepare directories
+        run: mkdir -p data/{output,html_snapshots,processed}
 
-      - name: Install dependencies
+      # Check if Tor is ready before proceeding
+      - name: Verify Tor
         run: |
-          python -m pip install --upgrade pip
-          # Install only required packages
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            # If no requirements.txt, install essential packages
-            pip install selenium beautifulsoup4 requests
+          # Wait up to 10 seconds for Tor to be ready
+          timeout=10
+          elapsed=0
+          while [ $elapsed -lt $timeout ]; do
+            if netstat -tulpn | grep 9050 > /dev/null; then
+              echo "✅ Tor is running on port 9050"
+              break
+            fi
+            elapsed=$((elapsed+1))
+            sleep 1
+          done
+          
+          if [ $elapsed -eq $timeout ]; then
+            echo "⚠️ Warning: Tor might not be running on port 9050"
           fi
 
-      - name: Configure for GitHub Actions
-        run: |
-          # Create configurations directory
-          mkdir -p /tmp/github_configs/code
-          
-          # Create all config files in a single step
-          cat > /tmp/github_configs/code/scraping_config.json << 'EOF'
-          {
-            "snapshots": {
-              "save_html": false,
-              "max_snapshots_per_site": 5,
-              "cleanup_old_snapshots": true
-            },
-            "scheduling": {
-              "frequency_hours": 6,
-              "randomize_start_time": true
-            }
-          }
-          EOF
-          
-          cat > /tmp/github_configs/code/proxy_config.json << 'EOF'
-          {
-            "proxy": {
-              "type": "socks",
-              "host": "127.0.0.1",
-              "port": 9050,
-              "remote_dns": true
-            },
-            "tor": {
-              "auto_start": false
-            }
-          }
-          EOF
-          
-          # Create browser config with resolved Firefox path
-          FIREFOX_PATH=$(which firefox)
-          cat > /tmp/github_configs/code/browser_config.json << EOF
-          {
-            "timing": {
-              "min_wait_time": 10,
-              "max_wait_time": 20,
-              "tor_check_wait_time": 3,
-              "page_load_timeout": 120
-            },
-            "anti_bot": {
-              "enabled": true,
-              "randomize_timing": true
-            },
-            "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
-            "firefox_binary": "${FIREFOX_PATH}"
-          }
-          EOF
-          
-          # Create necessary data directories in one step
-          mkdir -p data/output data/html_snapshots data/processed
-
+      # Run the actual scraping with optimized settings
       - name: Run scraper and process entities
+        id: run-scraper
         run: |
-          # Export environment variable to point to temporary config
+          # Export configuration path
           export GITHUB_CONFIG_PATH="/tmp/github_configs"
           
-          # Run the scraper
+          # Run the scraper with optimized settings
           cd tracker
+          echo "Starting scraper..."
+          start_time=$(date +%s)
+          
+          # Run main scraper
           python main.py
           
-          # Process entities immediately after scraping
-          cd processing
-          python process_entities.py
-          echo "Entity processing and archiving completed"
+          # Check if any new entities were found
+          if [ -s "../data/output/new_entities.json" ]; then
+            # Only process if we found something
+            cd processing
+            python process_entities.py
+            echo "Entity processing completed"
+            echo "new_entities_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "No new entities found, skipping processing"
+            echo "new_entities_found=false" >> $GITHUB_OUTPUT
+          fi
+          
+          end_time=$(date +%s)
+          runtime=$((end_time-start_time))
+          echo "Total runtime: $runtime seconds"
 
+      # Only commit if we found new entities
       - name: Commit and push if there are changes
+        if: steps.run-scraper.outputs.new_entities_found == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # Only commit changes to data directory
           git add -A data/
           
-          # Check if there are changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
+          if ! git diff --staged --quiet; then
             git commit -m "Auto-update data from scheduled scrape"
             git push
+          else
+            echo "No changes to commit despite new entities"
           fi
