@@ -1,0 +1,3 @@
+{
+  "error": "The provided list contains an extremely large number of domains. In order to ensure the accuracy and detail required for each organization's information, please narrow down the list to a smaller set of domains."
+}
