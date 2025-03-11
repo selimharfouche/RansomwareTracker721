@@ -1,0 +1,166 @@
+{
+    "AFG": {
+      "en": "Afghanistan",
+      "fr": "Afghanistan"
+    },
+    "ALB": {
+      "en": "Albania",
+      "fr": "Albanie"
+    },
+    "DZA": {
+      "en": "Algeria",
+      "fr": "Algérie"
+    },
+    "ASM": {
+      "en": "American Samoa",
+      "fr": "Samoa américaines"
+    },
+    "AND": {
+      "en": "Andorra",
+      "fr": "Andorre"
+    },
+    "AGO": {
+      "en": "Angola",
+      "fr": "Angola"
+    },
+    "AIA": {
+      "en": "Anguilla",
+      "fr": "Anguilla"
+    },
+    "ATA": {
+      "en": "Antarctica",
+      "fr": "Antarctique"
+    },
+    "ATG": {
+      "en": "Antigua and Barbuda",
+      "fr": "Antigua-et-Barbuda"
+    },
+    "ARG": {
+      "en": "Argentina",
+      "fr": "Argentine"
+    },
+    "ARM": {
+      "en": "Armenia",
+      "fr": "Arménie"
+    },
+    "ABW": {
+      "en": "Aruba",
+      "fr": "Aruba"
+    },
+    "AUS": {
+      "en": "Australia",
+      "fr": "Australie"
+    },
+    "AUT": {
+      "en": "Austria",
+      "fr": "Autriche"
+    },
+    "AZE": {
+      "en": "Azerbaijan",
+      "fr": "Azerbaïdjan"
+    },
+    "BHS": {
+      "en": "Bahamas",
+      "fr": "Bahamas"
+    },
+    "BHR": {
+      "en": "Bahrain",
+      "fr": "Bahreïn"
+    },
+    "BGD": {
+      "en": "Bangladesh",
+      "fr": "Bangladesh"
+    },
+    "BRB": {
+      "en": "Barbados",
+      "fr": "Barbade"
+    },
+    "BLR": {
+      "en": "Belarus",
+      "fr": "Biélorussie"
+    },
+    "BEL": {
+      "en": "Belgium",
+      "fr": "Belgique"
+    },
+    "BLZ": {
+      "en": "Belize",
+      "fr": "Belize"
+    },
+    "BEN": {
+      "en": "Benin",
+      "fr": "Bénin"
+    },
+    "BMU": {
+      "en": "Bermuda",
+      "fr": "Bermudes"
+    },
+    "BTN": {
+      "en": "Bhutan",
+      "fr": "Bhoutan"
+    },
+    "BOL": {
+      "en": "Bolivia",
+      "fr": "Bolivie"
+    },
+    "BIH": {
+      "en": "Bosnia and Herzegovina",
+      "fr": "Bosnie-Herzégovine"
+    },
+    "BWA": {
+      "en": "Botswana",
+      "fr": "Botswana"
+    },
+    "BRA": {
+      "en": "Brazil",
+      "fr": "Brésil"
+    },
+    "GBR": {
+      "en": "United Kingdom",
+      "fr": "Royaume-Uni"
+    },
+    "USA": {
+      "en": "United States",
+      "fr": "États-Unis"
+    },
+    "UNK": {
+      "en": "Global",
+      "fr": "Mondial"
+    },
+    "CAN": {
+      "en": "Canada",
+      "fr": "Canada"
+    },
+    "FRA": {
+      "en": "France",
+      "fr": "France"
+    },
+    "DEU": {
+      "en": "Germany",
+      "fr": "Allemagne"
+    },
+    "ITA": {
+      "en": "Italy",
+      "fr": "Italie"
+    },
+    "ESP": {
+      "en": "Spain",
+      "fr": "Espagne"
+    },
+    "JPN": {
+      "en": "Japan",
+      "fr": "Japon"
+    },
+    "CHN": {
+      "en": "China",
+      "fr": "Chine"
+    },
+    "IND": {
+      "en": "India",
+      "fr": "Inde"
+    },
+    "RUS": {
+      "en": "Russia",
+      "fr": "Russie"
+    }
+  }

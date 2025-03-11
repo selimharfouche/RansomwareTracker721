@@ -9,9 +9,9 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card"
-import { MapPin, Shield, X, ChevronDown, ChevronUp } from "lucide-react"
+import { MapPin, ChevronDown, ChevronUp } from "lucide-react"
 
-export function CountryDetailCard({ country, countryStats, onClose }) {
+export function CityListCard({ title, cities, showCountry = false }) {
   const { t } = useTranslation()
   const [showAllCities, setShowAllCities] = useState(false)
 
@@ -20,62 +20,45 @@ export function CountryDetailCard({ country, countryStats, onClose }) {
     setShowAllCities(!showAllCities)
   }
 
-  // No data check
-  if (!country || !countryStats || !countryStats[country]) {
-    return null;
-  }
-
-  const countryData = countryStats[country];
-  const { count, cities, name = country } = countryData;
-
   // Format city data for display
-  const allCityEntries = Object.entries(cities || {})
-    .sort(([, a], [, b]) => b - a)
-    .map(([city, count]) => ({ city, count }));
+  const allCityEntries = cities || [];
     
-  // Display 5 cities by default, or all if expanded
+  // Display 10 cities by default, or all if expanded
   const cityEntries = showAllCities 
     ? allCityEntries 
-    : allCityEntries.slice(0, 5);
+    : allCityEntries.slice(0, 10);
 
   return (
-    <Card className="rounded-lg border shadow-md overflow-hidden animate-in fade-in duration-1000">
-      <CardHeader className="relative pb-2 bg-muted/20">
-        <div className="flex justify-between items-center">
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <MapPin className="h-5 w-5 text-primary" />
-            {name}
-          </CardTitle>
-          <button
-            onClick={onClose}
-            className="rounded-full p-1 hover:bg-muted transition-colors"
-            aria-label={t("close_country_details")}
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-        <CardDescription className="flex items-center gap-1.5">
-          <Shield className="h-4 w-4 text-primary/80" />
-          <span>{t("ransomware_incidents_recorded", {count})}</span>
+    <Card className="rounded-lg border shadow-md overflow-hidden">
+      <CardHeader className="pb-2 bg-muted/20">
+        <CardTitle className="flex items-center gap-2">
+          <MapPin className="h-5 w-5 text-primary" />
+          {title}
+        </CardTitle>
+        <CardDescription>
+          {t("top_cities_by_incidents")}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4">
         {cityEntries.length > 0 ? (
           <div>
-            <h3 className="text-sm font-medium mb-3 flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-primary/80" />
-              <span>{t("top_cities")}</span>
-            </h3>
             <table className="w-full mb-2">
               <tbody>
-                {cityEntries.map(({ city, count }, index) => (
-                  <tr key={city} className="border-b last:border-b-0">
+                {cityEntries.map(({ city, count, countryName }, index) => (
+                  <tr key={`${city}-${index}`} className="border-b last:border-b-0">
                     <td className="py-3">
                       <div className="flex items-center gap-3">
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
                           {index + 1}
                         </div>
-                        <span className="font-medium">{city}</span>
+                        <div>
+                          <span className="font-medium">{city}</span>
+                          {showCountry && countryName && (
+                            <div className="text-xs text-muted-foreground">
+                              {countryName}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 text-right text-sm text-muted-foreground whitespace-nowrap">
@@ -86,7 +69,7 @@ export function CountryDetailCard({ country, countryStats, onClose }) {
               </tbody>
             </table>
             
-            {allCityEntries.length > 5 && (
+            {allCityEntries.length > 10 && (
               <button 
                 onClick={toggleAllCities}
                 className="w-full text-center py-2 text-sm text-primary hover:underline flex items-center justify-center gap-1"
@@ -98,7 +81,7 @@ export function CountryDetailCard({ country, countryStats, onClose }) {
                   </>
                 ) : (
                   <>
-                    <span>{t("more_cities", {count: allCityEntries.length - 5})}</span>
+                    <span>{t("more_cities", {count: allCityEntries.length - 10})}</span>
                     <ChevronDown className="h-3 w-3" />
                   </>
                 )}

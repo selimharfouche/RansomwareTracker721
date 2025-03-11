@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps"
 import { scaleLinear } from "d3-scale"
-import { feature } from "topojson-client"
+import { useTranslation } from "@/utils/translation"
 
 // World map topojson
 const remoteGeoUrl = "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json"
 const localGeoUrl = "/world-countries.json"
 
-export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
+export function MapChart({ countryStats, onSelectCountry, selectedCountry, disabled = false }) {
+  const { t } = useTranslation();
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 })
   const [mapData, setMapData] = useState(null)
   const [error, setError] = useState(null)
@@ -17,11 +18,8 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
   const [tooltipContent, setTooltipContent] = useState("")
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
   const [countryMatches, setCountryMatches] = useState({ total: 0, matched: 0 })
-  const [countryFeatures, setCountryFeatures] = useState({})
   const mapContainerRef = useRef(null)
-  const mapBounds = useRef({})
 
-  // Fetch map data on component mount
   useEffect(() => {
     const fetchMapData = async () => {
       try {
@@ -39,57 +37,6 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
         
         const data = await response.json();
         setMapData(data);
-        
-        // Process geographies to extract features and bounding boxes
-        if (data && data.objects) {
-          const countries = {};
-          const features = feature(data, data.objects.countries).features;
-          
-          features.forEach(geo => {
-            if (geo.id) {
-              // Calculate country bounds (bounding box)
-              let bounds = { x: [Infinity, -Infinity], y: [Infinity, -Infinity] };
-              
-              if (geo.geometry && geo.geometry.coordinates) {
-                const coords = geo.geometry.coordinates;
-                
-                // Handle different geometry types
-                if (geo.geometry.type === "Polygon") {
-                  coords[0].forEach(([x, y]) => {
-                    bounds.x[0] = Math.min(bounds.x[0], x);
-                    bounds.x[1] = Math.max(bounds.x[1], x);
-                    bounds.y[0] = Math.min(bounds.y[0], y);
-                    bounds.y[1] = Math.max(bounds.y[1], y);
-                  });
-                } 
-                else if (geo.geometry.type === "MultiPolygon") {
-                  coords.forEach(poly => {
-                    poly[0].forEach(([x, y]) => {
-                      bounds.x[0] = Math.min(bounds.x[0], x);
-                      bounds.x[1] = Math.max(bounds.x[1], x);
-                      bounds.y[0] = Math.min(bounds.y[0], y);
-                      bounds.y[1] = Math.max(bounds.y[1], y);
-                    });
-                  });
-                }
-              }
-              
-              // Store country with its bounds
-              countries[geo.id] = {
-                feature: geo,
-                bounds: bounds,
-                center: [
-                  (bounds.x[0] + bounds.x[1]) / 2,
-                  (bounds.y[0] + bounds.y[1]) / 2
-                ],
-                name: geo.properties.name
-              };
-            }
-          });
-          
-          setCountryFeatures(countries);
-          mapBounds.current = countries;
-        }
       } catch (error) {
         console.error("Error loading map data:", error);
         setError(`Failed to load map data: ${error.message}`);
@@ -99,57 +46,47 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
     fetchMapData();
   }, []);
 
-  // Calculate matches when country features and stats are available
+  // Calculate matches when map data changes
   useEffect(() => {
-    if (Object.keys(countryFeatures).length > 0 && Object.keys(countryStats).length > 0) {
-      let matches = 0;
-      for (const countryId in countryFeatures) {
-        if (countryStats[countryId]) {
-          matches++;
-        }
-      }
-      
-      setCountryMatches({
-        total: Object.keys(countryFeatures).length,
-        matched: matches
-      });
-    }
-  }, [countryFeatures, countryStats]);
-
-  // Handle country selection and zoom effect
-  useEffect(() => {
-    if (selectedCountry && countryFeatures[selectedCountry]) {
-      // Get the selected country's data
-      const country = countryFeatures[selectedCountry];
-      
-      // Calculate best zoom level based on country size
-      const bounds = country.bounds;
-      const width = Math.abs(bounds.x[1] - bounds.x[0]);
-      const height = Math.abs(bounds.y[1] - bounds.y[0]);
-      
-      // Adjust zoom based on country size (larger countries need less zoom)
-      let zoomLevel = 4;
-      if (width > 50 || height > 50) zoomLevel = 3;
-      if (width > 90 || height > 90) zoomLevel = 2;
-      
-      // Apply zoom with animation delay for better UX
+    if (mapData && Object.keys(countryStats).length > 0) {
       setTimeout(() => {
-        setPosition({
-          coordinates: country.center,
-          zoom: zoomLevel
-        });
-      }, 100);
+        let matches = 0;
+        let total = 0;
+        
+        // Safely count matches
+        try {
+          const geographies = document.querySelectorAll('[class*="rsm-geography"]');
+          total = geographies.length;
+          
+          Object.keys(countryStats).forEach(countryCode => {
+            if (document.querySelector(`[aria-label*="${countryCode}"]`)) {
+              matches++;
+            }
+          });
+        } catch (e) {
+          console.warn("Error counting map matches:", e);
+        }
+        
+        setCountryMatches({ total, matched: matches });
+      }, 1000);
     }
-  }, [selectedCountry, countryFeatures]);
+  }, [mapData, countryStats]);
 
-  // Handle country click
+  // Reset zoom when selected country is cleared
+  useEffect(() => {
+    if (!selectedCountry) {
+      setPosition({ coordinates: [0, 0], zoom: 1 });
+    }
+  }, [selectedCountry]);
+
   const handleCountryClick = useCallback((geo) => {
-    if (!geo || !geo.id) return;
+    if (disabled) return; // Skip if map is disabled
     
     const countryId = geo.id;
-    const countryName = geo.properties?.name || 'Unknown';
+    const countryName = geo.properties?.name || t("unknown");
     
     console.log(`Country clicked: ${countryName} (${countryId})`);
+    console.log(`Has data: ${countryStats[countryId] ? 'Yes' : 'No'}`);
     
     if (countryStats[countryId]) {
       if (selectedCountry === countryId) {
@@ -157,22 +94,20 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
         onSelectCountry(null);
         setPosition({ coordinates: [0, 0], zoom: 1 });
       } else {
-        // Select the country
+        // Select the country and zoom in
         onSelectCountry(countryId);
       }
-    } else {
-      console.log(`No data for ${countryName}`);
     }
-  }, [countryStats, onSelectCountry, selectedCountry]);
+  }, [countryStats, onSelectCountry, selectedCountry, disabled, t]);
 
-  // Handle reset button click
   const handleReset = useCallback(() => {
     setPosition({ coordinates: [0, 0], zoom: 1 });
     onSelectCountry(null);
   }, [onSelectCountry]);
 
-  // Handle mouse move for tooltip positioning
   const handleMouseMove = useCallback((e) => {
+    if (disabled) return; // Skip if map is disabled
+    
     if (tooltipVisible && mapContainerRef.current) {
       const containerRect = mapContainerRef.current.getBoundingClientRect();
       const x = e.clientX - containerRect.left;
@@ -183,24 +118,25 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
         y: y
       });
     }
-  }, [tooltipVisible]);
+  }, [tooltipVisible, disabled]);
 
-  // Handle mouse hover on country
-  const handleCountryHover = useCallback((geo) => {
+  const handleMouseHover = useCallback((geo) => {
+    if (disabled) return; // Skip if map is disabled
+    
     if (!geo || !geo.id) return;
     
     const countryId = geo.id;
-    const countryName = geo.properties?.name || 'Unknown';
+    const countryName = geo.properties?.name || t("unknown");
     const hasData = countryStats[countryId] ? true : false;
     const count = hasData ? countryStats[countryId]?.count || 0 : 0;
     
     const tooltipText = hasData 
-      ? `${countryName}: ${count} incidents` 
-      : `${countryName}: No data`;
+      ? `${countryName}: ${count} ${t(count === 1 ? 'incident' : 'incidents')}` 
+      : `${countryName}: ${t("no_data")}`;
       
     setTooltipContent(tooltipText);
     setTooltipVisible(true);
-  }, [countryStats]);
+  }, [countryStats, disabled, t]);
 
   if (error) {
     return <div className="text-center text-red-500 p-4">{error}</div>;
@@ -211,7 +147,7 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
       <div className="flex h-full w-full items-center justify-center">
         <div className="animate-pulse text-center">
           <div className="h-8 w-8 mx-auto rounded-full bg-primary/20 mb-2"></div>
-          <p>Loading map data...</p>
+          <p>{t("loading_map_data")}</p>
         </div>
       </div>
     );
@@ -223,7 +159,7 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
 
   return (
     <div 
-      className="relative h-full w-full overflow-hidden rounded-lg"
+      className={`relative h-full w-full ${disabled ? 'pointer-events-none' : ''}`}
       ref={mapContainerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltipVisible(false)}
@@ -254,11 +190,10 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
           center={position.coordinates} 
           onMoveEnd={setPosition}
           onMoveStart={() => setTooltipVisible(false)}
-          translateExtent={[[-Infinity, -Infinity], [Infinity, Infinity]]}
         >
           <Geographies geography={mapData}>
-            {({ geographies }) => {
-              return geographies.map((geo) => {
+            {({ geographies }) => 
+              geographies.map((geo) => {
                 const countryId = geo.id;
                 const hasData = countryStats[countryId] ? true : false;
                 const count = hasData ? countryStats[countryId]?.count || 0 : 0;
@@ -274,25 +209,25 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
                     style={{
                       default: {
                         outline: "none",
-                        cursor: hasData ? "pointer" : "default"
+                        cursor: disabled ? "default" : (hasData ? "pointer" : "default")
                       },
                       hover: {
                         fill: hasData ? "hsl(var(--primary) / 0.7)" : "#F5F5F5",
                         outline: "none",
-                        cursor: hasData ? "pointer" : "default"
+                        cursor: disabled ? "default" : (hasData ? "pointer" : "default")
                       },
                       pressed: {
                         outline: "none",
-                        cursor: hasData ? "pointer" : "default"
+                        cursor: disabled ? "default" : (hasData ? "pointer" : "default")
                       },
                     }}
                     onClick={() => handleCountryClick(geo)}
-                    onMouseEnter={() => handleCountryHover(geo)}
+                    onMouseEnter={() => handleMouseHover(geo)}
                     onMouseLeave={() => setTooltipVisible(false)}
                   />
                 );
-              });
-            }}
+              })
+            }
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
@@ -300,7 +235,7 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
       {position.zoom > 1 && (
         <button
           onClick={handleReset}
-          className="absolute bottom-4 right-4 rounded-full bg-primary p-2 text-primary-foreground shadow-md hover:bg-primary/90 transition-colors"
+          className="absolute bottom-4 right-4 rounded-full bg-primary p-2 text-primary-foreground shadow-md hover:bg-primary/90"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -309,19 +244,18 @@ export function MapChart({ countryStats, onSelectCountry, selectedCountry }) {
         </button>
       )}
 
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-md bg-background/90 p-2 text-xs backdrop-blur">
+      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-md bg-background/80 p-2 text-xs backdrop-blur">
         <div className="flex items-center gap-1">
           <div className="h-3 w-3 rounded-sm bg-slate-200"></div>
-          <span>No data</span>
+          <span>{t("no_data")}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="h-3 w-3 rounded-sm bg-primary/30"></div>
-          <span>Low</span>
+          <span>{t("low")}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="h-3 w-3 rounded-sm bg-primary"></div>
-          <span>High</span>
+          <span>{t("high")}</span>
         </div>
       </div>
     </div>
