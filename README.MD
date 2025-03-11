@@ -1,5 +1,7 @@
 TODO : FILTER ALSO ON MPAGE BY CAPITAL, ENTREPRISE SIZE ETC CHECK JSON
 
+
+TODO: change JSON LIKE AFTER AI PROCESS COPY IT TO WEBSITE DIRECTORY  !
 To use this system:
 
 Run python create_configs.py --all to create the initial configuration files
