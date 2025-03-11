@@ -2,16 +2,14 @@ name: Ransomware Tracker Scraping
 
 on:
   schedule:
-    # Run every 6 hours
     - cron: '0 */6 * * *'
-  # Allow manual triggering
   workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This grants permission to write to the repository
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,13 +20,26 @@ jobs:
           python-version: '3.9'
           cache: 'pip'
 
+      # Cache Tor installation
+      - name: Cache Tor
+        id: cache-tor
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/tor-binary
+          key: ${{ runner.os }}-tor-${{ hashFiles('requirements.txt') }}
+
       - name: Install Tor
+        if: steps.cache-tor.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y tor
+          mkdir -p ~/.cache/tor-binary
+          cp $(which tor) ~/.cache/tor-binary/
+      
+      - name: Start Tor Service
+        run: |
           sudo service tor start
-          # Verify Tor is running
-          sleep 5  # Give Tor time to start
+          sleep 3
           netstat -tulpn | grep 9050 || echo "Warning: Tor might not be running on port 9050"
 
       - name: Setup Firefox
@@ -36,28 +47,30 @@ jobs:
         with:
           firefox-version: 'latest'
 
-      - name: Install Geckodriver
-        run: |
-          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '"' -f 4)
-          wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz
-          tar -xzf geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz
-          sudo mv geckodriver /usr/local/bin/
-          geckodriver --version
+      - name: Setup Geckodriver
+        uses: browser-actions/setup-geckodriver@latest
+        with:
+          token: ${{ github.token }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          # Make sure requests library is installed for process_entities.py
-          pip install requests
+          # Install only required packages
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            # If no requirements.txt, install essential packages
+            pip install selenium beautifulsoup4 requests
+          fi
 
       - name: Configure for GitHub Actions
         run: |
-          # Create temporary GitHub Actions configuration
+          # Create configurations directory
           mkdir -p /tmp/github_configs/code
           
-          # Create scraping_config.json for GitHub Actions (but don't overwrite repo version)
-          echo '{
+          # Create all config files in a single step
+          cat > /tmp/github_configs/code/scraping_config.json << 'EOF'
+          {
             "snapshots": {
               "save_html": false,
               "max_snapshots_per_site": 5,
@@ -67,10 +80,11 @@ jobs:
               "frequency_hours": 6,
               "randomize_start_time": true
             }
-          }' > /tmp/github_configs/code/scraping_config.json
+          }
+          EOF
           
-          # Create proxy_config.json for GitHub Actions
-          echo '{
+          cat > /tmp/github_configs/code/proxy_config.json << 'EOF'
+          {
             "proxy": {
               "type": "socks",
               "host": "127.0.0.1",
@@ -80,10 +94,13 @@ jobs:
             "tor": {
               "auto_start": false
             }
-          }' > /tmp/github_configs/code/proxy_config.json
+          }
+          EOF
           
-          # Create browser_config.json with Firefox binary path
-          echo '{
+          # Create browser config with resolved Firefox path
+          FIREFOX_PATH=$(which firefox)
+          cat > /tmp/github_configs/code/browser_config.json << EOF
+          {
             "timing": {
               "min_wait_time": 10,
               "max_wait_time": 20,
@@ -95,45 +112,33 @@ jobs:
               "randomize_timing": true
             },
             "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
-            "firefox_binary": "'$(which firefox)'"
-          }' > /tmp/github_configs/code/browser_config.json
+            "firefox_binary": "${FIREFOX_PATH}"
+          }
+          EOF
           
-          # Print Firefox and Geckodriver information for debugging
-          echo "Firefox path: $(which firefox)"
-          firefox --version
-          echo "Geckodriver path: $(which geckodriver)"
-          geckodriver --version
+          # Create necessary data directories in one step
+          mkdir -p data/output data/html_snapshots data/processed
 
-      - name: Run scraper
+      - name: Run scraper and process entities
         run: |
-          # Create necessary directories
-          mkdir -p data/output
-          mkdir -p data/html_snapshots
-          mkdir -p data/processed
-          
           # Export environment variable to point to temporary config
           export GITHUB_CONFIG_PATH="/tmp/github_configs"
           
-          # Run the scraper with verbose output
+          # Run the scraper
           cd tracker
           python main.py
-
-      - name: Process and archive entities
-        run: |
-          # Run the entity processing script to standardize and archive entities
-          cd tracker/processing
+          
+          # Process entities immediately after scraping
+          cd processing
           python process_entities.py
           echo "Entity processing and archiving completed"
 
       - name: Commit and push if there are changes
         run: |
-          # Clean up geckodriver tarball
-          rm -f geckodriver-*.tar.gz
-          
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # Only commit changes to data directory, not config
+          # Only commit changes to data directory
           git add -A data/
           
           # Check if there are changes to commit
