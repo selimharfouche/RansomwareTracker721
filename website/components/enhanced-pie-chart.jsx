@@ -10,8 +10,10 @@ import {
   Legend,
   Tooltip
 } from 'recharts';
+import { useTranslation } from "@/utils/translation";
 
 export function EnhancedPieChart({ data, index, category, colors, valueFormatter }) {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(null);
   
   // Calculate percentages
@@ -69,7 +71,7 @@ export function EnhancedPieChart({ data, index, category, colors, valueFormatter
         <div className="bg-background border rounded-md p-2 shadow-md text-sm">
           <p className="font-medium">{data[index]}</p>
           <p className="text-primary">{valueFormatter ? valueFormatter(data[category]) : data[category]}</p>
-          <p className="text-xs text-muted-foreground">{data.percentage}% of total</p>
+          <p className="text-xs text-muted-foreground">{data.percentage}% {t("of_total")}</p>
         </div>
       );
     }

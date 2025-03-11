@@ -210,3 +210,4 @@ var/
 venv/
 ENV/
 .dockerignore
+.vercel
