@@ -1,3 +1,5 @@
+TODO : FILTER ALSO ON MPAGE BY CAPITAL, ENTREPRISE SIZE ETC CHECK JSON
+
 To use this system:
 
 Run python create_configs.py --all to create the initial configuration files
