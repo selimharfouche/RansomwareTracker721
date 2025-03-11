@@ -1,0 +1,20 @@
+[
+  {
+    "domain": "www.jpwindustries.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Ohio",
+      "city": "Cleveland"
+    },
+    "organization": {
+      "name": "JPW Industries",
+      "industry": "Manufacturing",
+      "sub_industry": "Industrial Machinery",
+      "size": {
+        "employees_range": "100-499",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  }
+]

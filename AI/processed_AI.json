@@ -25119,8 +25119,29 @@
       "id": "post/mies7rTNd76hDhK267d0046a8569f",
       "group_key": "lockbit",
       "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "www.jpwindustries.com",
+      "geography": {
+        "country_code": "USA",
+        "region": "Ohio",
+        "city": "Cleveland"
+      },
+      "organization": {
+        "name": "JPW Industries",
+        "industry": "Manufacturing",
+        "sub_industry": "Industrial Machinery",
+        "size": {
+          "employees_range": "100-499",
+          "revenue_range": "$10M-$50M"
+        },
+        "status": "Private"
+      },
+      "id": "33339358-eac5-468b-8028-fbe7eb32bd99",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1196,
-  "last_updated": "2025-03-11 17:49:53 UTC"
+  "total_count": 1197,
+  "last_updated": "2025-03-11 18:04:21 UTC"
 }
