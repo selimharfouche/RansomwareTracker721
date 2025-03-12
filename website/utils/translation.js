@@ -49,6 +49,12 @@ const translations = {
     show_fewer_cities: "Show fewer cities",
     more_cities: "+ {{count}} more cities",
     no_city_data: "No city data available",
+    "organization_size": "Organization Size",
+  "organization_status": "Organization Status",
+  "distribution_by_size": "Distribution by employee count and revenue",
+  "distribution_by_status": "Distribution by organization status",
+  "employees_range": "Employee Count",
+  "revenue_range": "Annual Revenue",
     
     // Errors
     error_loading_data: "Error loading data",
@@ -99,7 +105,12 @@ const translations = {
     show_fewer_cities: "Afficher moins de villes",
     more_cities: "+ {{count}} villes supplémentaires",
     no_city_data: "Aucune donnée de ville disponible",
-    
+    "organization_size": "Taille de l'Organisation", 
+  "organization_status": "Statut de l'Organisation",
+  "distribution_by_size": "Distribution par nombre d'employés et revenus",
+  "distribution_by_status": "Distribution par statut d'organisation",
+  "employees_range": "Nombre d'Employés",
+  "revenue_range": "Revenu Annuel",
     // Errors
     error_loading_data: "Erreur de chargement des données",
     error_description: "Une erreur est survenue lors du chargement des données. Veuillez actualiser la page. Si le problème persiste, il pourrait y avoir un problème de configuration du serveur."
