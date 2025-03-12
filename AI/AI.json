@@ -13,12 +13,6 @@
       "group_key": "ransomhub"
     },
     {
-      "id": "post/C1J0mMR9dcwtKgRm67c49364dd1c8",
-      "domain": "gruppocogesi.org",
-      "ransomware_group": "LockBit",
-      "group_key": "lockbit"
-    },
-    {
       "id": "post/QXQ5PfOboqLa3nkG67c051d0b1617",
       "domain": "ahn.org",
       "ransomware_group": "LockBit",
@@ -7175,9 +7169,27 @@
       "domain": "test.com",
       "ransomware_group": "LockBit",
       "group_key": "lockbit"
+    },
+    {
+      "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
+      "domain": "www.visualisation.one",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "post/C1J0mMR9dcwtKgRm67c49364dd1c8",
+      "domain": "gruppocogesi.org",
+      "ransomware_group": "LockBit",
+      "group_key": "lockbit"
+    },
+    {
+      "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
+      "domain": "total-ps.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1196,
-  "last_updated": "2025-03-11 12:35:29 UTC",
+  "total_count": 1198,
+  "last_updated": "2025-03-12 19:36:09 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

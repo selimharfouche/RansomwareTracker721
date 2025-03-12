@@ -25140,8 +25140,50 @@
       "id": "33339358-eac5-468b-8028-fbe7eb32bd99",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.visualisation.one",
+      "geography": {
+        "country_code": "GBR",
+        "region": "London",
+        "city": "London"
+      },
+      "organization": {
+        "name": "Visualisation One",
+        "industry": "Technology",
+        "sub_industry": "Data Visualization",
+        "size": {
+          "employees_range": "10-49",
+          "revenue_range": "$1M-$10M"
+        },
+        "status": "Private"
+      },
+      "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "total-ps.com",
+      "geography": {
+        "country_code": "USA",
+        "region": "Illinois",
+        "city": "Chicago"
+      },
+      "organization": {
+        "name": "Total PS",
+        "industry": "Business Services",
+        "sub_industry": "Professional Services",
+        "size": {
+          "employees_range": "50-99",
+          "revenue_range": "$10M-$50M"
+        },
+        "status": "Private"
+      },
+      "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1197,
-  "last_updated": "2025-03-11 18:04:21 UTC"
+  "total_count": 1199,
+  "last_updated": "2025-03-12 21:31:38 UTC"
 }
