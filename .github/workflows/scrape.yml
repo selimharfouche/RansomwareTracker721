@@ -73,9 +73,11 @@ jobs:
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
-            # Make sure to install requests if not in requirements.txt
             pip install selenium beautifulsoup4 requests
           fi
+          
+          # Make sure requests is installed (needed for Telegram notifications)
+          pip install requests
 
       # Create configuration files with 10 second minimum wait time
       - name: Configure for GitHub Actions
@@ -134,12 +136,13 @@ jobs:
       
       # Prepare directories
       - name: Create data directories
-        run: mkdir -p data/output data/html_snapshots data/processed logs
+        run: |
+          mkdir -p data/output data/html_snapshots data/processed logs
 
-      # Run scraper
+      # Run scraper with Telegram environmental variables
       - name: Run scraper and process entities
         env:
-          # Pass GitHub secrets to the environment
+          # Pass GitHub secrets to the environment for Telegram notifications
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         run: |

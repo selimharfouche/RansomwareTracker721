@@ -91,10 +91,17 @@ class BaseParser(ABC):
                 
                 # Send Telegram notification for new entity
                 try:
-                    # Import the notifier dynamically to avoid circular imports
-                    telegram_module = importlib.import_module('tracker.telegram_bot.notifier')
-                    telegram_module.notify_new_entity(entity_copy, self.site_name)
+                    # Try to import the telegram notifier module
+                    # We use a direct import here to handle potential errors gracefully
+                    from tracker.telegram_bot.notifier import notify_new_entity
+                    
+                    # Send the notification
+                    notify_new_entity(entity_copy, self.site_name)
                     logger.info(f"Telegram notification sent for {entity.get('domain', entity_id)}")
+                except ImportError:
+                    logger.warning("Could not import telegram notifier. Notifications will not be sent.")
+                    logger.warning("If you want notifications, ensure 'requests' is installed.")
+                    logger.warning("For local development, also install 'python-dotenv'.")
                 except Exception as e:
                     logger.error(f"Failed to send Telegram notification: {e}")
             else:
