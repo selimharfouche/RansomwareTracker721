@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -13,6 +14,7 @@ sys.path.append(str(PROJECT_ROOT))
 # Import Tor manager first
 from tracker.utils.tor_manager import ensure_tor_running
 from tracker.utils.logging_utils import logger
+from tracker.utils.file_utils import load_json
 from tracker.browser.tor_browser import setup_tor_browser, test_tor_connection
 from tracker.scraper.generic_parser import GenericParser
 from tracker.config.config_handler import ConfigHandler
@@ -60,6 +62,11 @@ def main(target_sites=None):
         target_sites (list): Optional list of site keys to process. If None, process all sites.
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Initialize tracking variables for the final notification
+    sites_processed = []
+    total_entities_found = 0
+    new_entities_found = 0
     
     # Check if we're running in GitHub Actions
     in_github_actions = os.environ.get('GITHUB_ACTIONS') == 'true'
@@ -111,7 +118,32 @@ def main(target_sites=None):
         for site_key in target_sites:
             site_config = config_handler.get_site_config(site_key)
             if site_config:
-                process_site(driver, site_config)
+                # Add site to processed list for the notification
+                site_name = site_config.get('site_name', site_key)
+                sites_processed.append(site_name)
+                
+                # Process the site
+                success = process_site(driver, site_config)
+                
+                # Count entities if successfully processed
+                if success:
+                    try:
+                        # Get entity counts for this site
+                        json_file = site_config.get("json_file", f"{site_key}_entities.json")
+                        entity_data = load_json(json_file, OUTPUT_DIR)
+                        site_total = len(entity_data.get('entities', []))
+                        total_entities_found += site_total
+                        
+                        # Try to count new entities from the central file
+                        new_entities_file = os.path.join(OUTPUT_DIR, "new_entities.json")
+                        if os.path.exists(new_entities_file):
+                            with open(new_entities_file, 'r') as f:
+                                new_entities_data = json.load(f)
+                                new_entities = [e for e in new_entities_data.get('entities', []) 
+                                              if e.get('group_key') == site_key]
+                                new_entities_found += len(new_entities)
+                    except Exception as e:
+                        logger.error(f"Error counting entities for site {site_key}: {e}")
             else:
                 logger.error(f"Configuration for site {site_key} not found or invalid")
         
@@ -121,6 +153,15 @@ def main(target_sites=None):
         # Always close the browser properly
         if driver:
             driver.quit()
+        
+        # Send completion notification
+        try:
+            # Import the notifier dynamically to avoid module import issues
+            from tracker.telegram_bot.notifier import send_scan_completion_notification
+            send_scan_completion_notification(sites_processed, total_entities_found, new_entities_found)
+            logger.info("Scan completion notification sent")
+        except Exception as e:
+            logger.error(f"Failed to send scan completion notification: {e}")
 
 if __name__ == "__main__":
     # Parse command line arguments
