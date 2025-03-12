@@ -1,0 +1,38 @@
+[
+  {
+    "domain": "www.visualisation.one",
+    "geography": {
+      "country_code": "GBR",
+      "region": "London",
+      "city": "London"
+    },
+    "organization": {
+      "name": "Visualisation One",
+      "industry": "Technology",
+      "sub_industry": "Data Visualization",
+      "size": {
+        "employees_range": "10-49",
+        "revenue_range": "$1M-$10M"
+      },
+      "status": "Private"
+    }
+  },
+  {
+    "domain": "total-ps.com",
+    "geography": {
+      "country_code": "USA",
+      "region": "Illinois",
+      "city": "Chicago"
+    },
+    "organization": {
+      "name": "Total PS",
+      "industry": "Business Services",
+      "sub_industry": "Professional Services",
+      "size": {
+        "employees_range": "50-99",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Private"
+    }
+  }
+]
