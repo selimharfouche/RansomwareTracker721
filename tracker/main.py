@@ -26,12 +26,14 @@ CONFIG_DIR = os.path.join(PROJECT_ROOT, "config", "sites")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
 HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "data", "html_snapshots")
 PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
+LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
 
 # Ensure directories exist
 os.makedirs(CONFIG_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(HTML_SNAPSHOTS_DIR, exist_ok=True)
 os.makedirs(PROCESSED_DIR, exist_ok=True)
+os.makedirs(LOGS_DIR, exist_ok=True)  # Ensure logs directory exists for notification logs
 
 def process_site(driver, site_config):
     """Process a single site based on its configuration"""
@@ -83,6 +85,12 @@ def main(target_sites=None, skip_processing=False):
             return
     else:
         logger.info("Running in GitHub Actions environment. Assuming Tor is already running.")
+        
+        # Verify Telegram credentials are available in GitHub Actions
+        if not os.environ.get('TELEGRAM_BOT_TOKEN') or not os.environ.get('TELEGRAM_CHANNEL_ID'):
+            logger.warning("Telegram credentials not found in GitHub Actions environment. "
+                          "Notifications may not work. Please add TELEGRAM_BOT_TOKEN and "
+                          "TELEGRAM_CHANNEL_ID as repository secrets.")
     
     # Load site configurations
     config_handler = ConfigHandler(CONFIG_DIR)
@@ -162,9 +170,16 @@ def main(target_sites=None, skip_processing=False):
         # Send completion notification
         try:
             # Import the notifier dynamically to avoid module import issues
+            # Note: The notifier module will handle environment differences internally
             from tracker.telegram_bot.notifier import send_scan_completion_notification
+            
+            logger.info("Sending scan completion notification...")
             send_scan_completion_notification(sites_processed, total_entities_found, new_entities_found)
-            logger.info("Scan completion notification sent")
+            logger.info("Scan completion notification sent successfully")
+        except ImportError as e:
+            logger.error(f"Failed to import telegram notifier module: {e}")
+            logger.info("If you want to use Telegram notifications, make sure 'requests' is installed")
+            logger.info("For local development, also install 'python-dotenv'")
         except Exception as e:
             logger.error(f"Failed to send scan completion notification: {e}")
         
