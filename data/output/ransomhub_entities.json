@@ -31,36 +31,6 @@
             "first_seen": "2025-03-11 06:23:07 UTC"
         },
         {
-            "id": "7a831b1a-529f-44e2-8842-cb1edb5d0904",
-            "domain": "www.hexosys.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1D 16h 3m 54s",
-                "days": 1,
-                "hours": 16,
-                "minutes": 3,
-                "seconds": 54
-            },
-            "updated": "2025-03-10 12:47:08",
-            "estimated_publish_date": "2025-03-14 12:00:01 UTC",
-            "first_seen": "2025-03-10 18:22:05 UTC"
-        },
-        {
-            "id": "27e87e01-e3c7-4018-8db2-df4fbf216611",
-            "domain": "www.dcarosolutions.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "5D 16h 3m 54s",
-                "days": 5,
-                "hours": 16,
-                "minutes": 3,
-                "seconds": 54
-            },
-            "updated": "2025-03-08 17:36:11",
-            "estimated_publish_date": "2025-03-18 12:00:01 UTC",
-            "first_seen": "2025-03-09 10:42:09 UTC"
-        },
-        {
             "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
             "domain": "mitchellmcnutt.com",
             "status": "countdown",
