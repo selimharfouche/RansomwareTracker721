@@ -21743,9 +21743,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
+      "domain": "total-ps.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-07 19:39:21 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "1D 16h 36m 20s",
+        "days": 1,
+        "hours": 16,
+        "minutes": 36,
+        "seconds": 20
+      },
+      "estimated_publish_date": "2025-03-14 12:00:01 UTC",
+      "first_seen": "2025-03-12 19:23:41 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-12 18:24:48 UTC",
-  "total_count": 1197,
+  "last_updated": "2025-03-12 19:24:29 UTC",
+  "total_count": 1198,
   "description": "Complete archive of all discovered ransomware entities"
 }
