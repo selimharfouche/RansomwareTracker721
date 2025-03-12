@@ -73,6 +73,7 @@ jobs:
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
+            # Make sure to install requests if not in requirements.txt
             pip install selenium beautifulsoup4 requests
           fi
 
@@ -133,21 +134,21 @@ jobs:
       
       # Prepare directories
       - name: Create data directories
-        run: mkdir -p data/output data/html_snapshots data/processed
+        run: mkdir -p data/output data/html_snapshots data/processed logs
 
       # Run scraper
       - name: Run scraper and process entities
+        env:
+          # Pass GitHub secrets to the environment
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         run: |
           export GITHUB_CONFIG_PATH="/tmp/github_configs"
           
           # Run the scraper
           cd tracker
           python main.py
-          
-          # Process entities
-          cd processing
-          python process_entities.py
-          echo "Entity processing completed"
+          echo "Scraper and entity processing completed"
 
       # Commit changes
       - name: Commit and push if there are changes
