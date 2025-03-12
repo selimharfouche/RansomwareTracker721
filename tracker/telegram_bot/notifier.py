@@ -1,27 +1,37 @@
+# tracker/telegram_bot/notifier.py
 import os
 import logging
 import requests
 import json
 from datetime import datetime
 from pathlib import Path
-from dotenv import load_dotenv
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
-# Load .env file from project root
-PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
-ENV_PATH = PROJECT_ROOT / '.env'
-load_dotenv(dotenv_path=ENV_PATH)
+# Check if running in GitHub Actions
+IN_GITHUB_ACTIONS = os.environ.get('GITHUB_ACTIONS') == 'true'
 
 # Define log directory for notification records
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 LOGS_DIR = PROJECT_ROOT / 'logs'
 LOGS_DIR.mkdir(exist_ok=True)
 NOTIFICATION_LOG = LOGS_DIR / 'telegram_notifications.log'
 
-# Get Telegram credentials from .env
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-TELEGRAM_CHANNEL_ID = os.getenv('TELEGRAM_CHANNEL_ID')
+# Get Telegram credentials from environment
+# In GitHub Actions, these should be set as repository secrets
+if not IN_GITHUB_ACTIONS:
+    # Only try to use dotenv in local development
+    try:
+        from dotenv import load_dotenv
+        ENV_PATH = PROJECT_ROOT / '.env'
+        load_dotenv(dotenv_path=ENV_PATH)
+    except ImportError:
+        logger.warning("python-dotenv not installed. Using environment variables directly.")
+
+# Get credentials from environment (works for both .env and GitHub secrets)
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHANNEL_ID = os.environ.get('TELEGRAM_CHANNEL_ID')
 
 def log_notification(entity, message, success):
     """Log notification details to file for record-keeping."""
@@ -44,7 +54,11 @@ def log_notification(entity, message, success):
 def send_telegram_message(message):
     """Send a message to the Telegram channel."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHANNEL_ID:
-        logger.error("Telegram credentials not set in .env file")
+        logger.error("Telegram credentials not set in environment variables")
+        if IN_GITHUB_ACTIONS:
+            logger.error("Make sure TELEGRAM_BOT_TOKEN and TELEGRAM_CHANNEL_ID are set as GitHub repository secrets")
+        else:
+            logger.error("Make sure these are set in your .env file or environment")
         return False
     
     try:
@@ -127,13 +141,17 @@ def format_entity_notification(entity, site_name):
 
 def notify_new_entity(entity, site_name):
     """Send a Telegram notification for a newly discovered entity."""
-    message = format_entity_notification(entity, site_name)
-    success = send_telegram_message(message)
-    
-    # Log the notification
-    log_notification(entity, message, success)
-    
-    return success
+    try:
+        message = format_entity_notification(entity, site_name)
+        success = send_telegram_message(message)
+        
+        # Log the notification
+        log_notification(entity, message, success)
+        
+        return success
+    except Exception as e:
+        logger.error(f"Error in notify_new_entity: {e}")
+        return False
 
 def send_scan_completion_notification(sites_processed, total_entities, new_entities):
     """
@@ -144,44 +162,48 @@ def send_scan_completion_notification(sites_processed, total_entities, new_entit
         total_entities: Total number of entities found across all sites
         new_entities: Number of new entities discovered in this scan
     """
-    # Format the message with scan results
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
-    
-    # Create a message with scan summary
-    message = f"🔍 <b>Ransomware Tracker Scan Completed</b>\n\n"
-    message += f"<b>Time:</b> {timestamp}\n"
-    
-    # Add sites processed
-    if sites_processed:
-        message += f"\n<b>Sites Scanned:</b>\n"
-        for site in sites_processed:
-            message += f"• {site}\n"
-    
-    # Add statistics
-    message += f"\n<b>Total Entities:</b> {total_entities}\n"
-    
-    # Highlight new entities with emoji based on count
-    if new_entities > 0:
-        message += f"<b>New Entities:</b> 🚨 {new_entities} 🚨\n"
-    else:
-        message += f"<b>New Entities:</b> 0 (No new entities found)\n"
-    
-    # Add a status indicator
-    if new_entities > 0:
-        message += f"\n✅ <i>New entities were discovered and notifications sent</i>"
-    else:
-        message += f"\n✅ <i>Scan completed successfully with no new entities</i>"
-    
-    # Send the message
-    success = send_telegram_message(message)
-    
-    if success:
-        logger.info("Scan completion notification sent successfully")
-    else:
-        logger.error("Failed to send scan completion notification")
-    
-    # Create a dummy entity for logging purposes
-    dummy_entity = {'id': 'scan_summary', 'domain': 'scan_summary'}
-    log_notification(dummy_entity, message, success)
-    
-    return success
+    try:
+        # Format the message with scan results
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        
+        # Create a message with scan summary
+        message = f"🔍 <b>Ransomware Tracker Scan Completed</b>\n\n"
+        message += f"<b>Time:</b> {timestamp}\n"
+        
+        # Add sites processed
+        if sites_processed:
+            message += f"\n<b>Sites Scanned:</b>\n"
+            for site in sites_processed:
+                message += f"• {site}\n"
+        
+        # Add statistics
+        message += f"\n<b>Total Entities:</b> {total_entities}\n"
+        
+        # Highlight new entities with emoji based on count
+        if new_entities > 0:
+            message += f"<b>New Entities:</b> 🚨 {new_entities} 🚨\n"
+        else:
+            message += f"<b>New Entities:</b> 0 (No new entities found)\n"
+        
+        # Add a status indicator
+        if new_entities > 0:
+            message += f"\n✅ <i>New entities were discovered and notifications sent</i>"
+        else:
+            message += f"\n✅ <i>Scan completed successfully with no new entities</i>"
+        
+        # Send the message
+        success = send_telegram_message(message)
+        
+        if success:
+            logger.info("Scan completion notification sent successfully")
+        else:
+            logger.error("Failed to send scan completion notification")
+        
+        # Create a dummy entity for logging purposes
+        dummy_entity = {'id': 'scan_summary', 'domain': 'scan_summary'}
+        log_notification(dummy_entity, message, success)
+        
+        return success
+    except Exception as e:
+        logger.error(f"Error in send_scan_completion_notification: {e}")
+        return False
