@@ -18,16 +18,20 @@ from tracker.utils.file_utils import load_json
 from tracker.browser.tor_browser import setup_tor_browser, test_tor_connection
 from tracker.scraper.generic_parser import GenericParser
 from tracker.config.config_handler import ConfigHandler
+# Import the processing functionality
+from tracker.processing.process_entities import process_and_archive_entities
 
 # Constants with relative paths
 CONFIG_DIR = os.path.join(PROJECT_ROOT, "config", "sites")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
 HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "data", "html_snapshots")
+PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 
 # Ensure directories exist
 os.makedirs(CONFIG_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(HTML_SNAPSHOTS_DIR, exist_ok=True)
+os.makedirs(PROCESSED_DIR, exist_ok=True)
 
 def process_site(driver, site_config):
     """Process a single site based on its configuration"""
@@ -54,12 +58,13 @@ def process_site(driver, site_config):
         logger.error(f"Error processing {site_name}: {e}")
         return False
 
-def main(target_sites=None):
+def main(target_sites=None, skip_processing=False):
     """
     Main function to scrape multiple sites based on configuration files
     
     Args:
         target_sites (list): Optional list of site keys to process. If None, process all sites.
+        skip_processing (bool): If True, skip entity processing after scraping
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
@@ -162,13 +167,28 @@ def main(target_sites=None):
             logger.info("Scan completion notification sent")
         except Exception as e:
             logger.error(f"Failed to send scan completion notification: {e}")
+        
+        # Process entities if not skipped
+        if not skip_processing:
+            try:
+                logger.info("Starting entity processing and archiving...")
+                success = process_and_archive_entities()
+                if success:
+                    logger.info("Entity processing and archiving completed successfully")
+                else:
+                    logger.error("Entity processing and archiving failed")
+            except Exception as e:
+                logger.error(f"Error during entity processing: {e}")
+        else:
+            logger.info("Entity processing skipped (--no-process flag was used)")
 
 if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Ransomware leak site tracker")
     parser.add_argument('--sites', type=str, nargs='+', help='Specific sites to scrape (e.g., lockbit bashe)')
     parser.add_argument('--headless', action='store_true', help='Run browser in headless mode')
+    parser.add_argument('--no-process', action='store_true', help='Skip entity processing after scraping')
     args = parser.parse_args()
     
-    # Run the main function
-    main(args.sites)
+    # Run the main function with the parsed arguments
+    main(args.sites, args.no_process)

@@ -269,6 +269,9 @@ def process_and_archive_entities():
     """
     Process entities from new_entities.json, standardize them,
     and archive them directly into final_entities.json.
+    
+    Returns:
+        bool: True if processing was successful, False otherwise
     """
     # Check if input file exists
     if not os.path.exists(INPUT_FILE):
