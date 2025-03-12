@@ -1,0 +1,25 @@
+{
+    "entities": [
+        {
+            "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
+            "domain": "www.visualisation.one",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "1D 23h 26m 14s",
+                "days": 1,
+                "hours": 23,
+                "minutes": 26,
+                "seconds": 14
+            },
+            "updated": "2025-03-12 06:58:01",
+            "estimated_publish_date": "2025-03-14 12:00:01 UTC",
+            "first_seen": "2025-03-12 12:33:48 UTC",
+            "ransomware_group": "RansomHub",
+            "group_key": "ransomhub"
+        }
+    ],
+    "last_updated": "2025-03-12 12:33:48 UTC",
+    "total_count": 1,
+    "ransomware_group": "RansomHub",
+    "group_key": "ransomhub"
+}

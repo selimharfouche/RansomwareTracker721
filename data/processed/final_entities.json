@@ -21719,9 +21719,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
+      "domain": "www.visualisation.one",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-12 06:58:01 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "1D 23h 26m 14s",
+        "days": 1,
+        "hours": 23,
+        "minutes": 26,
+        "seconds": 14
+      },
+      "estimated_publish_date": "2025-03-14 12:00:01 UTC",
+      "first_seen": "2025-03-12 12:33:48 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-11 12:35:29 UTC",
-  "total_count": 1196,
+  "last_updated": "2025-03-12 12:34:35 UTC",
+  "total_count": 1197,
   "description": "Complete archive of all discovered ransomware entities"
 }
