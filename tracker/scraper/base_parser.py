@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import datetime
 import json
 import os
+import importlib
 import shutil
 from pathlib import Path
 from utils.logging_utils import logger
@@ -87,6 +88,15 @@ class BaseParser(ABC):
                 entity_copy['ransomware_group'] = self.site_name
                 entity_copy['group_key'] = self.site_key
                 truly_new_entities.append(entity_copy)
+                
+                # Send Telegram notification for new entity
+                try:
+                    # Import the notifier dynamically to avoid circular imports
+                    telegram_module = importlib.import_module('tracker.telegram_bot.notifier')
+                    telegram_module.notify_new_entity(entity_copy, self.site_name)
+                    logger.info(f"Telegram notification sent for {entity.get('domain', entity_id)}")
+                except Exception as e:
+                    logger.error(f"Failed to send Telegram notification: {e}")
             else:
                 # This is an existing entity, preserve its first_seen date
                 entity['first_seen'] = existing_dict[entity_id].get('first_seen', current_time)

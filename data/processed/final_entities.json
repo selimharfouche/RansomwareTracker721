@@ -43,30 +43,6 @@
       "class": null
     },
     {
-      "id": "post/C1J0mMR9dcwtKgRm67c49364dd1c8",
-      "domain": "gruppocogesi.org",
-      "status": "countdown",
-      "description_preview": "CO.GE.S.I. si è specializzata nel supporto tecnico – amministrativo finalizzato alla definizione delle istanze di condono edilizio e delle istanze edilizie presentate ai sensi del D.p.r. n. 380/2001.",
-      "updated": "2025-03-02 17:20:00 UTC",
-      "views": 3873,
-      "countdown_remaining": {
-        "days": 7,
-        "hours": 6,
-        "minutes": 6,
-        "seconds": 7,
-        "countdown_text": null
-      },
-      "estimated_publish_date": "2025-03-16 16:20:36 UTC",
-      "first_seen": "2025-03-09 10:14:29 UTC",
-      "ransomware_group": "LockBit",
-      "group_key": "lockbit",
-      "country": null,
-      "data_size": null,
-      "last_view": null,
-      "visits": null,
-      "class": null
-    },
-    {
       "id": "post/QXQ5PfOboqLa3nkG67c051d0b1617",
       "domain": "ahn.org",
       "status": "published",
