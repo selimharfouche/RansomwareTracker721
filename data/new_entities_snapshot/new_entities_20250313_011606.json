@@ -1,0 +1,20 @@
+{
+    "entities": [
+        {
+            "id": "122",
+            "domain": "boostheat.com",
+            "status": "published",
+            "country": "France",
+            "description_preview": "Industrial Machinery & Equipment | internal files, docs, employees' info, clients' info",
+            "updated": "2025/02/10 12:00:00",
+            "views": 29414,
+            "first_seen": "2025-03-13 01:16:06 UTC",
+            "ransomware_group": "Bashe",
+            "group_key": "bashe"
+        }
+    ],
+    "last_updated": "2025-03-13 01:16:06 UTC",
+    "total_count": 1,
+    "ransomware_group": "Bashe",
+    "group_key": "bashe"
+}
