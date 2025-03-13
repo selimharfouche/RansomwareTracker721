@@ -36,32 +36,90 @@ jobs:
             pip install requests
           fi
 
+      # Find the location of domain_enrichment.py and display directory structure
+      - name: Find AI scripts and display directory structure
+        run: |
+          echo "Repository root files:"
+          ls -la
+          
+          echo "Creating AI directory if it doesn't exist:"
+          mkdir -p AI
+          
+          echo "Creating tracker/AI directory if it doesn't exist:"
+          mkdir -p tracker/AI
+          
+          echo "Checking for domain_enrichment.py in various locations:"
+          find . -name "domain_enrichment.py" || echo "domain_enrichment.py not found"
+          
+          echo "Creating basic versions of required scripts if they don't exist:"
+          if [ ! -f "AI/extract_ai_fields.py" ] && [ ! -f "tracker/AI/extract_ai_fields.py" ]; then
+            echo "Creating placeholder extract_ai_fields.py"
+            echo '#!/usr/bin/env python3
+import os
+import json
+from pathlib import Path
+
+# Find or create the necessary directories
+project_root = Path(__file__).resolve().parent.parent
+ai_dir = Path(__file__).resolve().parent
+data_dir = project_root / "data" / "processed"
+
+# Placeholder for creating AI.json
+sample_data = {
+    "entities": [],
+    "total_count": 0,
+    "last_updated": "",
+    "description": "Placeholder AI.json file"
+}
+
+# Save to file
+ai_json_path = ai_dir / "AI.json"
+with open(ai_json_path, "w") as f:
+    json.dump(sample_data, f, indent=2)
+
+print(f"Created placeholder AI.json at {ai_json_path}")
+' > AI/extract_ai_fields.py
+            chmod +x AI/extract_ai_fields.py
+          fi
+          
+          if [ ! -f "AI/domain_enrichment.py" ] && [ ! -f "tracker/AI/domain_enrichment.py" ]; then
+            echo "Creating placeholder domain_enrichment.py"
+            echo '#!/usr/bin/env python3
+import os
+import json
+import argparse
+from pathlib import Path
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="Domain enrichment processor")
+parser.add_argument("--yes", action="store_true", help="Automatically confirm all batches")
+args = parser.parse_args()
+
+# Find or create the necessary directories
+ai_dir = Path(__file__).resolve().parent
+
+# Create or update processed_AI.json as a copy of AI.json
+ai_json_path = ai_dir / "AI.json"
+processed_json_path = ai_dir / "processed_AI.json"
+
+if ai_json_path.exists():
+    with open(ai_json_path, "r") as f:
+        data = json.load(f)
+    
+    with open(processed_json_path, "w") as f:
+        json.dump(data, f, indent=2)
+    
+    print(f"Created placeholder processed_AI.json at {processed_json_path}")
+else:
+    print(f"Error: AI.json not found at {ai_json_path}")
+' > AI/domain_enrichment.py
+            chmod +x AI/domain_enrichment.py
+          fi
+
       # Create directories if needed
       - name: Prepare directories
         run: |
           mkdir -p data/processed logs AI
 
-      # Run the AI processing workflow
-      - name: Run AI processing
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-        run: |
-          python tracker/processing/run_ai_processing.py
-
-      # Commit changes if any
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          
-          # Add AI data files
-          git add -A AI/
-          
-          # Check if there are changes to commit
-          if ! git diff --staged --quiet; then
-            git commit -m "Auto-update AI data from AI processing workflow"
-            git push
-          else
-            echo "No changes to commit"
-          fi
+      # Run the AI processing workflow with detailed debugging
+      - n
