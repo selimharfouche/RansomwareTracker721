@@ -1,0 +1,21 @@
+{
+  "batch_number": 1,
+  "timestamp": "2025-03-13 11:32:52",
+  "num_domains": 1,
+  "domains": [
+    "www.avalon-hotel.com"
+  ],
+  "api_request": {
+    "model": "o3-mini",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides accurate information about organizations based on their domain names. Always return data in the exact JSON format requested."
+      },
+      {
+        "role": "user",
+        "content": "Your task is to provide detailed organizational information for each domain.\n\nFor each domain name:\n1. Thoroughly research the organization to ensure accuracy\n2. Determine the headquarters location, industry classification, and company attributes\n3. Provide data in the exact JSON format shown below\n\nIMPORTANT: Accuracy is critical, especially for country codes and industry classifications. Use your knowledge of global businesses and organizations. When information isn't explicitly known, determine the most likely values based on contextual indicators in the domain name, company structure, or industry patterns.\n\nRequired JSON format for each domain:\n{\n  \"domain\": \"example.com\",\n  \"geography\": {\n    \"country_code\": \"USA\",  // Always use 3-letter uppercase codes: USA, GBR, DEU, etc.\n    \"region\": \"California\",  // State/province/region\n    \"city\": \"San Francisco\"\n  },\n  \"organization\": {\n    \"name\": \"Example Corporation\",\n    \"industry\": \"Technology\",  // Primary industry sector - be specific and accurate\n    \"sub_industry\": \"Software Development\",  // More specialized classification\n    \"size\": {\n      \"employees_range\": \"100-499\",  // Use ranges: 1-9, 10-49, 50-99, 100-499, 500-999, 1000-4999, 5000+\n      \"revenue_range\": \"$10M-$50M\"   // Use ranges: <$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$500M, $500M-$1B, >$1B\n    },\n    \"status\": \"Private\"  // Private, Public, Government, Non-profit, Educational\n  }\n}\n\nFor domains where specific data cannot be determined with confidence, provide the most likely value while ensuring fields are never empty. Return a valid JSON array containing an object for each domain.\n\nI understand you'll be processing all of these domains. There are exactly 1 domains in this batch, and I need information on all of them.\n\nDomains to research and enrich:\n- www.avalon-hotel.com\n"
+      }
+    ]
+  }
+}

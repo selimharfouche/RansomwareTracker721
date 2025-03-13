@@ -1,6 +1,12 @@
 {
   "entities": [
     {
+      "id": "e0d0bae5-60d3-4211-8b18-61600e38896b",
+      "domain": "www.avalon-hotel.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
       "id": "65fbca8b-8570-4182-b133-f30804aed03d",
       "domain": "www.black-star.fr",
       "ransomware_group": "RansomHub",
