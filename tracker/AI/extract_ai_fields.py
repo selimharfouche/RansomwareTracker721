@@ -3,12 +3,13 @@
 Entity Field Extractor Script
 
 This script extracts specific fields (id, domain, ransomware_group, group_key) 
-from final_entities.json and creates a new AI.json file in the AI directory.
+from final_entities.json and creates a new AI.json file in the specified output directory.
 """
 
 import os
 import json
 import logging
+import argparse
 from pathlib import Path
 
 # Set up logging
@@ -18,11 +19,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Correct path calculation
-SCRIPT_DIR = Path(__file__).parent.absolute()  # The AI directory
-PROJECT_ROOT = SCRIPT_DIR.parent  # Go up one level to the project root
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="Extract AI fields from entities")
+parser.add_argument("--output", type=str, help="Output directory for AI.json")
+args = parser.parse_args()
+
+# Define paths using Path for cross-platform compatibility
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 INPUT_FILE = PROJECT_ROOT / "data" / "processed" / "final_entities.json"
-OUTPUT_FILE = SCRIPT_DIR / "AI.json"
+
+# Determine output directory
+if args.output:
+    OUTPUT_DIR = Path(args.output)
+else:
+    # Default to script directory if no output specified
+    OUTPUT_DIR = Path(__file__).parent
+
+# Ensure output directory exists
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+OUTPUT_FILE = OUTPUT_DIR / "AI.json"
 
 def load_json_file(file_path):
     """Load a JSON file and return its contents."""
@@ -31,6 +47,8 @@ def load_json_file(file_path):
             return json.load(f)
     except FileNotFoundError:
         logger.error(f"Input file not found: {file_path}")
+        logger.info(f"Working directory: {os.getcwd()}")
+        logger.info(f"Project root: {PROJECT_ROOT}")
         return None
     except json.JSONDecodeError:
         logger.error(f"Invalid JSON in file: {file_path}")
@@ -59,16 +77,35 @@ def extract_entity_fields():
     and create a new AI.json file.
     """
     # Check if input file exists before attempting to load
+    logger.info(f"Looking for input file at: {INPUT_FILE}")
     if not INPUT_FILE.exists():
         logger.error(f"Input file does not exist: {INPUT_FILE}")
-        logger.info(f"Working directory: {os.getcwd()}")
-        logger.info(f"Project root: {PROJECT_ROOT}")
+        
+        # Create a placeholder file if input doesn't exist
+        placeholder_data = {
+            "entities": [],
+            "total_count": 0,
+            "last_updated": "",
+            "description": "Placeholder AI.json file (input file not found)"
+        }
+        save_json_file(placeholder_data, OUTPUT_FILE)
+        logger.info(f"Created placeholder AI.json at {OUTPUT_FILE}")
         return False
         
     # Load the input file
     data = load_json_file(INPUT_FILE)
     if not data or "entities" not in data:
         logger.error("No valid entities found in the input file")
+        
+        # Create a placeholder file if input is invalid
+        placeholder_data = {
+            "entities": [],
+            "total_count": 0,
+            "last_updated": "",
+            "description": "Placeholder AI.json file (no valid entities in input)"
+        }
+        save_json_file(placeholder_data, OUTPUT_FILE)
+        logger.info(f"Created placeholder AI.json at {OUTPUT_FILE}")
         return False
     
     # Extract required fields
@@ -100,7 +137,6 @@ def extract_entity_fields():
 
 if __name__ == "__main__":
     logger.info("Starting entity field extraction")
-    logger.info(f"Looking for input file at: {INPUT_FILE}")
     success = extract_entity_fields()
     if success:
         logger.info(f"Successfully extracted fields to {OUTPUT_FILE}")

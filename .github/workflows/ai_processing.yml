@@ -28,7 +28,7 @@ jobs:
 
       - name: Create directories
         run: |
-          mkdir -p AI data/processed logs
+          mkdir -p data/AI logs
 
       - name: Run AI processing with GitHub flag
         env:
@@ -42,7 +42,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add -A AI/ data/processed/
+          git add -A data/AI/
           
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update AI data"
