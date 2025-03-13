@@ -1,0 +1,19 @@
+{
+    "entities": [
+        {
+            "id": "post/UF5uNMJnYKCQIbBp65e371ae9cfd2",
+            "domain": "dena.de",
+            "status": "published",
+            "description_preview": "About dena. Effizient, intelligent und nachhaltig - so soll Energie in Zukunft erzeugt und genutzt werden. Das erreicht die Deutsche Energie-Agentur mit Partnern und Kunden aus dem \u00f6ffentlichen und privaten Sektor. Gemeinsam treiben wir die Energiewe...",
+            "updated": "02 Mar, 2024,\u00a0\u00a0 18:36 UTC",
+            "views": 45104,
+            "first_seen": "2025-03-13 01:16:47 UTC",
+            "ransomware_group": "LockBit",
+            "group_key": "lockbit"
+        }
+    ],
+    "last_updated": "2025-03-13 01:16:47 UTC",
+    "total_count": 1,
+    "ransomware_group": "LockBit",
+    "group_key": "lockbit"
+}
