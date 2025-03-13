@@ -18,6 +18,7 @@ import datetime
 import re
 import requests
 import shutil
+import traceback
 from pathlib import Path
 import logging
 
@@ -30,14 +31,15 @@ logger = logging.getLogger(__name__)
 
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
-INPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
-OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
+PER_GROUP_DIR = os.path.join(OUTPUT_DIR, "per_group")
 
-# Ensure output directory exists
+# Ensure output directories exist
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(PER_GROUP_DIR, exist_ok=True)
 
-# Define file paths
-INPUT_FILE = os.path.join(INPUT_DIR, "new_entities.json")
+# Define file paths - Both files in the main output directory
+INPUT_FILE = os.path.join(OUTPUT_DIR, "new_entities.json")
 FINAL_ENTITIES_FILE = os.path.join(OUTPUT_DIR, "final_entities.json")
 
 # Define the fields we want to standardize across all entities
@@ -133,8 +135,10 @@ def save_json_file(data, file_path):
             shutil.copy2(file_path, backup_file)
             logger.info(f"Created backup of existing file: {backup_file}")
         
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        # Make sure parent directory exists (fix for issue)
+        parent_dir = os.path.dirname(file_path)
+        os.makedirs(parent_dir, exist_ok=True)
+        logger.info(f"Ensuring directory exists: {parent_dir}")
         
         # Write the new data
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -142,8 +146,36 @@ def save_json_file(data, file_path):
         logger.info(f"Successfully saved data to {file_path}")
         return True
     except Exception as e:
+        # Detailed error information to help debug
         logger.error(f"Error saving to {file_path}: {e}")
+        logger.error(f"File path: {file_path}")
+        logger.error(f"Directory exists? {os.path.exists(os.path.dirname(file_path))}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return False
+
+def load_site_entities(site_key):
+    """Load entity data for a specific site from the per_group directory."""
+    json_file = f"{site_key}_entities.json"
+    per_group_path = os.path.join(PER_GROUP_DIR, json_file)
+    
+    try:
+        if os.path.exists(per_group_path):
+            with open(per_group_path, 'r') as f:
+                return json.load(f)
+        else:
+            # For backward compatibility, try looking in the main output directory
+            old_path = os.path.join(OUTPUT_DIR, json_file)
+            if os.path.exists(old_path):
+                with open(old_path, 'r') as f:
+                    data = json.load(f)
+                    logger.info(f"Found entity file in old location: {old_path}")
+                    return data
+            logger.warning(f"No entity file found for {site_key}")
+    except Exception as e:
+        logger.warning(f"Error loading site entities for {site_key}: {e}")
+    
+    # Return empty data if file not found or error occurred
+    return {"entities": [], "last_updated": "", "total_count": 0}
 
 def standardize_date(date_string):
     """
@@ -269,19 +301,36 @@ def process_and_archive_entities():
     """
     Process entities from new_entities.json, standardize them,
     and archive them directly into final_entities.json.
-    
-    Returns:
-        bool: True if processing was successful, False otherwise
     """
-    # Check if input file exists
+    # Check if input file exists - if not, create an empty one
     if not os.path.exists(INPUT_FILE):
         logger.warning(f"Input file not found: {INPUT_FILE}")
-        return False
+        logger.info(f"Creating empty new_entities.json file")
+        
+        # Create empty structure
+        current_time = get_current_utc_time()
+        empty_db = {
+            'entities': [],
+            'last_updated': current_time,
+            'total_count': 0
+        }
+        
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(INPUT_FILE), exist_ok=True)
+        
+        # Save the empty file
+        try:
+            with open(INPUT_FILE, 'w', encoding='utf-8') as f:
+                json.dump(empty_db, f, indent=2)
+            logger.info(f"Successfully created empty file: {INPUT_FILE}")
+        except Exception as e:
+            logger.error(f"Failed to create input file: {e}")
+            return False
     
     # Load input entities
     input_data = load_json_file(INPUT_FILE)
     if not input_data or "entities" not in input_data or not input_data["entities"]:
-        logger.warning(f"No entities found in {INPUT_FILE}")
+        logger.info(f"No entities found in {INPUT_FILE} to process")
         return True  # Return True because there's nothing to process (not an error)
     
     # Process and standardize all entities

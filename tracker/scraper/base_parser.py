@@ -16,13 +16,24 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 class BaseParser(ABC):
     """Base class for all site parsers"""
     
-    def __init__(self, driver, site_config, output_dir, html_snapshots_dir):
+    def __init__(self, driver, site_config, output_dir, per_group_dir, html_snapshots_dir):
+        """
+        Initialize the base parser.
+        
+        Args:
+            driver: Selenium WebDriver instance
+            site_config: Configuration dictionary for the site
+            output_dir: Directory for common/shared files (e.g., new_entities.json)
+            per_group_dir: Directory for group-specific files (e.g., lockbit_entities.json)
+            html_snapshots_dir: Directory for HTML snapshots
+        """
         self.driver = driver
         self.site_config = site_config
         self.site_name = site_config["name"] if "name" in site_config else site_config.get("site_name", "Unknown")
         self.site_key = site_config.get("site_key", "unknown")
         self.json_file = site_config.get("json_file", f"{self.site_key}_entities.json")
-        self.output_dir = output_dir
+        self.output_dir = output_dir  # For shared files
+        self.per_group_dir = per_group_dir  # For group-specific files
         self.html_snapshots_dir = html_snapshots_dir
         self.new_entities_file = "new_entities.json"
     
@@ -62,7 +73,7 @@ class BaseParser(ABC):
             new_entities: List of entities scraped from the site
         """
         # Load existing entities to identify which ones are truly new
-        existing_entities = load_json(self.json_file, self.output_dir)
+        existing_entities = load_json(self.json_file, self.per_group_dir)  # Use per_group_dir for group files
         existing_dict = {entity.get('id'): entity for entity in existing_entities.get('entities', [])}
         
         # Create a completely new database with all current entities
@@ -89,21 +100,23 @@ class BaseParser(ABC):
                 entity_copy['group_key'] = self.site_key
                 truly_new_entities.append(entity_copy)
                 
-                # Send Telegram notification for new entity
-                try:
-                    # Try to import the telegram notifier module
-                    # We use a direct import here to handle potential errors gracefully
-                    from tracker.telegram_bot.notifier import notify_new_entity
-                    
-                    # Send the notification
-                    notify_new_entity(entity_copy, self.site_name)
-                    logger.info(f"Telegram notification sent for {entity.get('domain', entity_id)}")
-                except ImportError:
-                    logger.warning("Could not import telegram notifier. Notifications will not be sent.")
-                    logger.warning("If you want notifications, ensure 'requests' is installed.")
-                    logger.warning("For local development, also install 'python-dotenv'.")
-                except Exception as e:
-                    logger.error(f"Failed to send Telegram notification: {e}")
+                # Send Telegram notification for new entity if not disabled
+                if os.environ.get('DISABLE_TELEGRAM') != 'true':
+                    try:
+                        # Try to import the telegram notifier module
+                        from tracker.telegram_bot.notifier import notify_new_entity
+                        
+                        # Send the notification
+                        notify_new_entity(entity_copy, self.site_name)
+                        logger.info(f"Telegram notification sent for {entity.get('domain', entity_id)}")
+                    except ImportError:
+                        logger.warning("Could not import telegram notifier. Notifications will not be sent.")
+                        logger.warning("If you want notifications, ensure 'requests' is installed.")
+                        logger.warning("For local development, also install 'python-dotenv'.")
+                    except Exception as e:
+                        logger.error(f"Failed to send Telegram notification: {e}")
+                else:
+                    logger.debug(f"Telegram notification skipped for {entity.get('domain', entity_id)} (notifications disabled)")
             else:
                 # This is an existing entity, preserve its first_seen date
                 entity['first_seen'] = existing_dict[entity_id].get('first_seen', current_time)
@@ -115,9 +128,9 @@ class BaseParser(ABC):
             'total_count': len(new_entities)
         }
         
-        # Always save the complete file, overwriting the old one
-        save_json(updated_db, self.json_file, self.output_dir)
-        logger.info(f"Saved complete database with {len(new_entities)} entities to {self.json_file}")
+        # Save the group-specific entity file to the per_group directory 
+        save_json(updated_db, self.json_file, self.per_group_dir)  # Use per_group_dir for group files
+        logger.info(f"Saved complete database with {len(new_entities)} entities to {os.path.join(self.per_group_dir, self.json_file)}")
         
         # Update the new_entities.json file if we discovered truly new entities
         if truly_new_entities:
@@ -143,7 +156,7 @@ class BaseParser(ABC):
         
         # 1. Save to snapshot directory with timestamped filename
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        snapshot_dir = os.path.join(PROJECT_ROOT, "data", "new_entities_snapshot")
+        snapshot_dir = os.path.join(PROJECT_ROOT, "data", "snapshots", "new_entities_snapshot")
         os.makedirs(snapshot_dir, exist_ok=True)
         
         snapshot_filename = f"new_entities_{timestamp}.json"
@@ -167,8 +180,9 @@ class BaseParser(ABC):
             logger.error(f"Error saving snapshot file: {e}")
         
         # 2. Update the central new_entities.json file by appending the new entities
-        central_file = "new_entities.json"
-        central_path = os.path.join(self.output_dir, central_file)
+        # Important: Use self.output_dir (not per_group_dir) for the central file
+        central_file = self.new_entities_file
+        central_path = os.path.join(self.output_dir, central_file)  # Use main output_dir, not per_group
         
         try:
             # Load existing central file or create a new one
@@ -197,7 +211,7 @@ class BaseParser(ABC):
                     'total_count': len(truly_new_entities)
                 }
             
-            # Save the updated central file
+            # Save the updated central file to the MAIN output directory
             with open(central_path, 'w') as f:
                 json.dump(central_db, f, indent=4)
             

@@ -8,9 +8,11 @@ from tracker.utils.logging_utils import logger
 class GenericParser(BaseParser):
     """Generic parser that uses configuration to parse any site"""
     
-    def __init__(self, driver, site_config, output_dir, html_snapshots_dir):
+    def __init__(self, driver, site_config, output_dir, per_group_dir, html_snapshots_dir):
         """Initialize with site configuration"""
-        super().__init__(driver, site_config, output_dir, html_snapshots_dir)
+        # Pass all parameters to the parent class constructor
+        super().__init__(driver, site_config, output_dir, per_group_dir, html_snapshots_dir)
+        
         # Extract parsing configuration
         self.parsing_config = site_config.get('parsing', {})
         self.entity_selector = self.parsing_config.get('entity_selector')
@@ -43,6 +45,7 @@ class GenericParser(BaseParser):
                 logger.warning(f"Skipping entity without ID on {self.site_name}")
         
         return entities
+    
     
     def _parse_entity(self, entity_block):
         """Parse an entity block based on field configurations"""
