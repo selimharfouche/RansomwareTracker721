@@ -134,10 +134,10 @@ jobs:
           }
           EOF
       
-      # Prepare directories
+      # Prepare directories with updated structure
       - name: Create data directories
         run: |
-          mkdir -p data/output data/html_snapshots data/processed logs
+          mkdir -p data/output data/snapshots/html_snapshots data/snapshots/new_entities_snapshot logs
 
       # Run scraper with Telegram environmental variables
       - name: Run scraper and process entities
