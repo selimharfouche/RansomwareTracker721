@@ -1,125 +1,77 @@
-TODO : FILTER ALSO ON MPAGE BY CAPITAL, ENTREPRISE SIZE ETC CHECK JSON
+# RansomwareTracker721
 
+![RansomwareTracker](https://img.shields.io/badge/RansomwareTracker-1.0-blue)
 
-TODO: change JSON LIKE AFTER AI PROCESS COPY IT TO WEBSITE DIRECTORY  !
-To use this system:
+Un système de suivi complet pour surveiller les entités divulguées par différents groupes de ransomware. Ce projet automatise la collecte de données via Tor, standardise les formats de date, et enrichit les informations par IA.
 
-Run python create_configs.py --all to create the initial configuration files
-Run python main.py to process all configured sites
-Or run python main.py --sites lockbit bashe to process specific sites
+## Table des matières
 
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Utilisation](#utilisation)
+- [Structure du projet](#structure-du-projet)
+- [Fonctionnalités](#fonctionnalités)
+- [GitHub Actions](#github-actions)
+- [Notifications Telegram](#notifications-telegram)
+- [Site Web](#site-web)
+- [Contribuer](#contribuer)
 
-tor config :
-a12@1 721 % cat  ~/.tor/torrc
+## Introduction
 
-SocksPort 9050
-ControlPort 9051
-CookieAuthentication 1
-# Longer circuit timeout for onion services
-CircuitBuildTimeout 60
-# More aggressive circuit handling
-LearnCircuitBuildTimeout 0
-# Improve onion service performance
-HiddenServiceStatistics 0
-OptimisticData 1
-a12@1 721 % tor -f ~/.tor/torrc
-
-# Ransomware Tracker
-
-A comprehensive system for monitoring and analyzing ransomware leak sites through Tor. This project automatically tracks multiple ransomware groups, detects new victims, standardizes data formats, and provides real-time notifications.
-
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [System Architecture](#system-architecture)
-3. [Installation](#installation)
-4. [Configuration](#configuration)
-5. [Usage](#usage)
-6. [Telegram Notifications](#telegram-notifications)
-7. [AI Data Enrichment](#ai-data-enrichment)
-8. [Directory Structure](#directory-structure)
-
-## Project Overview
-
-The Ransomware Tracker automatically monitors various ransomware leak sites through Tor, identifying and tracking entities (victims) that have been targeted by ransomware groups. Key features include:
-
-- **Multi-site monitoring**: Tracks multiple ransomware groups (LockBit, Bashe, RansomHub, etc.)
-- **Configuration-based architecture**: Add new ransomware sites without code changes
-- **Entity tracking**: Identifies new victims and tracks their status over time
-- **Real-time notifications**: Sends alerts via Telegram when new victims are discovered
-- **Data standardization**: Converts different date formats and fields to a consistent structure
-- **AI enrichment**: Enhances victim data with organizational information using AI
-- **GitHub Actions integration**: Runs automatically on schedule in the cloud
-
-The system is designed for cybersecurity researchers, threat intelligence analysts, and organizations that need to monitor ransomware activity across the threat landscape.
-
-## System Architecture
-
-The system uses a modular, configuration-based architecture:
-
-1. **Scraper Module**: Connects to ransomware sites via Tor and extracts HTML content
-2. **Parser Module**: Uses site-specific configurations to extract entity information
-3. **Processing Pipeline**: Standardizes and archives entity data
-4. **Notification System**: Sends real-time alerts via Telegram
-5. **AI Enrichment**: Enhances entity data with additional organizational information
-
-Data flows through the system as follows:
-- Raw HTML → Structured JSON → Standardized formats → AI enrichment → Notifications
-
-The configuration-based approach allows adding new ransomware sites by simply creating a JSON configuration file, without modifying any code.
+RansomwareTracker721 est un système avancé qui surveille automatiquement les sites de fuite de ransomware, identifie les nouvelles victimes, et standardise les données dans un format cohérent. Le système utilise Tor pour accéder aux sites .onion, extrait les informations des entités et notifie les utilisateurs via Telegram des nouvelles découvertes.
 
 ## Installation
 
-### Prerequisites
+### Cloner le dépôt
+
+```bash
+git clone https://github.com/selimharfouche/RansomwareTracker721
+cd RansomwareTracker721
+```
+
+### Créer et activer un environnement virtuel
+
+```bash
+# Créer l'environnement virtuel
+python -m venv venv
+
+# Activer l'environnement virtuel
+# Sur Windows
+venv\Scripts\activate
+# Sur macOS et Linux
+source venv/bin/activate
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+### Prérequis
 
 - Python 3.9+
-- Tor service
-- Firefox (for Selenium)
-- Geckodriver (for Selenium)
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/ransomware-tracker.git
-   cd ransomware-tracker
-   ```
-
-2. Create and activate a virtual environment:
-   ```bash
-   # Create virtual environment
-   python -m venv venv
-   
-   # Activate on Windows
-   venv\Scripts\activate
-   
-   # Activate on macOS/Linux
-   source venv/bin/activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Create a `.env` file in the project root with your Telegram credentials (if using notifications):
-   ```
-   TELEGRAM_BOT_TOKEN=your_bot_token_here
-   TELEGRAM_CHANNEL_ID=your_channel_id_here
-   ```
-
-5. For AI enrichment, add your OpenAI API key to the `.env` file:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
+- Tor (déjà en cours d'exécution sur le port 9050)
+- Firefox et Geckodriver
 
 ## Configuration
 
-The system uses JSON configuration files to control various aspects of operation.
+### Variables d'environnement (Facultatif)
 
-### Site Configurations
+Créez un fichier `.env` à la racine du projet avec les variables suivantes (facultatif) :
 
-Site configurations are stored in `config/sites/` with one file per ransomware group. Example:
+```
+# Configuration Telegram (facultatif)
+TELEGRAM_BOT_TOKEN=votre_token_bot
+TELEGRAM_CHANNEL_ID=votre_id_canal
+
+# Configuration OpenAI (pour l'enrichissement des données, facultatif)
+OPENAI_API_KEY=votre_clé_api_openai
+```
+
+### Configuration des sites
+
+Le système est conçu pour être facilement extensible. Vous pouvez ajouter de nouveaux sites ransomware en créant simplement un fichier JSON dans le répertoire `config/sites/`.
+
+Exemple de structure pour un site :
 
 ```json
 {
@@ -145,268 +97,131 @@ Site configurations are stored in `config/sites/` with one file per ransomware g
         "regex": "^\\/?(.+)$",
         "regex_group": 1
       },
-      // Additional field configurations...
+      ...
     ]
   }
 }
 ```
 
-### Browser Configuration
+## Utilisation
 
-Browser settings are controlled in `config/code/browser_config.json`:
+### Scraping des sites de ransomware
 
-```json
-{
-  "timing": {
-    "min_wait_time": 10,
-    "max_wait_time": 20,
-    "tor_check_wait_time": 3,
-    "page_load_timeout": 120
-  },
-  "anti_bot": {
-    "enabled": true,
-    "randomize_timing": true
-  },
-  "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
-}
-```
-
-### Proxy Configuration
-
-Tor and proxy settings are configured in `config/code/proxy_config.json`:
-
-```json
-{
-  "proxy": {
-    "type": "socks",
-    "host": "127.0.0.1",
-    "port": 9050,
-    "remote_dns": true
-  },
-  "tor": {
-    "auto_start": true,
-    "config": [
-      "SocksPort 9050",
-      "ControlPort 9051",
-      "CookieAuthentication 1",
-      "CircuitBuildTimeout 60"
-    ]
-  }
-}
-```
-
-### Scraping Configuration
-
-Scraping behavior is controlled in `config/code/scraping_config.json`:
-
-```json
-{
-  "snapshots": {
-    "save_html": false,
-    "max_snapshots_per_site": 5,
-    "cleanup_old_snapshots": true
-  },
-  "scheduling": {
-    "frequency_hours": 6,
-    "randomize_start_time": true
-  }
-}
-```
-
-## Usage
-
-### Basic Usage
-
-Run the main script to scrape all configured sites:
+Toutes les options pour exécuter main.py :
 
 ```bash
-cd tracker
-python main.py
+# Scraping de tous les sites configurés
+python tracker/main.py
+
+# Scraping de sites spécifiques
+python tracker/main.py --sites lockbit bashe
+
+# Désactiver les notifications Telegram
+python tracker/main.py --no-telegram
+
+# Mode headless (sans interface graphique)
+python tracker/main.py --headless
+
+# Sauter l'étape de traitement des entités
+python tracker/main.py --no-process
+
+# Configurer les temps d'attente
+python tracker/main.py --browser-config timing.min_wait_time=5 timing.max_wait_time=10
+
+# Configurer les options de snapshot HTML
+python tracker/main.py --scraping-config snapshots.save_html=true
+
+# Combiner plusieurs options
+python tracker/main.py --sites lockbit --no-telegram --headless --browser-config timing.min_wait_time=2
 ```
 
-### Command Line Options
+### Traitement et standardisation des entités
 
 ```bash
-# Scrape specific sites
-python main.py --sites lockbit bashe
-
-# Run in headless mode (no visible browser)
-python main.py --headless
-
-# Skip entity processing after scraping
-python main.py --no-process
+# Traitement des nouvelles entités découvertes
+python tracker/processing/process_entities.py
 ```
 
-### Creating New Site Configurations
-
-To track a new ransomware group, create a configuration file:
+### Traitement IA
 
 ```bash
-python create_configs.py --sites new_ransomware_group
+# Extraction des domaines pour enrichissement
+python tracker/processing/run_ai_processing.py
 ```
 
-Then edit the generated file in `config/sites/` to match the site's structure.
+## Structure du projet
 
-### GitHub Actions Integration
-
-The project includes a GitHub Actions workflow (`scrape.yml`) that runs the scraper automatically on a schedule. To use it:
-
-1. Fork the repository
-2. Add your Telegram credentials as GitHub secrets:
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHANNEL_ID`
-3. Enable GitHub Actions in your repository
-
-The workflow runs every 6 hours by default, but you can modify the schedule in the workflow file.
-
-## Telegram Notifications
-
-The system can send real-time notifications about new ransomware victims via Telegram.
-
-### Setting Up Telegram Bot
-
-1. Create a Telegram bot using [@BotFather](https://t.me/botfather)
-2. Create a Telegram channel or group
-3. Add your bot to the channel/group as an admin
-4. Get the channel ID (can be in format `-100xxxxxxxxxx`)
-5. Add these credentials to your `.env` file or GitHub secrets
-
-### Types of Notifications
-
-The system sends two types of notifications:
-
-1. **Entity Notifications**: Sent when a new ransomware victim is discovered
-2. **Scan Completion Notifications**: Sent at the end of each scan with a summary
-
-Example entity notification:
-```
-🚨 New Ransomware Victim Discovered!
-
-Domain: example.com
-Ransomware Group: LockBit
-Status: ⏳ Countdown
-Views: 156
-
-Description:
-Example Corp data breach including financial records and customer information...
-
-Countdown: 5d 4h 32m 15s
-Estimated Publication: 2023-09-15 12:30:00 UTC
-
-First seen: 2023-09-10 08:15:22 UTC
-```
-
-### Notification Logs
-
-All notifications are logged to `logs/telegram_notifications.log` for history tracking.
-
-## AI Data Enrichment
-
-The system can enrich entity data with organizational information using the OpenAI API.
-
-### Setup
-
-1. Add your OpenAI API key to the `.env` file
-2. Run the extraction script to prepare data:
-   ```bash
-   cd AI
-   python extract_ai_fields.py
-   ```
-3. Run the enrichment process:
-   ```bash
-   python domain_enrichment.py
-   ```
-
-### Batch Processing
-
-The enrichment process works in batches of 100 domains by default. You can:
-- Preview batches before processing (`python domain_enrichment.py`)
-- Automatically process all batches (`python domain_enrichment.py --yes`)
-- Hide preview details (`python domain_enrichment.py --no-preview`)
-
-### Output Data
-
-The AI enrichment adds the following information to each entity:
-
-```json
-{
-  "domain": "example.com",
-  "geography": {
-    "country_code": "USA",
-    "region": "California",
-    "city": "San Francisco"
-  },
-  "organization": {
-    "name": "Example Corporation",
-    "industry": "Technology",
-    "sub_industry": "Software Development",
-    "size": {
-      "employees_range": "100-499",
-      "revenue_range": "$10M-$50M"
-    },
-    "status": "Private"
-  }
-}
-```
-
-The enriched data is saved to `AI/processed_AI.json`.
-
-## Directory Structure
+RansomwareTracker721 est un monorepo contenant tous les composants nécessaires :
 
 ```
 project-root/
-├── tracker/                    # Python code
-│   ├── main.py                 # Main script
-│   ├── create_configs.py       # Script to create site configs
-│   ├── browser/                # Browser modules
-│   │   ├── __init__.py
-│   │   └── tor_browser.py      # Tor browser management
-│   ├── config/                 # Configuration handling
-│   │   ├── __init__.py
-│   │   └── config_handler.py   # Configuration loader
-│   ├── scraper/                # Scraper modules
-│   │   ├── __init__.py
-│   │   ├── base_parser.py      # Base parser class
-│   │   └── generic_parser.py   # Generic site parser
-│   ├── processing/             # Data processing scripts
-│   │   ├── __init__.py
-│   │   ├── entity_merger.py    # Combines entities from all sites
-│   │   ├── process_entities.py # Standardizes and archives entities
-│   └── telegram_bot/           # Telegram notification system
-│       ├── __init__.py
-│       └── notifier.py         # Notification sender
-├── config/                     # Configuration files
-│   ├── sites/                  # Site configurations
-│   │   ├── lockbit.json        # LockBit configuration
-│   │   └── bashe.json          # Bashe configuration
-│   └── code/                   # Code-related configurations
-│       ├── browser_config.json # Browser settings
-│       ├── proxy_config.json   # Proxy and Tor settings
-│       └── scraping_config.json # Scraping behavior settings
-├── data/                       # Data storage
-│   ├── output/                 # Raw JSON output
-│   │   ├── lockbit_entities.json
-│   │   ├── bashe_entities.json
-│   │   └── new_entities.json   # Newly discovered entities
-│   ├── processed/              # Processed data
-│   │   ├── all_entities.json   # All entities merged
-│   │   └── final_entities.json # Standardized archive
-│   ├── new_entities_snapshot/  # Historical snapshots
-│   └── html_snapshots/         # Raw HTML snapshots
-├── AI/                         # AI enrichment system
-│   ├── extract_ai_fields.py    # Extracts fields for AI processing
-│   ├── domain_enrichment.py    # Enriches domains with OpenAI
-│   ├── AI.json                 # Extracted basic entity data
-│   ├── processed_AI.json       # Enriched entity data
-│   ├── raw_responses/          # Raw API responses
-│   └── batch_previews/         # Preview of batch requests
-├── logs/                       # Log files
-│   └── telegram_notifications.log # Notification history
-├── .github/                    # GitHub configuration
-│   └── workflows/
-│       └── scrape.yml          # GitHub Actions workflow
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
+├── tracker/                    # Code Python principal
+│   ├── main.py                 # Script principal
+│   ├── browser/                # Gestion du navigateur Tor
+│   ├── scraper/                # Extraction des données
+│   ├── processing/             # Traitement des données
+│   ├── telegram_bot/           # Bot Telegram
+│   └── AI/                     # Scripts d'enrichissement par IA
+├── config/                     # Fichiers de configuration
+│   ├── sites/                  # Configuration des sites (JSON)
+│   └── code/                   # Configuration du comportement
+├── data/                       # Stockage des données
+│   ├── output/                 # Fichiers JSON principaux
+│   │   └── per_group/          # Données par groupe
+│   ├── processed/              # Données standardisées
+│   ├── snapshots/              # Captures HTML
+│   └── AI/                     # Données enrichies par IA
+├── website/                    # Code source du site web
+└── .github/
+    └── workflows/              # Configuration GitHub Actions
 ```
 
-This README provides an overview of the project's functionality and usage. For more detailed information about specific components, refer to the documentation in the corresponding directories.
+## Fonctionnalités
+
+- **Extensible** : Ajoutez de nouveaux sites en créant simplement un fichier JSON
+- **Configuration flexible** : Contrôlez le comportement via des paramètres JSON et des variables d'environnement
+- **Standardisation des dates** : Toutes les dates sont converties en UTC
+- **Détection des victimes** : Identification des nouvelles victimes apparaissant sur les sites
+- **Enrichissement par IA** : Données améliorées via l'API OpenAI
+- **Notifications en temps réel** : Alertes via Telegram
+- **Rotation des snapshots** : Conservation des N derniers snapshots HTML
+
+## GitHub Actions
+
+Le projet utilise GitHub Actions pour automatiser les processus de scraping et d'analyse :
+
+- **Scraping automatique** : Exécution toutes les 6 heures des scraping des sites ransomware
+- **Traitement des entités** : Standardisation automatique des données
+- **Enrichissement IA** : Exécution toutes les 48 heures du traitement IA
+- **Notifications** : Envoi automatique des résultats dans le canal Telegram
+- **Persistance des données** : Mise à jour automatique des fichiers JSON dans le dépôt
+
+Les workflows sont configurés dans le répertoire `.github/workflows/` et fonctionnent de manière autonome.
+
+## Notifications Telegram
+
+Le système envoie des notifications pour :
+
+1. Les nouvelles victimes découvertes
+2. Les résumés de scan complets
+3. Les résultats de traitement IA
+
+Rejoignez notre canal Telegram pour recevoir ces notifications :
+[https://t.me/+OxLHO7fclkwxOTQ0](https://t.me/+OxLHO7fclkwxOTQ0)
+
+## Site Web
+
+Une interface web est disponible dans le répertoire `website/` à la racine du projet.
+
+## Contribuer
+
+Les contributions sont les bienvenues ! Voici comment vous pouvez aider :
+
+1. Ajouter des configurations pour de nouveaux sites de ransomware
+2. Améliorer les extracteurs de données existants
+3. Développer de nouvelles fonctionnalités d'analyse
+4. Signaler des bugs ou proposer des améliorations
+
+---
+
+**Note** : Ce projet est développé à des fins de recherche et d'information uniquement

@@ -21707,9 +21707,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "08dcf36c-b682-4d81-837b-e8d87ea77d17",
+      "domain": "idcconstruction.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-14 14:53:56 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "9D 16h 43m 4s",
+        "days": 9,
+        "hours": 16,
+        "minutes": 43,
+        "seconds": 4
+      },
+      "estimated_publish_date": "2025-03-24 11:59:59 UTC",
+      "first_seen": "2025-03-14 19:16:55 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-14 13:23:07 UTC",
-  "total_count": 1199,
+  "last_updated": "2025-03-14 18:19:43 UTC",
+  "total_count": 1200,
   "description": "Complete archive of all discovered ransomware entities"
 }
