@@ -1,0 +1,11 @@
+{
+  "snapshots": {
+    "save_html": true,
+    "max_snapshots_per_site": 5,
+    "cleanup_old_snapshots": true
+  },
+  "scheduling": {
+    "frequency_hours": 6,
+    "randomize_start_time": true
+  }
+}
