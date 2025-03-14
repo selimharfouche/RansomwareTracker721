@@ -5,74 +5,29 @@
             "domain": "dtrglaw.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 1h 1m 26s",
-                "days": 5,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "4D 23h 46m 40s",
+                "days": 4,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-13 19:43:34",
-            "estimated_publish_date": "2025-03-19 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
             "first_seen": "2025-03-14 01:14:35 UTC"
-        },
-        {
-            "id": "b1b50ea0-f5e9-4dea-b2df-93110f30b35d",
-            "domain": "www.raymond.in",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-13 16:20:12",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
-            "first_seen": "2025-03-13 18:02:26 UTC"
-        },
-        {
-            "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
-            "domain": "www.visualisation.one",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-12 06:58:01",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
             "id": "f984b763-0b0c-4c36-86c9-03d0b646e9e6",
             "domain": "dccsagroup.com&csahome.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 1h 1m 26s",
-                "days": 3,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "2D 23h 46m 40s",
+                "days": 2,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-02-14 19:33:44",
-            "estimated_publish_date": "2025-03-17 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
-        },
-        {
-            "id": "7a831b1a-529f-44e2-8842-cb1edb5d0904",
-            "domain": "www.hexosys.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-10 12:47:08",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-17 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -80,74 +35,14 @@
             "domain": "www.dcarosolutions.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 1h 1m 26s",
-                "days": 4,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "3D 23h 46m 40s",
+                "days": 3,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-08 17:36:11",
-            "estimated_publish_date": "2025-03-18 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
-        },
-        {
-            "id": "33339358-eac5-468b-8028-fbe7eb32bd99",
-            "domain": "www.jpwindustries.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-07 20:38:50",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
-        },
-        {
-            "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
-            "domain": "total-ps.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-07 19:39:21",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
-        },
-        {
-            "id": "812fddc9-0e49-41cd-9d16-441e29d69bd0",
-            "domain": "srmg.com.au",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-07 09:49:00",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
-            "first_seen": "2025-03-13 17:39:59 UTC"
-        },
-        {
-            "id": "121e0987-19c9-4a99-8799-cade8e753280",
-            "domain": "wheats.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-03-07 09:35:16",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-18 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -155,14 +50,14 @@
             "domain": "www.convention.qc.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 1h 1m 26s",
-                "days": 5,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "4D 23h 46m 40s",
+                "days": 4,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-05 14:11:33",
-            "estimated_publish_date": "2025-03-19 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -170,14 +65,14 @@
             "domain": "www.centersheetmetal.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 1h 1m 26s",
-                "days": 5,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "4D 23h 46m 40s",
+                "days": 4,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-05 14:08:41",
-            "estimated_publish_date": "2025-03-19 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -185,14 +80,14 @@
             "domain": "www.hinton.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 1h 1m 26s",
-                "days": 5,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "4D 23h 46m 40s",
+                "days": 4,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-05 14:05:42",
-            "estimated_publish_date": "2025-03-19 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -200,14 +95,14 @@
             "domain": "www.portlandschools.org",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 1h 1m 26s",
-                "days": 5,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
+                "countdown_text": "4D 23h 46m 40s",
+                "days": 4,
+                "hours": 23,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-05 14:03:01",
-            "estimated_publish_date": "2025-03-19 12:00:06 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -215,29 +110,70 @@
             "domain": "www.sunsweet.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "11h 1m 26s",
+                "countdown_text": "9h 46m 40s",
                 "days": 0,
-                "hours": 11,
-                "minutes": 1,
-                "seconds": 26
+                "hours": 9,
+                "minutes": 46,
+                "seconds": 40
             },
             "updated": "2025-03-04 18:55:46",
-            "estimated_publish_date": "2025-03-14 22:00:06 UTC",
+            "estimated_publish_date": "2025-03-14 22:00:00 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
-            "id": "edd499a7-cd9a-46f3-9461-14396f18ea74",
-            "domain": "www.casinoessentials.com",
-            "status": "countdown",
-            "countdown_remaining": {
-                "countdown_text": "1h 1m 26s",
-                "days": 0,
-                "hours": 1,
-                "minutes": 1,
-                "seconds": 26
-            },
-            "updated": "2025-02-28 15:42:49",
-            "estimated_publish_date": "2025-03-14 12:00:06 UTC",
+            "id": "b3d4347e-bc22-419e-9540-643508d4ac87",
+            "domain": "sportadmin.se",
+            "status": "published",
+            "updated": "2025-02-04 16:06:48",
+            "first_seen": "2025-03-14 12:13:21 UTC"
+        },
+        {
+            "id": "b1b50ea0-f5e9-4dea-b2df-93110f30b35d",
+            "domain": "www.raymond.in",
+            "status": "published",
+            "updated": "2025-03-13 16:20:12",
+            "first_seen": "2025-03-13 18:02:26 UTC"
+        },
+        {
+            "id": "2197b914-3e68-4bb1-af62-1a127c91e7f2",
+            "domain": "www.visualisation.one",
+            "status": "published",
+            "updated": "2025-03-12 06:58:01",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "7a831b1a-529f-44e2-8842-cb1edb5d0904",
+            "domain": "www.hexosys.com",
+            "status": "published",
+            "updated": "2025-03-10 12:47:08",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "33339358-eac5-468b-8028-fbe7eb32bd99",
+            "domain": "www.jpwindustries.com",
+            "status": "published",
+            "updated": "2025-03-07 20:38:50",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
+            "domain": "total-ps.com",
+            "status": "published",
+            "updated": "2025-03-07 19:39:21",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "812fddc9-0e49-41cd-9d16-441e29d69bd0",
+            "domain": "srmg.com.au",
+            "status": "published",
+            "updated": "2025-03-07 09:49:00",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "121e0987-19c9-4a99-8799-cade8e753280",
+            "domain": "wheats.com",
+            "status": "published",
+            "updated": "2025-03-07 09:35:16",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -294,6 +230,13 @@
             "domain": "www.journeyoilfield.net",
             "status": "published",
             "updated": "2025-02-28 15:44:57",
+            "first_seen": "2025-03-13 17:39:59 UTC"
+        },
+        {
+            "id": "edd499a7-cd9a-46f3-9461-14396f18ea74",
+            "domain": "www.casinoessentials.com",
+            "status": "published",
+            "updated": "2025-02-28 15:42:49",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -4532,6 +4475,6 @@
             "first_seen": "2025-03-13 17:39:59 UTC"
         }
     ],
-    "last_updated": "2025-03-14 10:58:43 UTC",
-    "total_count": 629
+    "last_updated": "2025-03-14 12:13:21 UTC",
+    "total_count": 630
 }
