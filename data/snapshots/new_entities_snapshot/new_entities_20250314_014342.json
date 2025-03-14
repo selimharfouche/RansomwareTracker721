@@ -1,0 +1,25 @@
+{
+    "entities": [
+        {
+            "id": "19b55b56-ae24-430c-9c3f-2d429a81c8e7",
+            "domain": "dtrglaw.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "5D 10h 16m 19s",
+                "days": 5,
+                "hours": 10,
+                "minutes": 16,
+                "seconds": 19
+            },
+            "updated": "2025-03-13 19:43:34",
+            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "first_seen": "2025-03-14 01:43:42 UTC",
+            "ransomware_group": "RansomHub",
+            "group_key": "ransomhub"
+        }
+    ],
+    "last_updated": "2025-03-14 01:43:42 UTC",
+    "total_count": 1,
+    "ransomware_group": "RansomHub",
+    "group_key": "ransomhub"
+}
