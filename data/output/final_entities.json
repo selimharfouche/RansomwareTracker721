@@ -21665,9 +21665,27 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "b3d4347e-bc22-419e-9540-643508d4ac87",
+      "domain": "sportadmin.se",
+      "status": "published",
+      "description_preview": null,
+      "updated": "2025-02-04 16:06:48 UTC",
+      "views": null,
+      "countdown_remaining": null,
+      "estimated_publish_date": null,
+      "first_seen": "2025-03-14 12:13:21 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-14 11:31:21 UTC",
-  "total_count": 1197,
+  "last_updated": "2025-03-14 12:14:07 UTC",
+  "total_count": 1198,
   "description": "Complete archive of all discovered ransomware entities"
 }
