@@ -69,46 +69,43 @@ MONTH_NAMES = {
 
 def get_current_utc_time():
     """
-    Fetches the current UTC time from an online time API.
+    Fetches the current UTC time from the timeapi.io API.
     Returns time in format: YYYY-MM-DD HH:MM:SS UTC
     
     Falls back to local system time if online fetch fails.
     """
-    # List of time APIs to try (in order of preference)
-    time_apis = [
-        "http://worldtimeapi.org/api/timezone/Etc/UTC",
-        "http://worldclockapi.com/api/json/utc/now"
-    ]
+    # Use timeapi.io with UTC timezone
+    time_api = "https://timeapi.io/api/time/current/zone?timeZone=UTC"
     
-    for api_url in time_apis:
-        try:
-            logger.debug(f"Fetching time from: {api_url}")
-            response = requests.get(api_url, timeout=5)
+    try:
+        logger.debug(f"Fetching time from: {time_api}")
+        response = requests.get(time_api, timeout=5)
+        
+        if response.status_code == 200:
+            data = response.json()
             
-            if response.status_code == 200:
-                data = response.json()
-                
-                # Handle WorldTimeAPI response format
-                if "datetime" in data:
-                    # WorldTimeAPI format: 2023-03-09T10:00:00.000000+00:00
-                    dt_str = data["datetime"]
-                    # Convert to datetime object
-                    dt = datetime.datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
-                    return dt.strftime("%Y-%m-%d %H:%M:%S UTC")
-                
-                # Handle WorldClockAPI response format
-                elif "currentDateTime" in data:
-                    # WorldClockAPI format: 2023-03-09T10:00Z
-                    dt_str = data["currentDateTime"]
-                    # Convert to datetime object (removing the Z)
-                    dt = datetime.datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
-                    return dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+            # Extract individual time components
+            year = data.get("year")
+            month = data.get("month")
+            day = data.get("day")
+            hour = data.get("hour")
+            minute = data.get("minute")
+            seconds = data.get("seconds")
             
-        except Exception as e:
-            logger.warning(f"Failed to fetch time from {api_url}: {e}")
+            # Format date components with zero padding where needed
+            date_str = f"{year}-{month:02d}-{day:02d}"
+            time_str = f"{hour:02d}:{minute:02d}:{seconds:02d}"
+            
+            # Combine into final format
+            formatted_time = f"{date_str} {time_str} UTC"
+            logger.info(f"Successfully fetched UTC time: {formatted_time}")
+            return formatted_time
+            
+    except Exception as e:
+        logger.warning(f"Failed to fetch time from {time_api}: {e}")
     
-    # Fallback to system time if all APIs fail
-    logger.warning("Failed to fetch time from online sources. Using system time.")
+    # Fallback to system time
+    logger.warning("Failed to fetch time from API. Using system UTC time.")
     return datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
 def load_json_file(file_path):
@@ -184,13 +181,13 @@ def standardize_date(date_string):
     Handles various input formats:
     - DD MMM, YYYY, HH:MM UTC (LockBit format, e.g., "12 Aug, 2024, 11:05 UTC")
     - YYYY/MM/DD HH:MM:SS (Bashe format)
-    - YYYY-MM-DD HH:MM:SS (without UTC)
+    - YYYY-MM-DD HH:MM:SS (without timezone)
     - YYYY-MM-DD HH:MM:SS UTC (already standard)
     """
     if not date_string:
         return None
     
-    # Check if already in standard format
+    # Check if already in standard format with UTC timezone
     if re.match(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC', date_string):
         return date_string
     
@@ -202,6 +199,7 @@ def standardize_date(date_string):
         # Pad single-digit day and hour with zeros
         day = day.zfill(2)
         hour = hour.zfill(2)
+            
         return f"{year}-{month_num}-{day} {hour}:{minute}:00 UTC"
     
     # Handle Bashe format (YYYY/MM/DD HH:MM:SS)
@@ -210,9 +208,15 @@ def standardize_date(date_string):
         year, month, day, time = bashe_match.groups()
         return f"{year}-{month}-{day} {time} UTC"
     
-    # Handle format without UTC (YYYY-MM-DD HH:MM:SS)
+    # Handle format without timezone (YYYY-MM-DD HH:MM:SS)
     if re.match(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_string):
         return f"{date_string} UTC"
+    
+    # Handle format with other timezones (YYYY-MM-DD HH:MM:SS CET/CEST)
+    timezone_match = re.match(r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) (CET|CEST|[A-Z]+)', date_string)
+    if timezone_match:
+        date_part, _ = timezone_match.groups()
+        return f"{date_part} UTC"
     
     # For any other format, try to parse with datetime
     try:
@@ -227,7 +231,7 @@ def standardize_date(date_string):
         ]:
             try:
                 dt = datetime.datetime.strptime(date_string, fmt)
-                return dt.strftime('%Y-%m-%d %H:%M:%S UTC')
+                return f"{dt.strftime('%Y-%m-%d %H:%M:%S')} UTC"
             except ValueError:
                 continue
         
@@ -280,7 +284,7 @@ def standardize_entity(entity):
 
 def reset_input_file():
     """Reset the input file by emptying its entities array."""
-    # Get current UTC time from online source
+    # Get current time
     current_time = get_current_utc_time()
     
     empty_db = {
