@@ -15,17 +15,14 @@ sys.path.append(str(PROJECT_ROOT))
 from tracker.utils.tor_manager import ensure_tor_running
 from tracker.utils.logging_utils import logger
 from tracker.utils.file_utils import load_json
-from tracker.browser.tor_browser import (
-    load_browser_config, load_proxy_config, load_scraping_config,
-    save_config_file, setup_tor_browser, test_tor_connection
-)
+from tracker.browser.tor_browser import setup_tor_browser, test_tor_connection
 from tracker.scraper.generic_parser import GenericParser
 from tracker.config.config_handler import ConfigHandler
 
 # Constants with relative paths
 CONFIG_DIR = os.path.join(PROJECT_ROOT, "config", "sites")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
-PER_GROUP_DIR = os.path.join(OUTPUT_DIR, "per_group")  # Directory for per-group files
+PER_GROUP_DIR = os.path.join(OUTPUT_DIR, "per_group")  # New directory for per-group files
 HTML_SNAPSHOTS_DIR = os.path.join(PROJECT_ROOT, "data", "snapshots", "html_snapshots")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
 
@@ -49,8 +46,6 @@ def override_config(config, override_options):
     """
     if not override_options:
         return config
-    
-    has_changes = False
     
     for option in override_options:
         # Split the option into key path and value
@@ -83,12 +78,10 @@ def override_config(config, override_options):
             current = current[k]
         
         # Set the value at the target key
-        if keys[-1] not in current or current[keys[-1]] != value:
-            current[keys[-1]] = value
-            has_changes = True
-            logger.info(f"Overriding config value {key_path} = {value}")
+        current[keys[-1]] = value
+        logger.info(f"Overriding config value {key_path} = {value}")
     
-    return config, has_changes
+    return config
 
 def process_site(driver, site_config):
     """Process a single site based on its configuration"""
@@ -117,8 +110,7 @@ def process_site(driver, site_config):
         return False
 
 def main(target_sites=None, skip_processing=False, disable_telegram=False, 
-         browser_config_overrides=None, proxy_config_overrides=None, scraping_config_overrides=None,
-         use_last_config=False):
+         browser_config_overrides=None, proxy_config_overrides=None, scraping_config_overrides=None):
     """
     Main function to scrape multiple sites based on configuration files
     
@@ -129,50 +121,41 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
         browser_config_overrides (list): List of browser config overrides in format "key.subkey=value"
         proxy_config_overrides (list): List of proxy config overrides in format "key.subkey=value"
         scraping_config_overrides (list): List of scraping config overrides in format "key.subkey=value"
-        use_last_config (bool): If True, load the last saved configuration
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
-    # ===== Handle configuration loading and overrides =====
+    # Set target_sites in environment if specified for site filtering
+    if target_sites:
+        os.environ["TARGET_SITES"] = ",".join(target_sites)
+        logger.info(f"Set TARGET_SITES environment variable: {os.environ['TARGET_SITES']}")
     
-    # If using last config, we'll pass this to setup_tor_browser later
-    # Otherwise, apply any configuration overrides and save them
-    if not use_last_config:
-        # Apply browser configuration overrides if provided
-        if browser_config_overrides:
-            # Load the browser configuration directly
-            browser_config = load_browser_config()
-            browser_config, has_changes = override_config(browser_config, browser_config_overrides)
-            
-            # Save the modified config if changes were made
-            if has_changes:
-                save_config_file(browser_config, "browser")
-                logger.info(f"Applied and saved browser configuration overrides: {browser_config_overrides}")
-        
-        # Apply proxy configuration overrides if provided
-        if proxy_config_overrides:
-            # Load and override proxy configuration
-            proxy_config = load_proxy_config()
-            proxy_config, has_changes = override_config(proxy_config, proxy_config_overrides)
-            
-            # Save the modified config if changes were made
-            if has_changes:
-                save_config_file(proxy_config, "proxy")
-                logger.info(f"Applied and saved proxy configuration overrides: {proxy_config_overrides}")
-        
-        # Apply scraping configuration overrides if provided
-        if scraping_config_overrides:
-            # Load and override scraping configuration
-            scraping_config = load_scraping_config()
-            scraping_config, has_changes = override_config(scraping_config, scraping_config_overrides)
-            
-            # Save the modified config if changes were made
-            if has_changes:
-                save_config_file(scraping_config, "scraping")
-                logger.info(f"Applied and saved scraping configuration overrides: {scraping_config_overrides}")
-    else:
-        logger.info("Using last saved configuration")
+    # Set browser config overrides in environment
+    if browser_config_overrides:
+        for override in browser_config_overrides:
+            if '=' in override:
+                key_path, value = override.split('=', 1)
+                env_key = "BROWSER_" + key_path.upper().replace('.', '_')
+                os.environ[env_key] = value
+                logger.info(f"Set environment variable {env_key}={value}")
     
+    # Set scraping config overrides in environment
+    if scraping_config_overrides:
+        for override in scraping_config_overrides:
+            if '=' in override:
+                key_path, value = override.split('=', 1)
+                env_key = "SCRAPING_" + key_path.upper().replace('.', '_')
+                os.environ[env_key] = value
+                logger.info(f"Set environment variable {env_key}={value}")
+    
+    # Set proxy config overrides in environment
+    if proxy_config_overrides:
+        for override in proxy_config_overrides:
+            if '=' in override:
+                key_path, value = override.split('=', 1)
+                env_key = "PROXY_" + key_path.upper().replace('.', '_')
+                os.environ[env_key] = value
+                logger.info(f"Set environment variable {env_key}={value}")
+                
     # Initialize tracking variables for the final notification
     sites_processed = []
     total_entities_found = 0
@@ -207,7 +190,11 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
     if not target_sites:
         target_sites = available_sites
     else:
-        # Validate requested sites
+        # Already filtered by ConfigHandler using TARGET_SITES environment variable
+        # But log for visibility
+        logger.info(f"Processing specific sites: {target_sites}")
+        
+        # Validate requested sites exist in the available sites
         for site_key in list(target_sites):  # Create a copy to modify during iteration
             if site_key not in available_sites:
                 logger.error(f"Unknown site key: {site_key}. Skipping.")
@@ -229,9 +216,9 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
     
     driver = None
     try:
-        # Initialize Selenium with Tor, using last config if specified
+        # Initialize Selenium with Tor
         logger.info("Setting up Tor browser...")
-        driver = setup_tor_browser(headless=in_github_actions, use_last_config=use_last_config)
+        driver = setup_tor_browser(headless=in_github_actions)  # Use headless mode in GitHub Actions
         
         # Test Tor connectivity
         if not test_tor_connection(driver):
@@ -328,13 +315,8 @@ if __name__ == "__main__":
     parser.add_argument('--scraping-config', type=str, nargs='+', 
                        help='Override scraping config values (e.g., snapshots.save_html=true)')
     
-    # Add the last-config flag
-    parser.add_argument('--last-config', action='store_true', 
-                       help='Use the last saved configuration instead of the default')
-    
     args = parser.parse_args()
     
     # Run the main function with the parsed arguments
     main(args.sites, args.no_process, args.no_telegram, 
-         args.browser_config, args.proxy_config, args.scraping_config,
-         args.last_config)
+         args.browser_config, args.proxy_config, args.scraping_config)

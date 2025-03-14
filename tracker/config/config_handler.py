@@ -1,8 +1,8 @@
-# tracker/config/config_handler.py
+# config/config_handler.py
 import os
 import json
 import glob
-from tracker.utils.logging_utils import logger
+from utils.logging_utils import logger
 
 class ConfigHandler:
     """Handler for site configuration files"""
@@ -22,6 +22,13 @@ class ConfigHandler:
             logger.warning(f"No configuration files found in {self.config_dir}")
             return
         
+        # Check if we should only load specific sites
+        target_sites_env = os.environ.get("TARGET_SITES")
+        target_sites = target_sites_env.split(",") if target_sites_env else None
+        
+        if target_sites:
+            logger.info(f"Filtering site configurations to: {target_sites}")
+        
         for config_file in config_files:
             try:
                 with open(config_file, 'r') as f:
@@ -34,6 +41,12 @@ class ConfigHandler:
                     continue
                 
                 site_key = config['site_key']
+                
+                # Skip sites not in target_sites if filtering is enabled
+                if target_sites and site_key not in target_sites:
+                    logger.info(f"Skipping site {site_key} (not in target sites)")
+                    continue
+                
                 self.site_configs[site_key] = config
                 logger.info(f"Loaded configuration for site: {config.get('site_name', site_key)}")
             

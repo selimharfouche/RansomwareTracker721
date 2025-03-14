@@ -16,13 +16,27 @@ _browser_config = None
 _proxy_config = None
 _scraping_config = None
 
-def reset_config_cache():
-    """Reset all configuration cache variables to force reload from disk"""
-    global _browser_config, _proxy_config, _scraping_config
-    _browser_config = None
-    _proxy_config = None
-    _scraping_config = None
-    logger.info("Configuration cache reset - will load fresh from disk")
+# Helper function to get values from environment variables
+def get_env_config_value(env_name, default_value):
+    """Get configuration value from environment variable if available"""
+    env_value = os.environ.get(env_name)
+    if env_value is not None:
+        # Convert to appropriate type
+        if isinstance(default_value, bool):
+            return env_value.lower() == "true"
+        elif isinstance(default_value, int):
+            try:
+                return int(env_value)
+            except ValueError:
+                return default_value
+        elif isinstance(default_value, float):
+            try:
+                return float(env_value)
+            except ValueError:
+                return default_value
+        else:
+            return env_value
+    return default_value
 
 # Determine the configuration directory based on environment
 def get_config_dir():
@@ -34,28 +48,14 @@ def get_config_dir():
     # Default to the project's config directory
     return os.path.join(Path(__file__).parent.parent.parent.absolute(), "config")
 
-# Get the path for saved configurations
-def get_saved_config_dir():
-    project_root = Path(__file__).parent.parent.parent.absolute()
-    saved_dir = os.path.join(project_root, "config", "saved")
-    os.makedirs(saved_dir, exist_ok=True)
-    return saved_dir
-
 # Load configuration files
-def load_browser_config(use_last=False):
+def load_browser_config():
     """Load browser configuration from config file"""
-    if use_last:
-        # Try to load from last_browser_config.json if it exists
-        saved_dir = get_saved_config_dir()
-        last_config_path = os.path.join(saved_dir, "last_browser_config.json")
-        if os.path.exists(last_config_path):
-            try:
-                with open(last_config_path, 'r') as f:
-                    config = json.load(f)
-                logger.info(f"Loaded browser config from saved last configuration")
-                return config
-            except Exception as e:
-                logger.error(f"Error loading saved browser config: {e}. Using standard config.")
+    global _browser_config
+    
+    # Use cached version if available
+    if _browser_config is not None:
+        return _browser_config
     
     # Load from standard location
     config_dir = get_config_dir()
@@ -64,7 +64,7 @@ def load_browser_config(use_last=False):
     try:
         if not os.path.exists(browser_config_path):
             logger.warning(f"Browser config file not found at {browser_config_path}. Using default values.")
-            return {
+            _browser_config = {
                 "timing": {
                     "min_wait_time": 10,
                     "max_wait_time": 20,
@@ -77,12 +77,14 @@ def load_browser_config(use_last=False):
                 },
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
             }
+            return _browser_config
         
         with open(browser_config_path, 'r') as f:
-            return json.load(f)
+            _browser_config = json.load(f)
+            return _browser_config
     except Exception as e:
         logger.error(f"Error loading browser config: {e}. Using default values.")
-        return {
+        _browser_config = {
             "timing": {
                 "min_wait_time": 10,
                 "max_wait_time": 20,
@@ -95,21 +97,15 @@ def load_browser_config(use_last=False):
             },
             "user_agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0"
         }
+        return _browser_config
 
-def load_proxy_config(use_last=False):
+def load_proxy_config():
     """Load proxy configuration from config file"""
-    if use_last:
-        # Try to load from last_proxy_config.json if it exists
-        saved_dir = get_saved_config_dir()
-        last_config_path = os.path.join(saved_dir, "last_proxy_config.json")
-        if os.path.exists(last_config_path):
-            try:
-                with open(last_config_path, 'r') as f:
-                    config = json.load(f)
-                logger.info(f"Loaded proxy config from saved last configuration")
-                return config
-            except Exception as e:
-                logger.error(f"Error loading saved proxy config: {e}. Using standard config.")
+    global _proxy_config
+    
+    # Use cached version if available
+    if _proxy_config is not None:
+        return _proxy_config
     
     # Load from standard location
     config_dir = get_config_dir()
@@ -118,7 +114,7 @@ def load_proxy_config(use_last=False):
     try:
         if not os.path.exists(proxy_config_path):
             logger.warning(f"Proxy config file not found at {proxy_config_path}. Using default values.")
-            return {
+            _proxy_config = {
                 "proxy": {
                     "type": "socks",
                     "host": "127.0.0.1",
@@ -129,12 +125,14 @@ def load_proxy_config(use_last=False):
                     "auto_start": False
                 }
             }
+            return _proxy_config
         
         with open(proxy_config_path, 'r') as f:
-            return json.load(f)
+            _proxy_config = json.load(f)
+            return _proxy_config
     except Exception as e:
         logger.error(f"Error loading proxy config: {e}. Using default values.")
-        return {
+        _proxy_config = {
             "proxy": {
                 "type": "socks",
                 "host": "127.0.0.1",
@@ -145,21 +143,15 @@ def load_proxy_config(use_last=False):
                 "auto_start": False
             }
         }
+        return _proxy_config
 
-def load_scraping_config(use_last=False):
+def load_scraping_config():
     """Load scraping configuration from config file"""
-    if use_last:
-        # Try to load from last_scraping_config.json if it exists
-        saved_dir = get_saved_config_dir()
-        last_config_path = os.path.join(saved_dir, "last_scraping_config.json")
-        if os.path.exists(last_config_path):
-            try:
-                with open(last_config_path, 'r') as f:
-                    config = json.load(f)
-                logger.info(f"Loaded scraping config from saved last configuration")
-                return config
-            except Exception as e:
-                logger.error(f"Error loading saved scraping config: {e}. Using standard config.")
+    global _scraping_config
+    
+    # Use cached version if available
+    if _scraping_config is not None:
+        return _scraping_config
     
     # Load from standard location
     config_dir = get_config_dir()
@@ -168,78 +160,44 @@ def load_scraping_config(use_last=False):
     try:
         if not os.path.exists(scraping_config_path):
             logger.warning(f"Scraping config file not found at {scraping_config_path}. Using default values.")
-            return {
+            _scraping_config = {
                 "snapshots": {
                     "save_html": False,
                     "max_snapshots_per_site": 5,
                     "cleanup_old_snapshots": True
                 }
             }
+            return _scraping_config
         
         with open(scraping_config_path, 'r') as f:
-            return json.load(f)
+            _scraping_config = json.load(f)
+            return _scraping_config
     except Exception as e:
         logger.error(f"Error loading scraping config: {e}. Using default values.")
-        return {
+        _scraping_config = {
             "snapshots": {
                 "save_html": False,
                 "max_snapshots_per_site": 5,
                 "cleanup_old_snapshots": True
             }
         }
+        return _scraping_config
 
-def save_config_file(config, config_type):
-    """Save a configuration to the saved configs directory"""
-    global _browser_config, _proxy_config, _scraping_config
-    
-    saved_dir = get_saved_config_dir()
-    filename = f"last_{config_type}_config.json"
-    file_path = os.path.join(saved_dir, filename)
-    
-    try:
-        with open(file_path, 'w') as f:
-            json.dump(config, f, indent=2)
-        logger.info(f"Saved {config_type} configuration to {file_path}")
-        
-        # Save critical browser timing values to environment variables
-        if config_type == "browser" and "timing" in config:
-            if "min_wait_time" in config["timing"]:
-                os.environ["BROWSER_MIN_WAIT"] = str(config["timing"]["min_wait_time"])
-                logger.info(f"Set env var BROWSER_MIN_WAIT={os.environ['BROWSER_MIN_WAIT']}")
-            if "max_wait_time" in config["timing"]:
-                os.environ["BROWSER_MAX_WAIT"] = str(config["timing"]["max_wait_time"])
-                logger.info(f"Set env var BROWSER_MAX_WAIT={os.environ['BROWSER_MAX_WAIT']}")
-        
-        # Reset config cache variables to ensure we reload them
-        _browser_config = None
-        _proxy_config = None
-        _scraping_config = None
-        logger.info("Reset configuration cache to force reload")
-        
-        return True
-    except Exception as e:
-        logger.error(f"Error saving {config_type} configuration: {e}")
-        return False
-
-def setup_tor_browser(headless=False, use_last_config=False):
+def setup_tor_browser(headless=False):
     """Configure Firefox to use Tor"""
-    global _browser_config, _proxy_config
-    
     # Load configurations if needed
-    if _browser_config is None:
-        _browser_config = load_browser_config(use_last_config)
-    
-    if _proxy_config is None:
-        _proxy_config = load_proxy_config(use_last_config)
+    browser_config = load_browser_config()
+    proxy_config = load_proxy_config()
     
     options = Options()
     
     # Get proxy settings from config
-    proxy = _proxy_config.get("proxy", {})
-    proxy_type = proxy.get("type", "socks")
-    proxy_host = proxy.get("host", "127.0.0.1")
-    proxy_port = proxy.get("port", 9050)
-    remote_dns = proxy.get("remote_dns", True)
+    proxy = proxy_config.get("proxy", {})
+    
+    # Check for environment variable overrides
+    proxy_host = get_env_config_value("PROXY_PROXY_HOST", proxy.get("host", "127.0.0.1"))
+    proxy_port = get_env_config_value("PROXY_PROXY_PORT", proxy.get("port", 9050))
+    remote_dns = get_env_config_value("PROXY_PROXY_REMOTE_DNS", proxy.get("remote_dns", True))
     
     # Set proxy preferences
     options.set_preference('network.proxy.type', 1)
@@ -248,7 +206,7 @@ def setup_tor_browser(headless=False, use_last_config=False):
     options.set_preference('network.proxy.socks_remote_dns', remote_dns)
     
     # Get user agent from config
-    user_agent = _browser_config.get("user_agent", "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0")
+    user_agent = browser_config.get("user_agent", "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0")
     
     # Additional settings to make us look more like a normal browser
     options.set_preference('general.useragent.override', user_agent)
@@ -268,8 +226,8 @@ def setup_tor_browser(headless=False, use_last_config=False):
     
     # If we're in GitHub Actions and have a firefox binary path, use it
     firefox_binary = None
-    if "firefox_binary" in _browser_config:
-        firefox_binary_path = _browser_config.get("firefox_binary")
+    if "firefox_binary" in browser_config:
+        firefox_binary_path = browser_config.get("firefox_binary")
         if firefox_binary_path and os.path.exists(firefox_binary_path):
             firefox_binary = FirefoxBinary(firefox_binary_path)
             logger.info(f"Using Firefox binary at: {firefox_binary_path}")
@@ -283,7 +241,7 @@ def setup_tor_browser(headless=False, use_last_config=False):
             driver = webdriver.Firefox(options=options)
         
         # Set page load timeout from config
-        page_load_timeout = _browser_config.get("timing", {}).get("page_load_timeout", 120)
+        page_load_timeout = browser_config.get("timing", {}).get("page_load_timeout", 120)
         driver.set_page_load_timeout(page_load_timeout)
         
         return driver
@@ -292,7 +250,7 @@ def setup_tor_browser(headless=False, use_last_config=False):
         # More detailed error information
         if in_github_actions:
             logger.error("This error occurred in GitHub Actions environment.")
-            logger.error(f"Firefox binary path in config: {_browser_config.get('firefox_binary', 'Not set')}")
+            logger.error(f"Firefox binary path in config: {browser_config.get('firefox_binary', 'Not set')}")
             logger.error(f"Firefox path from which command: {os.popen('which firefox').read().strip()}")
             logger.error(f"Firefox version: {os.popen('firefox --version').read().strip()}")
             logger.error(f"Geckodriver version: {os.popen('geckodriver --version').read().strip()}")
@@ -300,17 +258,14 @@ def setup_tor_browser(headless=False, use_last_config=False):
 
 def test_tor_connection(driver):
     """Test if we can connect through Tor"""
-    global _browser_config
-    
-    # Load config if not already loaded
-    if _browser_config is None:
-        _browser_config = load_browser_config()
+    # Load config if needed
+    browser_config = load_browser_config()
     
     try:
         driver.get('https://check.torproject.org/')
         
         # Get wait time from config
-        tor_check_wait_time = _browser_config.get("timing", {}).get("tor_check_wait_time", 3)
+        tor_check_wait_time = browser_config.get("timing", {}).get("tor_check_wait_time", 3)
         time.sleep(tor_check_wait_time)  # Give page time to load
         
         if "Congratulations" in driver.page_source:
@@ -325,11 +280,12 @@ def test_tor_connection(driver):
 
 def get_wait_time():
     """Get a wait time based on configuration settings"""
-    global _browser_config
+    # Load config if needed
+    browser_config = load_browser_config()
     
     # First check environment variables for direct overrides
-    env_min = os.environ.get("BROWSER_MIN_WAIT")
-    env_max = os.environ.get("BROWSER_MAX_WAIT")
+    env_min = os.environ.get("BROWSER_TIMING_MIN_WAIT_TIME")
+    env_max = os.environ.get("BROWSER_TIMING_MAX_WAIT_TIME")
     
     if env_min is not None and env_max is not None:
         try:
@@ -337,7 +293,7 @@ def get_wait_time():
             max_wait_time = int(env_max)
             logger.info(f"⭐ Using wait times from environment variables: min={min_wait_time}, max={max_wait_time}")
         except (ValueError, TypeError):
-            logger.warning(f"Invalid environment variable values: BROWSER_MIN_WAIT={env_min}, BROWSER_MAX_WAIT={env_max}")
+            logger.warning(f"Invalid environment variable values: BROWSER_TIMING_MIN_WAIT_TIME={env_min}, BROWSER_TIMING_MAX_WAIT_TIME={env_max}")
             # Continue to load from config file
             min_wait_time = max_wait_time = None
     else:
@@ -345,11 +301,7 @@ def get_wait_time():
     
     # If not set via environment variables, load from config
     if min_wait_time is None or max_wait_time is None:
-        # Force reload the config to ensure we get the latest values
-        _browser_config = load_browser_config()
-        
-        timing_config = _browser_config.get("timing", {})
-        anti_bot_config = _browser_config.get("anti_bot", {})
+        timing_config = browser_config.get("timing", {})
         
         min_wait_time = timing_config.get("min_wait_time", 10)
         max_wait_time = timing_config.get("max_wait_time", 20)
@@ -357,11 +309,13 @@ def get_wait_time():
         logger.info(f"📄 Using wait times from config file: min={min_wait_time}, max={max_wait_time}")
     
     # Get anti-bot settings
-    if _browser_config is None:
-        _browser_config = load_browser_config()
-    anti_bot_config = _browser_config.get("anti_bot", {})
+    anti_bot_config = browser_config.get("anti_bot", {})
     
-    if anti_bot_config.get("enabled", True) and anti_bot_config.get("randomize_timing", True):
+    # Check for environment variable overrides
+    anti_bot_enabled = get_env_config_value("BROWSER_ANTI_BOT_ENABLED", anti_bot_config.get("enabled", True))
+    randomize_timing = get_env_config_value("BROWSER_ANTI_BOT_RANDOMIZE_TIMING", anti_bot_config.get("randomize_timing", True))
+    
+    if anti_bot_enabled and randomize_timing:
         wait_time = random.uniform(min_wait_time, max_wait_time)
         logger.info(f"Generated random wait time: {wait_time:.2f}s")
         return wait_time
@@ -385,11 +339,12 @@ def browse_with_selenium(driver, url, site_config, wait_time=None):
         driver.get(url)
         
         # Only wait if anti-bot measures are enabled
-        global _browser_config
-        if _browser_config is None:
-            _browser_config = load_browser_config()
+        browser_config = load_browser_config()
+        
+        # Check for anti-bot override from environment
+        anti_bot_enabled = get_env_config_value("BROWSER_ANTI_BOT_ENABLED", browser_config.get("anti_bot", {}).get("enabled", True))
             
-        if _browser_config.get("anti_bot", {}).get("enabled", True):
+        if anti_bot_enabled:
             logger.info(f"Waiting {wait_time:.2f} seconds for anti-bot measures...")
             time.sleep(wait_time)
         
@@ -435,16 +390,19 @@ def get_working_mirror(driver, site_config):
 
 def save_html_snapshot(html_content, site_key, html_snapshots_dir):
     """Save HTML content to a timestamped file for analysis"""
-    global _scraping_config
+    # Load config if needed
+    scraping_config = load_scraping_config()
     
-    # Load config if not already loaded
-    if _scraping_config is None:
-        _scraping_config = load_scraping_config()
+    # First check environment variable for save_html
+    save_html = get_env_config_value("SCRAPING_SNAPSHOTS_SAVE_HTML", 
+                                    scraping_config.get("snapshots", {}).get("save_html", False))
     
     # Check if saving snapshots is enabled
-    if not _scraping_config.get("snapshots", {}).get("save_html", False):
+    if not save_html:
         logger.info("HTML snapshot saving is disabled in configuration. Skipping.")
         return None
+    
+    logger.info(f"⭐ HTML snapshot saving is enabled ({save_html})")
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     site_snapshot_dir = os.path.join(html_snapshots_dir, site_key)
@@ -457,9 +415,14 @@ def save_html_snapshot(html_content, site_key, html_snapshots_dir):
     
     logger.info(f"Raw HTML saved to {html_filename}")
     
-    # Cleanup old snapshots if enabled
-    if _scraping_config.get("snapshots", {}).get("cleanup_old_snapshots", True):
-        max_snapshots = _scraping_config.get("snapshots", {}).get("max_snapshots_per_site", 5)
+    # Cleanup old snapshots if enabled - check environment variable
+    cleanup_old = get_env_config_value("SCRAPING_SNAPSHOTS_CLEANUP_OLD_SNAPSHOTS", 
+                                      scraping_config.get("snapshots", {}).get("cleanup_old_snapshots", True))
+    
+    if cleanup_old:
+        max_snapshots = get_env_config_value("SCRAPING_SNAPSHOTS_MAX_SNAPSHOTS_PER_SITE", 
+                                            scraping_config.get("snapshots", {}).get("max_snapshots_per_site", 5))
+        
         cleanup_old_snapshots(site_snapshot_dir, max_snapshots)
     
     return html_filename
