@@ -110,7 +110,7 @@ def process_site(driver, site_config):
         return False
 
 def main(target_sites=None, skip_processing=False, disable_telegram=False, 
-         browser_config_overrides=None, proxy_config_overrides=None, scraping_config_overrides=None):
+         browser_config_overrides=None):
     """
     Main function to scrape multiple sites based on configuration files
     
@@ -119,8 +119,6 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
         skip_processing (bool): If True, skip entity processing after scraping
         disable_telegram (bool): If True, disable all Telegram notifications
         browser_config_overrides (list): List of browser config overrides in format "key.subkey=value"
-        proxy_config_overrides (list): List of proxy config overrides in format "key.subkey=value"
-        scraping_config_overrides (list): List of scraping config overrides in format "key.subkey=value"
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
@@ -135,24 +133,6 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
             if '=' in override:
                 key_path, value = override.split('=', 1)
                 env_key = "BROWSER_" + key_path.upper().replace('.', '_')
-                os.environ[env_key] = value
-                logger.info(f"Set environment variable {env_key}={value}")
-    
-    # Set scraping config overrides in environment
-    if scraping_config_overrides:
-        for override in scraping_config_overrides:
-            if '=' in override:
-                key_path, value = override.split('=', 1)
-                env_key = "SCRAPING_" + key_path.upper().replace('.', '_')
-                os.environ[env_key] = value
-                logger.info(f"Set environment variable {env_key}={value}")
-    
-    # Set proxy config overrides in environment
-    if proxy_config_overrides:
-        for override in proxy_config_overrides:
-            if '=' in override:
-                key_path, value = override.split('=', 1)
-                env_key = "PROXY_" + key_path.upper().replace('.', '_')
                 os.environ[env_key] = value
                 logger.info(f"Set environment variable {env_key}={value}")
                 
@@ -307,16 +287,11 @@ if __name__ == "__main__":
     parser.add_argument('--no-process', action='store_true', help='Skip entity processing after scraping')
     parser.add_argument('--no-telegram', action='store_true', help='Disable Telegram notifications')
     
-    # Configuration override arguments
+    # Configuration override arguments - only browser config is available now
     parser.add_argument('--browser-config', type=str, nargs='+', 
                        help='Override browser config values (e.g., timing.min_wait_time=15)')
-    parser.add_argument('--proxy-config', type=str, nargs='+', 
-                       help='Override proxy config values (e.g., proxy.port=9051)')
-    parser.add_argument('--scraping-config', type=str, nargs='+', 
-                       help='Override scraping config values (e.g., snapshots.save_html=true)')
     
     args = parser.parse_args()
     
     # Run the main function with the parsed arguments
-    main(args.sites, args.no_process, args.no_telegram, 
-         args.browser_config, args.proxy_config, args.scraping_config)
+    main(args.sites, args.no_process, args.no_telegram, args.browser_config)
