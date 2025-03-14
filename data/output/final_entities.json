@@ -21683,9 +21683,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "0787768e-11b2-4517-bfc6-b4fd6601af57",
+      "domain": "jennyyoo.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-14 12:15:55 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "9D 21h 37m 45s",
+        "days": 9,
+        "hours": 21,
+        "minutes": 37,
+        "seconds": 45
+      },
+      "estimated_publish_date": "2025-03-24 12:00:00 UTC",
+      "first_seen": "2025-03-14 14:22:15 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-14 12:14:07 UTC",
-  "total_count": 1198,
+  "last_updated": "2025-03-14 13:23:07 UTC",
+  "total_count": 1199,
   "description": "Complete archive of all discovered ransomware entities"
 }
