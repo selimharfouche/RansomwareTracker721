@@ -21641,9 +21641,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "19b55b56-ae24-430c-9c3f-2d429a81c8e7",
+      "domain": "dtrglaw.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-13 19:43:34 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "5D 10h 45m 25s",
+        "days": 5,
+        "hours": 10,
+        "minutes": 45,
+        "seconds": 25
+      },
+      "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+      "first_seen": "2025-03-14 01:14:35 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-13 17:02:58 UTC",
-  "total_count": 1196,
+  "last_updated": "2025-03-14 01:17:13 UTC",
+  "total_count": 1197,
   "description": "Complete archive of all discovered ransomware entities"
 }

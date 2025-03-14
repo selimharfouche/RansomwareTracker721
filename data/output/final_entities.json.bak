@@ -21617,9 +21617,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "b1b50ea0-f5e9-4dea-b2df-93110f30b35d",
+      "domain": "www.raymond.in",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-13 16:20:12 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "17h 57m 34s",
+        "days": 0,
+        "hours": 17,
+        "minutes": 57,
+        "seconds": 34
+      },
+      "estimated_publish_date": "2025-03-14 11:59:59 UTC",
+      "first_seen": "2025-03-13 18:02:26 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-13 16:55:39 UTC",
-  "total_count": 1195,
+  "last_updated": "2025-03-13 17:02:58 UTC",
+  "total_count": 1196,
   "description": "Complete archive of all discovered ransomware entities"
 }
