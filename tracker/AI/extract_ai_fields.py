@@ -3,7 +3,7 @@
 Entity Field Extractor Script
 
 This script extracts specific fields (id, domain, ransomware_group, group_key) 
-from final_entities.json and creates a new AI.json file in the specified output directory.
+from final_entities.json and creates a new AI.json file in the AI directory.
 """
 
 import os
@@ -26,14 +26,14 @@ args = parser.parse_args()
 
 # Define paths using Path for cross-platform compatibility
 PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
-INPUT_FILE = PROJECT_ROOT / "data" / "processed" / "final_entities.json"
+INPUT_FILE = PROJECT_ROOT / "data" / "output" / "final_entities.json"
 
 # Determine output directory
 if args.output:
     OUTPUT_DIR = Path(args.output)
 else:
-    # Default to script directory if no output specified
-    OUTPUT_DIR = Path(__file__).parent
+    # Default to the AI directory if no output specified
+    OUTPUT_DIR = PROJECT_ROOT / "data" / "AI"
 
 # Ensure output directory exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -47,8 +47,23 @@ def load_json_file(file_path):
             return json.load(f)
     except FileNotFoundError:
         logger.error(f"Input file not found: {file_path}")
-        logger.info(f"Working directory: {os.getcwd()}")
-        logger.info(f"Project root: {PROJECT_ROOT}")
+        logger.info(f"Creating an empty placeholder for {file_path}")
+        # Create an empty placeholder file for final_entities.json
+        empty_data = {
+            "entities": [],
+            "last_updated": "",
+            "total_count": 0,
+            "description": "Complete archive of all discovered ransomware entities"
+        }
+        try:
+            # Make sure the directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(empty_data, f, indent=2)
+            logger.info(f"Created empty placeholder file: {file_path}")
+            return empty_data
+        except Exception as e:
+            logger.error(f"Failed to create placeholder file: {e}")
         return None
     except json.JSONDecodeError:
         logger.error(f"Invalid JSON in file: {file_path}")
@@ -77,19 +92,20 @@ def extract_entity_fields():
     and create a new AI.json file.
     """
     # Check if input file exists before attempting to load
-    logger.info(f"Looking for input file at: {INPUT_FILE}")
     if not INPUT_FILE.exists():
         logger.error(f"Input file does not exist: {INPUT_FILE}")
+        logger.info(f"Working directory: {os.getcwd()}")
+        logger.info(f"Project root: {PROJECT_ROOT}")
         
-        # Create a placeholder file if input doesn't exist
-        placeholder_data = {
-            "entities": [],
-            "total_count": 0,
-            "last_updated": "",
-            "description": "Placeholder AI.json file (input file not found)"
+        # Create an empty AI.json file
+        empty_db = {
+            'entities': [],
+            'last_updated': "",
+            'total_count': 0,
+            'description': "Extracted fields from ransomware entities for AI processing"
         }
-        save_json_file(placeholder_data, OUTPUT_FILE)
-        logger.info(f"Created placeholder AI.json at {OUTPUT_FILE}")
+        save_json_file(empty_db, OUTPUT_FILE)
+        logger.info(f"Created empty AI.json file at {OUTPUT_FILE}")
         return False
         
     # Load the input file
@@ -97,15 +113,15 @@ def extract_entity_fields():
     if not data or "entities" not in data:
         logger.error("No valid entities found in the input file")
         
-        # Create a placeholder file if input is invalid
-        placeholder_data = {
-            "entities": [],
-            "total_count": 0,
-            "last_updated": "",
-            "description": "Placeholder AI.json file (no valid entities in input)"
+        # Create an empty AI.json file
+        empty_db = {
+            'entities': [],
+            'last_updated': "",
+            'total_count': 0,
+            'description': "Extracted fields from ransomware entities for AI processing"
         }
-        save_json_file(placeholder_data, OUTPUT_FILE)
-        logger.info(f"Created placeholder AI.json at {OUTPUT_FILE}")
+        save_json_file(empty_db, OUTPUT_FILE)
+        logger.info(f"Created empty AI.json file at {OUTPUT_FILE}")
         return False
     
     # Extract required fields
@@ -137,8 +153,11 @@ def extract_entity_fields():
 
 if __name__ == "__main__":
     logger.info("Starting entity field extraction")
+    logger.info(f"Looking for input file at: {INPUT_FILE}")
     success = extract_entity_fields()
     if success:
         logger.info(f"Successfully extracted fields to {OUTPUT_FILE}")
     else:
         logger.error("Failed to extract entity fields")
+
+
