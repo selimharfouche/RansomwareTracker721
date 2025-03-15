@@ -12,6 +12,7 @@ import os
 import time
 import logging
 import argparse
+import traceback
 from pathlib import Path
 from typing import List, Dict, Any
 import requests
@@ -58,6 +59,7 @@ IN_GITHUB_ACTIONS = os.environ.get('GITHUB_ACTIONS') == 'true'
 if IN_GITHUB_ACTIONS:
     # In GitHub Actions, read directly from environment
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    logger.info("Running in GitHub Actions, using environment OPENAI_API_KEY")
 else:
     # In local development, try to use dotenv
     try:
@@ -66,6 +68,7 @@ else:
         ENV_FILE = Path(__file__).parent.parent.parent / ".env"
         load_dotenv(dotenv_path=ENV_FILE)
         OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+        logger.info(f"Loaded environment from {ENV_FILE}")
     except ImportError:
         logger.warning("python-dotenv not installed. Using environment variables directly.")
         OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -75,6 +78,8 @@ if not OPENAI_API_KEY:
     logger.info("Please set OPENAI_API_KEY in your environment or .env file")
     exit(1)
 
+logger.info(f"OpenAI API key found, length: {len(OPENAI_API_KEY)}")
+
 # Batch size for API calls
 BATCH_SIZE = 100
 
@@ -82,7 +87,9 @@ def load_json_file(file_path: Path) -> Dict:
     """Load a JSON file and return its contents."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            logger.info(f"Successfully loaded {file_path} with {len(data.get('entities', []))} entities")
+            return data
     except FileNotFoundError:
         logger.info(f"File not found: {file_path}. Will create new file.")
         return {"entities": []}
@@ -98,10 +105,11 @@ def save_json_file(data: Dict, file_path: Path) -> bool:
     try:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-        logger.info(f"Successfully saved data to {file_path}")
+        logger.info(f"Successfully saved data to {file_path} with {len(data.get('entities', []))} entities")
         return True
     except Exception as e:
         logger.error(f"Error saving to {file_path}: {e}")
+        logger.error(traceback.format_exc())
         return False
 
 def create_enrichment_prompt(domains: List[str]) -> str:
@@ -316,11 +324,16 @@ def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
             ]
         }
         
+        logger.info(f"Making API request to OpenAI with {len(domains)} domains")
+        
         response = requests.post(
             "https://api.openai.com/v1/chat/completions",
             headers=headers,
             json=data
         )
+        
+        # Log API response details
+        logger.info(f"API response status code: {response.status_code}")
         
         # Handle API errors
         if response.status_code != 200:
@@ -330,6 +343,9 @@ def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
         # Extract content
         response_data = response.json()
         content = response_data['choices'][0]['message']['content']
+        
+        # Log a snippet of the content
+        logger.info(f"API response content (first 100 chars): {content[:100]}...")
         
         # Save raw response for inspection
         timestamp = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
@@ -386,6 +402,7 @@ def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
             
     except Exception as e:
         logger.error(f"Error calling OpenAI API: {e}")
+        logger.error(traceback.format_exc())
         return []
 
 def send_telegram_notification(newly_processed_entities):
@@ -470,6 +487,7 @@ def send_telegram_notification(newly_processed_entities):
             message += f"\n... and {len(newly_processed_entities) - 5} more entities\n"
         
         # Send the message
+        logger.info(f"Sending Telegram notification for {len(newly_processed_entities)} entities")
         success = send_telegram_message(message)
         
         if success:
@@ -481,6 +499,7 @@ def send_telegram_notification(newly_processed_entities):
         
     except Exception as e:
         logger.error(f"Error sending Telegram notification: {e}")
+        logger.error(traceback.format_exc())
         return False
 
 def process_domain_enrichment(auto_confirm=False, show_preview=True):
@@ -492,6 +511,10 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
     4. Parse and add enriched data to processed_AI.json after each batch
     5. Send notification about processed entities
     """
+    logger.info("=== Starting domain enrichment process ===")
+    logger.info(f"Input file: {INPUT_FILE}")
+    logger.info(f"Processed file: {PROCESSED_FILE}")
+    
     # Load input file
     input_data = load_json_file(INPUT_FILE)
     if not input_data or "entities" not in input_data:
@@ -512,7 +535,7 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
     
     # Split unprocessed entities into batches
     batched_entities = batch_domains(unprocessed_entities, BATCH_SIZE)
-    logger.info(f"Found {len(unprocessed_entities)} unprocessed domains, split into {len(batched_entities)} batches of {BATCH_SIZE}")
+    logger.info(f"Found {len(unprocessed_entities)} unprocessed domains, split into {len(batched_entities)} batches of up to {BATCH_SIZE}")
     
     # Process each batch
     total_processed = 0
@@ -544,6 +567,8 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
             logger.error(f"No enriched data obtained from API for batch {batch_num}. Continuing to next batch.")
             continue
         
+        logger.info(f"Received enriched data for {len(enriched_data)} domains from OpenAI API")
+        
         # Create a dictionary of enriched data by domain for easy lookup
         enriched_by_domain = {entity.get('domain'): entity for entity in enriched_data if entity.get('domain')}
         
@@ -572,7 +597,7 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
             
             # Save the updated processed data after each batch
             save_json_file(processed_data, PROCESSED_FILE)
-            logger.info(f"Added {len(newly_processed)} newly processed entities from batch {batch_num}")
+            logger.info(f"Added {len(newly_processed)} newly processed entities from batch {batch_num} to processed_AI.json")
         
         # Add delay between batches to avoid rate limiting
         if batch_num < len(batched_entities):
@@ -668,6 +693,11 @@ if __name__ == "__main__":
         logger.warning("OpenAI API key not found. Running in simulation mode.")
         simulate_enrichment()
     else:
-        process_domain_enrichment(auto_confirm=args.yes, show_preview=not args.no_preview)
+        # Force auto_confirm to True if running in GitHub Actions
+        if IN_GITHUB_ACTIONS:
+            logger.info("Running in GitHub Actions, auto-confirming all batches")
+            process_domain_enrichment(auto_confirm=True, show_preview=False)
+        else:
+            process_domain_enrichment(auto_confirm=args.yes, show_preview=not args.no_preview)
     
     logger.info("Domain enrichment process completed")
