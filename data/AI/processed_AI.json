@@ -25161,8 +25161,113 @@
       "id": "7e87abea-a8bb-4678-9c72-905e32194f3a",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "idcconstruction.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "Los Angeles"
+      },
+      "organization_details": {
+        "name": "IDC Construction Inc.",
+        "industry": "Construction",
+        "sub_industry": "Commercial Construction"
+      },
+      "size_information": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "organization_status": "Active",
+      "id": "08dcf36c-b682-4d81-837b-e8d87ea77d17",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "jennyyoo.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New York",
+        "city": "New York"
+      },
+      "organization_details": {
+        "name": "Jenny Yoo Media",
+        "industry": "Media & Entertainment",
+        "sub_industry": "Digital Media / Personal Branding"
+      },
+      "size_information": {
+        "employees_range": "1-10",
+        "revenue_range": "Less than $1M"
+      },
+      "organization_status": "Active",
+      "id": "0787768e-11b2-4517-bfc6-b4fd6601af57",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "dtrglaw.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Texas",
+        "city": "Houston"
+      },
+      "organization_details": {
+        "name": "DTRG Law Group",
+        "industry": "Legal",
+        "sub_industry": "Law Practice"
+      },
+      "size_information": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "organization_status": "Active",
+      "id": "19b55b56-ae24-430c-9c3f-2d429a81c8e7",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "www.raymond.in",
+      "geography": {
+        "country_code": "IN",
+        "region": "Maharashtra",
+        "city": "Mumbai"
+      },
+      "organization_details": {
+        "name": "Raymond Ltd.",
+        "industry": "Apparel & Fashion",
+        "sub_industry": "Men's Suits & Textiles"
+      },
+      "size_information": {
+        "employees_range": "10000+",
+        "revenue_range": "$1B+"
+      },
+      "organization_status": "Active",
+      "id": "b1b50ea0-f5e9-4dea-b2df-93110f30b35d",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "www.avalon-hotel.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Nevada",
+        "city": "Las Vegas"
+      },
+      "organization_details": {
+        "name": "Avalon Hotel Group",
+        "industry": "Hospitality",
+        "sub_industry": "Hotels & Resorts"
+      },
+      "size_information": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "organization_status": "Active",
+      "id": "e0d0bae5-60d3-4211-8b18-61600e38896b",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
     }
   ],
-  "total_count": 1199,
-  "last_updated": "2025-03-12 21:31:38 UTC"
+  "total_count": 1203,
+  "last_updated": "2025-03-15 17:51:34 UTC"
 }
