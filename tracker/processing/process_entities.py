@@ -301,11 +301,131 @@ def reset_input_file():
     
     return success
 
+def ensure_final_entities_exists():
+    """
+    Ensure that final_entities.json exists, creating it by merging all JSON files
+    in PER_GROUP_DIR if it doesn't exist.
+    """
+    if os.path.exists(FINAL_ENTITIES_FILE):
+        logger.info(f"{FINAL_ENTITIES_FILE} already exists. Checking if it needs updating...")
+        
+        # Check if it has a valid entities array
+        final_data = load_json_file(FINAL_ENTITIES_FILE)
+        if final_data and "entities" in final_data:
+            current_time = get_current_utc_time()
+            final_data["last_updated"] = current_time
+            save_json_file(final_data, FINAL_ENTITIES_FILE)
+            logger.info(f"Updated timestamp in {FINAL_ENTITIES_FILE}")
+            return True
+    
+    logger.info(f"Creating {FINAL_ENTITIES_FILE} by merging all JSON files in {PER_GROUP_DIR}")
+    
+    # Create a new final_entities.json with merged content
+    merged_entities = []
+    entity_map = {}  # Use map to avoid duplicates
+    
+    try:
+        # Ensure output directory exists
+        os.makedirs(os.path.dirname(FINAL_ENTITIES_FILE), exist_ok=True)
+        
+        # Ensure per_group directory exists
+        if not os.path.exists(PER_GROUP_DIR):
+            logger.warning(f"{PER_GROUP_DIR} does not exist. Creating an empty final_entities.json.")
+            current_time = get_current_utc_time()
+            empty_db = {
+                'entities': [],
+                'last_updated': current_time,
+                'total_count': 0,
+                'description': "Complete archive of all discovered ransomware entities"
+            }
+            return save_json_file(empty_db, FINAL_ENTITIES_FILE)
+        
+        # List JSON files in the per_group directory
+        per_group_files = os.listdir(PER_GROUP_DIR)
+        json_files = [f for f in per_group_files if f.endswith('_entities.json')]
+        
+        if not json_files:
+            logger.warning(f"No JSON files found in {PER_GROUP_DIR}. Creating an empty final_entities.json.")
+            current_time = get_current_utc_time()
+            empty_db = {
+                'entities': [],
+                'last_updated': current_time,
+                'total_count': 0,
+                'description': "Complete archive of all discovered ransomware entities"
+            }
+            return save_json_file(empty_db, FINAL_ENTITIES_FILE)
+        
+        # Process each JSON file
+        for json_file in json_files:
+            logger.info(f"Processing file: {json_file}")
+            file_path = os.path.join(PER_GROUP_DIR, json_file)
+            file_data = load_json_file(file_path)
+            if file_data and "entities" in file_data:
+                # Extract group information from filename (e.g., lockbit_entities.json -> lockbit)
+                group_key = json_file.replace('_entities.json', '')
+                
+                # Add group attribution to each entity
+                for entity in file_data["entities"]:
+                    # Skip entities without ID or domain
+                    if "id" not in entity or "domain" not in entity:
+                        continue
+                    
+                    # Add group attribution if missing
+                    if "group_key" not in entity:
+                        entity["group_key"] = group_key
+                    if "ransomware_group" not in entity:
+                        entity["ransomware_group"] = group_key
+                    
+                    # Create unique key for deduplication
+                    entity_key = f"{entity['id']}:{entity['domain']}"
+                    
+                    # Only add if not already in map
+                    if entity_key not in entity_map:
+                        # Standardize entity fields
+                        standardized = standardize_entity(entity)
+                        merged_entities.append(standardized)
+                        entity_map[entity_key] = True
+        
+        # Create the merged file
+        current_time = get_current_utc_time()
+        final_data = {
+            "entities": merged_entities,
+            "last_updated": current_time,
+            "total_count": len(merged_entities),
+            "description": "Complete archive of all discovered ransomware entities"
+        }
+        
+        # Save the file
+        result = save_json_file(final_data, FINAL_ENTITIES_FILE)
+        logger.info(f"Created {FINAL_ENTITIES_FILE} with {len(merged_entities)} merged entities")
+        return result
+    
+    except Exception as e:
+        logger.error(f"Error creating {FINAL_ENTITIES_FILE}: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        logger.info(f"Creating empty {FINAL_ENTITIES_FILE}")
+        
+        # Create an empty final_entities.json
+        current_time = get_current_utc_time()
+        empty_db = {
+            'entities': [],
+            'last_updated': current_time,
+            'total_count': 0,
+            'description': "Complete archive of all discovered ransomware entities"
+        }
+        
+        return save_json_file(empty_db, FINAL_ENTITIES_FILE)
+
 def process_and_archive_entities():
     """
     Process entities from new_entities.json, standardize them,
     and archive them directly into final_entities.json.
     """
+    # First, ensure final_entities.json exists
+    if not ensure_final_entities_exists():
+        logger.error("Failed to ensure final_entities.json exists")
+        return False
+    
     # Check if input file exists - if not, create an empty one
     if not os.path.exists(INPUT_FILE):
         logger.warning(f"Input file not found: {INPUT_FILE}")
@@ -424,6 +544,10 @@ def process_and_archive_entities():
         
         logger.info(f"Added {added_count} new entities, updated {updated_count} existing entities")
     else:
+        # This should never happen now with ensure_final_entities_exists()
+        # But keeping as safety check
+        logger.warning(f"Final entities file not found: {FINAL_ENTITIES_FILE} (should have been created by ensure_final_entities_exists)")
+        
         # Create new final entities file with standardized entities
         final_data = {
             "entities": standardized_entities,
