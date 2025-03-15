@@ -260,6 +260,7 @@ def get_unprocessed_domains(input_data, processed_data):
     
     logger.info(f"Found {len(unprocessed_entities)} unprocessed entities out of {len(input_data.get('entities', []))} total")
     return unprocessed_entities
+
 def batch_domains(domain_entities, batch_size=BATCH_SIZE):
     """Split domain entities into batches of specified size."""
     return [domain_entities[i:i + batch_size] for i in range(0, len(domain_entities), batch_size)]
@@ -387,6 +388,101 @@ def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
         logger.error(f"Error calling OpenAI API: {e}")
         return []
 
+def send_telegram_notification(newly_processed_entities):
+    """Send a Telegram notification with details about newly processed entities."""
+    if not newly_processed_entities:
+        logger.info("No newly processed entities to notify about")
+        return False
+    
+    try:
+        # Add project root to Python path for imports
+        PROJECT_ROOT = Path(__file__).parent.parent.parent
+        import sys
+        sys.path.append(str(PROJECT_ROOT))
+        
+        try:
+            from tracker.telegram_bot.notifier import send_telegram_message
+        except ImportError as e:
+            logger.error(f"Failed to import telegram notifier module: {e}")
+            logger.info("If you want to use Telegram notifications, make sure 'requests' is installed")
+            logger.info("For local development, also install 'python-dotenv'")
+            return False
+        
+        # Format the notification message
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        message = f"🤖 <b>AI Processing Completed</b>\n\n"
+        message += f"<b>Time:</b> {timestamp}\n"
+        message += f"<b>Newly Processed Entities:</b> {len(newly_processed_entities)}\n\n"
+        
+        # Add details for up to 5 entities
+        message += "<b>Processed Entity Details:</b>\n"
+        
+        for i, entity in enumerate(newly_processed_entities[:5]):
+            # Basic entity info
+            domain = entity.get('domain', 'Unknown')
+            message += f"\n<b>Entity {i+1}:</b> {domain}\n"
+            
+            # Organization info
+            if 'organization' in entity:
+                org = entity['organization']
+                message += f"<b>Organization:</b> {org.get('name', 'Unknown')}\n"
+                message += f"<b>Industry:</b> {org.get('industry', 'Unknown')}"
+                if org.get('sub_industry'):
+                    message += f" ({org.get('sub_industry')})"
+                message += f"\n"
+                
+                # Size info if available
+                if 'size' in org:
+                    size = org['size']
+                    if size.get('employees_range'):
+                        message += f"<b>Employees:</b> {size.get('employees_range')}\n"
+                    if size.get('revenue_range'):
+                        message += f"<b>Revenue:</b> {size.get('revenue_range')}\n"
+                
+                # Status if available
+                if org.get('status'):
+                    message += f"<b>Status:</b> {org.get('status')}\n"
+            
+            # Geography info
+            if 'geography' in entity:
+                geo = entity['geography']
+                message += f"<b>Country:</b> {geo.get('country_code', 'Unknown')}\n"
+                
+                # Location if available
+                if geo.get('city') or geo.get('region'):
+                    location = []
+                    if geo.get('city'):
+                        location.append(geo.get('city'))
+                    if geo.get('region'):
+                        location.append(geo.get('region'))
+                    message += f"<b>Location:</b> {', '.join(location)}\n"
+            
+            # Ransomware group info
+            if entity.get('ransomware_group'):
+                message += f"<b>Ransomware Group:</b> {entity.get('ransomware_group')}\n"
+            
+            # Add a separator between entities
+            if i < min(4, len(newly_processed_entities) - 1):
+                message += "\n" + "—" * 20 + "\n"
+        
+        # Add a note if there are more entities not shown
+        if len(newly_processed_entities) > 5:
+            message += f"\n... and {len(newly_processed_entities) - 5} more entities\n"
+        
+        # Send the message
+        success = send_telegram_message(message)
+        
+        if success:
+            logger.info("Telegram notification sent successfully")
+        else:
+            logger.error("Failed to send Telegram notification")
+            
+        return success
+        
+    except Exception as e:
+        logger.error(f"Error sending Telegram notification: {e}")
+        return False
+
 def process_domain_enrichment(auto_confirm=False, show_preview=True):
     """
     Main function to process domain enrichment:
@@ -394,6 +490,7 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
     2. Identify unprocessed domains
     3. Process domains in batches of 100 with confirmation for each batch
     4. Parse and add enriched data to processed_AI.json after each batch
+    5. Send notification about processed entities
     """
     # Load input file
     input_data = load_json_file(INPUT_FILE)
@@ -419,6 +516,7 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
     
     # Process each batch
     total_processed = 0
+    all_newly_processed = []  # Track all newly processed entities for notification
     
     for batch_num, entity_batch in enumerate(batched_entities, 1):
         # Extract just the domains for the API call
@@ -463,6 +561,7 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
                 enriched_entity['ransomware_group'] = entity.get('ransomware_group')
                 
                 newly_processed.append(enriched_entity)
+                all_newly_processed.append(enriched_entity)  # Add to the complete list for notification
         
         # Add newly processed entities to the processed data
         if newly_processed:
@@ -482,10 +581,12 @@ def process_domain_enrichment(auto_confirm=False, show_preview=True):
             time.sleep(delay)
     
     logger.info(f"Total entities processed: {total_processed}")
+    
+    # Send notification about all newly processed entities
+    if all_newly_processed:
+        send_telegram_notification(all_newly_processed)
+    
     return True
-
-
-
 
 def simulate_enrichment():
     """
@@ -553,6 +654,9 @@ def simulate_enrichment():
         # Save the updated processed data
         save_json_file(processed_data, PROCESSED_FILE)
         logger.info(f"Added {len(newly_processed)} simulated enriched entities")
+        
+        # Send notification about simulated entities
+        send_telegram_notification(newly_processed)
     
     return True
 
@@ -564,6 +668,6 @@ if __name__ == "__main__":
         logger.warning("OpenAI API key not found. Running in simulation mode.")
         simulate_enrichment()
     else:
-        process_domain_enrichment()
+        process_domain_enrichment(auto_confirm=args.yes, show_preview=not args.no_preview)
     
     logger.info("Domain enrichment process completed")
