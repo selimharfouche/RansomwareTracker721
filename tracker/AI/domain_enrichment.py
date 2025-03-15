@@ -260,7 +260,6 @@ def get_unprocessed_domains(input_data, processed_data):
     
     logger.info(f"Found {len(unprocessed_entities)} unprocessed entities out of {len(input_data.get('entities', []))} total")
     return unprocessed_entities
-
 def batch_domains(domain_entities, batch_size=BATCH_SIZE):
     """Split domain entities into batches of specified size."""
     return [domain_entities[i:i + batch_size] for i in range(0, len(domain_entities), batch_size)]
