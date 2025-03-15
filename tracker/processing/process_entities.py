@@ -150,6 +150,32 @@ def save_json_file(data, file_path):
         logger.error(f"Traceback: {traceback.format_exc()}")
         return False
 
+def create_empty_final_entities():
+    """Create an empty final_entities.json file if it doesn't exist."""
+    current_time = get_current_utc_time()
+    
+    # Create empty file structure
+    empty_final = {
+        "entities": [],
+        "last_updated": current_time,
+        "total_count": 0,
+        "description": "Complete archive of all discovered ransomware entities"
+    }
+    
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(FINAL_ENTITIES_FILE), exist_ok=True)
+    
+    # Save the file
+    try:
+        with open(FINAL_ENTITIES_FILE, 'w', encoding='utf-8') as f:
+            json.dump(empty_final, f, indent=2, ensure_ascii=False)
+        logger.info(f"Created new empty final_entities.json file")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to create empty final_entities.json file: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return False
+
 def load_site_entities(site_key):
     """Load entity data for a specific site from the per_group directory."""
     json_file = f"{site_key}_entities.json"
@@ -306,6 +332,13 @@ def process_and_archive_entities():
     Process entities from new_entities.json, standardize them,
     and archive them directly into final_entities.json.
     """
+    # First, ensure final_entities.json exists
+    if not os.path.exists(FINAL_ENTITIES_FILE):
+        logger.warning(f"final_entities.json not found at {FINAL_ENTITIES_FILE}. Creating new file.")
+        if not create_empty_final_entities():
+            logger.error("Failed to create final_entities.json. Exiting.")
+            return False
+    
     # Check if input file exists - if not, create an empty one
     if not os.path.exists(INPUT_FILE):
         logger.warning(f"Input file not found: {INPUT_FILE}")
@@ -337,16 +370,18 @@ def process_and_archive_entities():
         logger.info(f"No entities found in {INPUT_FILE} to process")
         
         # Even if there are no new entities, we should update the timestamp in final_entities.json
-        if os.path.exists(FINAL_ENTITIES_FILE):
-            try:
-                final_data = load_json_file(FINAL_ENTITIES_FILE)
-                if final_data and "entities" in final_data:
-                    current_time = get_current_utc_time()
-                    final_data["last_updated"] = current_time
-                    save_json_file(final_data, FINAL_ENTITIES_FILE)
-                    logger.info(f"Updated last_updated timestamp in {FINAL_ENTITIES_FILE}")
-            except Exception as e:
-                logger.error(f"Error updating timestamp in {FINAL_ENTITIES_FILE}: {e}")
+        try:
+            final_data = load_json_file(FINAL_ENTITIES_FILE)
+            if final_data and "entities" in final_data:
+                current_time = get_current_utc_time()
+                final_data["last_updated"] = current_time
+                logger.info(f"Updating last_updated timestamp in {FINAL_ENTITIES_FILE}")
+                if save_json_file(final_data, FINAL_ENTITIES_FILE):
+                    logger.info(f"Successfully updated timestamp in {FINAL_ENTITIES_FILE}")
+                else:
+                    logger.error(f"Failed to save updated timestamp to {FINAL_ENTITIES_FILE}")
+        except Exception as e:
+            logger.error(f"Error updating timestamp in {FINAL_ENTITIES_FILE}: {e}")
         
         return True  # Return True because there's nothing to process (not an error)
     
@@ -370,70 +405,69 @@ def process_and_archive_entities():
     # Now add these standardized entities to the final archive
     current_time = get_current_utc_time()
     
-    # Check if final archive exists
-    if os.path.exists(FINAL_ENTITIES_FILE):
-        # Load existing archive
-        final_data = load_json_file(FINAL_ENTITIES_FILE)
-        if not final_data or "entities" not in final_data:
-            logger.error(f"Invalid format in final entities file: {FINAL_ENTITIES_FILE}")
-            return False
-        
-        # Create a dictionary of existing entities for faster lookup AND MATCHING
-        existing_entities_map = {}
-        for idx, entity in enumerate(final_data["entities"]):
-            if "id" in entity and "domain" in entity:
-                entity_key = f"{entity['id']}:{entity['domain']}"
-                # Store the index and entity for potential updates
-                existing_entities_map[entity_key] = {"index": idx, "entity": entity}
-        
-        # Process all standardized entities
-        added_count = 0
-        updated_count = 0
-        for entity in standardized_entities:
-            if "id" in entity and "domain" in entity:
-                entity_key = f"{entity['id']}:{entity['domain']}"
-                if entity_key not in existing_entities_map:
-                    # New entity - add it
-                    final_data["entities"].append(entity)
-                    existing_entities_map[entity_key] = {"index": len(final_data["entities"]) - 1, "entity": entity}
-                    added_count += 1
-                else:
-                    # Existing entity - update fields
-                    existing_idx = existing_entities_map[entity_key]["index"]
-                    existing_entity = final_data["entities"][existing_idx]
-                    
-                    # Update fields from the new entity
-                    fields_updated = False
-                    for field in STANDARD_FIELDS:
-                        if field in entity and entity[field] is not None:
-                            # Don't overwrite first_seen date
-                            if field == "first_seen" and existing_entity.get("first_seen"):
-                                continue
-                            
-                            # Only update if the field has changed
-                            if existing_entity.get(field) != entity[field]:
-                                existing_entity[field] = entity[field]
-                                fields_updated = True
-                    
-                    if fields_updated:
-                        updated_count += 1
-        
-        # Always update the last_updated timestamp and total_count
-        final_data["last_updated"] = current_time
-        final_data["total_count"] = len(final_data["entities"])
-        
-        logger.info(f"Added {added_count} new entities, updated {updated_count} existing entities")
-    else:
-        # Create new final entities file with standardized entities
+    # Load existing archive
+    final_data = load_json_file(FINAL_ENTITIES_FILE)
+    if not final_data or "entities" not in final_data:
+        logger.error(f"Invalid format in final entities file: {FINAL_ENTITIES_FILE}")
+        logger.info("Creating new final_entities.json file")
         final_data = {
-            "entities": standardized_entities,
+            "entities": [],
             "last_updated": current_time,
-            "total_count": len(standardized_entities),
+            "total_count": 0,
             "description": "Complete archive of all discovered ransomware entities"
         }
-        logger.info(f"Creating new final entities archive with {entity_count} entities")
+    
+    # Create a dictionary of existing entities for faster lookup AND MATCHING
+    existing_entities_map = {}
+    for idx, entity in enumerate(final_data["entities"]):
+        if "id" in entity and "domain" in entity:
+            entity_key = f"{entity['id']}:{entity['domain']}"
+            # Store the index and entity for potential updates
+            existing_entities_map[entity_key] = {"index": idx, "entity": entity}
+    
+    # Process all standardized entities
+    added_count = 0
+    updated_count = 0
+    for entity in standardized_entities:
+        if "id" in entity and "domain" in entity:
+            entity_key = f"{entity['id']}:{entity['domain']}"
+            if entity_key not in existing_entities_map:
+                # New entity - add it
+                final_data["entities"].append(entity)
+                existing_entities_map[entity_key] = {"index": len(final_data["entities"]) - 1, "entity": entity}
+                added_count += 1
+                logger.info(f"Added new entity: {entity.get('domain')}")
+            else:
+                # Existing entity - update fields
+                existing_idx = existing_entities_map[entity_key]["index"]
+                existing_entity = final_data["entities"][existing_idx]
+                
+                # Update fields from the new entity
+                fields_updated = False
+                for field in STANDARD_FIELDS:
+                    if field in entity and entity[field] is not None:
+                        # Don't overwrite first_seen date
+                        if field == "first_seen" and existing_entity.get("first_seen"):
+                            continue
+                        
+                        # Only update if the field has changed
+                        if existing_entity.get(field) != entity[field]:
+                            existing_entity[field] = entity[field]
+                            fields_updated = True
+                
+                if fields_updated:
+                    updated_count += 1
+                    logger.info(f"Updated existing entity: {entity.get('domain')}")
+    
+    # Always update the last_updated timestamp and total_count
+    final_data["last_updated"] = current_time
+    final_data["total_count"] = len(final_data["entities"])
+    
+    logger.info(f"Added {added_count} new entities, updated {updated_count} existing entities")
+    logger.info(f"Total entities in database: {final_data['total_count']}")
     
     # Save the final archive file
+    logger.info(f"Saving final entities to {FINAL_ENTITIES_FILE}")
     if save_json_file(final_data, FINAL_ENTITIES_FILE):
         # Reset the input file
         reset_input_file()
