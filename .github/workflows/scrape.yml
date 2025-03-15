@@ -2,7 +2,7 @@ name: Ransomware Tracker Scraping
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run at the top of every hour (0 minutes past every hour)
+    - cron: '*/5 * * * *'  # Run every 5 minutes
   workflow_dispatch:
 
 jobs:
@@ -139,18 +139,19 @@ jobs:
         run: |
           mkdir -p data/output data/snapshots/html_snapshots data/snapshots/new_entities_snapshot logs
 
-      # Run scraper with Telegram environmental variables
+      # Run scraper with Telegram environmental variables and constant-monitoring flag
       - name: Run scraper and process entities
         env:
           # Pass GitHub secrets to the environment for Telegram notifications
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           export GITHUB_CONFIG_PATH="/tmp/github_configs"
           
-          # Run the scraper
+          # Run the scraper with constant-monitoring flag
           cd tracker
-          python main.py
+          python main.py --constant-monitoring
           echo "Scraper and entity processing completed"
 
       # Commit changes
@@ -162,7 +163,7 @@ jobs:
           git add -A data/
           
           if ! git diff --staged --quiet; then
-            git commit -m "Auto-update data from hourly scrape"
+            git commit -m "Auto-update data from scheduled scrape"
             git push
           else
             echo "No changes to commit"
