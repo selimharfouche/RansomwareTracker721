@@ -335,6 +335,19 @@ def process_and_archive_entities():
     input_data = load_json_file(INPUT_FILE)
     if not input_data or "entities" not in input_data or not input_data["entities"]:
         logger.info(f"No entities found in {INPUT_FILE} to process")
+        
+        # Even if there are no new entities, we should update the timestamp in final_entities.json
+        if os.path.exists(FINAL_ENTITIES_FILE):
+            try:
+                final_data = load_json_file(FINAL_ENTITIES_FILE)
+                if final_data and "entities" in final_data:
+                    current_time = get_current_utc_time()
+                    final_data["last_updated"] = current_time
+                    save_json_file(final_data, FINAL_ENTITIES_FILE)
+                    logger.info(f"Updated last_updated timestamp in {FINAL_ENTITIES_FILE}")
+            except Exception as e:
+                logger.error(f"Error updating timestamp in {FINAL_ENTITIES_FILE}: {e}")
+        
         return True  # Return True because there's nothing to process (not an error)
     
     # Process and standardize all entities
@@ -365,28 +378,51 @@ def process_and_archive_entities():
             logger.error(f"Invalid format in final entities file: {FINAL_ENTITIES_FILE}")
             return False
         
-        # Create a dictionary of existing entities for faster lookup
-        existing_entities = {}
-        for entity in final_data["entities"]:
+        # Create a dictionary of existing entities for faster lookup AND MATCHING
+        existing_entities_map = {}
+        for idx, entity in enumerate(final_data["entities"]):
             if "id" in entity and "domain" in entity:
                 entity_key = f"{entity['id']}:{entity['domain']}"
-                existing_entities[entity_key] = True
+                # Store the index and entity for potential updates
+                existing_entities_map[entity_key] = {"index": idx, "entity": entity}
         
-        # Add only new entities that don't already exist
+        # Process all standardized entities
         added_count = 0
+        updated_count = 0
         for entity in standardized_entities:
             if "id" in entity and "domain" in entity:
                 entity_key = f"{entity['id']}:{entity['domain']}"
-                if entity_key not in existing_entities:
+                if entity_key not in existing_entities_map:
+                    # New entity - add it
                     final_data["entities"].append(entity)
-                    existing_entities[entity_key] = True
+                    existing_entities_map[entity_key] = {"index": len(final_data["entities"]) - 1, "entity": entity}
                     added_count += 1
+                else:
+                    # Existing entity - update fields
+                    existing_idx = existing_entities_map[entity_key]["index"]
+                    existing_entity = final_data["entities"][existing_idx]
+                    
+                    # Update fields from the new entity
+                    fields_updated = False
+                    for field in STANDARD_FIELDS:
+                        if field in entity and entity[field] is not None:
+                            # Don't overwrite first_seen date
+                            if field == "first_seen" and existing_entity.get("first_seen"):
+                                continue
+                            
+                            # Only update if the field has changed
+                            if existing_entity.get(field) != entity[field]:
+                                existing_entity[field] = entity[field]
+                                fields_updated = True
+                    
+                    if fields_updated:
+                        updated_count += 1
         
-        # Update metadata
-        final_data["total_count"] = len(final_data["entities"])
+        # Always update the last_updated timestamp and total_count
         final_data["last_updated"] = current_time
+        final_data["total_count"] = len(final_data["entities"])
         
-        logger.info(f"Added {added_count} new entities to the archive (skipped {entity_count - added_count} duplicates)")
+        logger.info(f"Added {added_count} new entities, updated {updated_count} existing entities")
     else:
         # Create new final entities file with standardized entities
         final_data = {

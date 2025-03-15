@@ -212,15 +212,53 @@ def save_raw_response(content, batch_number, timestamp=None):
         return None
 
 def get_unprocessed_domains(input_data, processed_data):
-    """Get domains from input_data that are not in processed_data."""
-    processed_domains = {entity.get('domain'): True for entity in processed_data.get('entities', [])}
+    """
+    Get domains from input_data that are not in processed_data.
+    Uses id+group_key combination for precise entity matching.
+    """
+    # Create lookup table using both id and group_key
+    processed_entities = {}
+    for entity in processed_data.get('entities', []):
+        entity_id = entity.get('id')
+        group_key = entity.get('group_key')
+        domain = entity.get('domain')
+        
+        # Primary lookup: id + group_key
+        if entity_id and group_key:
+            entity_key = f"{entity_id}:{group_key}"
+            processed_entities[entity_key] = True
+        
+        # Secondary lookup: just domain as fallback
+        if domain:
+            processed_entities[f"domain:{domain}"] = True
     
     unprocessed_entities = []
     for entity in input_data.get('entities', []):
+        entity_id = entity.get('id')
+        group_key = entity.get('group_key')
         domain = entity.get('domain')
-        if domain and domain not in processed_domains:
-            unprocessed_entities.append(entity)
+        
+        if not domain:
+            # Skip entities without a domain
+            continue
+            
+        # Check if the entity exists using id+group_key combination
+        if entity_id and group_key:
+            entity_key = f"{entity_id}:{group_key}"
+            if entity_key not in processed_entities:
+                # Entity with this id+group_key doesn't exist yet
+                unprocessed_entities.append(entity)
+                # Log for debugging
+                logger.info(f"Found unprocessed entity with id+group_key: {entity_id}:{group_key}, domain: {domain}")
+        else:
+            # Fallback to domain-only checking if id or group_key is missing
+            domain_key = f"domain:{domain}"
+            if domain_key not in processed_entities:
+                unprocessed_entities.append(entity)
+                # Log for debugging
+                logger.info(f"Found unprocessed entity using domain fallback: {domain}")
     
+    logger.info(f"Found {len(unprocessed_entities)} unprocessed entities out of {len(input_data.get('entities', []))} total")
     return unprocessed_entities
 
 def batch_domains(domain_entities, batch_size=BATCH_SIZE):
