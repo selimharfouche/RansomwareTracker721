@@ -49,7 +49,7 @@ pip install -r requirements.txt
 ### Prérequis
 
 - Python 3.9+
-- Tor (déjà en cours d'exécution sur le port 9050)
+- Tor 
 - Firefox et Geckodriver
 
 ## Configuration
