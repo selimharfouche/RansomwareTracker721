@@ -2,7 +2,7 @@ name: Ransomware Tracker Scraping
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 * * * *'  # Run at the top of every hour (0 minutes past every hour)
   workflow_dispatch:
 
 jobs:
@@ -162,7 +162,7 @@ jobs:
           git add -A data/
           
           if ! git diff --staged --quiet; then
-            git commit -m "Auto-update data from scheduled scrape"
+            git commit -m "Auto-update data from hourly scrape"
             git push
           else
             echo "No changes to commit"
