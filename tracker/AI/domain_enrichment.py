@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Domain Enrichment Processor
+Domain Enrichment Processor - FIXED AUTH HEADERS
 
 This script extracts domains from AI.json that haven't been processed yet,
 sends them to OpenAI API for enrichment, and saves the results to processed_AI.json.
@@ -18,12 +18,12 @@ from typing import List, Dict, Any
 import requests
 from datetime import datetime
 
-# Configure very detailed logging
+# Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler(sys.stdout)  # Force output to stdout for GitHub Actions
+        logging.StreamHandler(sys.stdout)
     ]
 )
 logger = logging.getLogger(__name__)
@@ -38,13 +38,12 @@ args = parser.parse_args()
 if args.output:
     OUTPUT_DIR = Path(args.output)
 else:
-    # Default to script directory if no output specified
     OUTPUT_DIR = Path(__file__).parent
 
 # Ensure output directory exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# Define file paths relative to the output directory
+# Define file paths
 INPUT_FILE = OUTPUT_DIR / "AI.json"
 PROCESSED_FILE = OUTPUT_DIR / "processed_AI.json"
 LOG_FILE = OUTPUT_DIR / "domain_enrichment.log"
@@ -168,9 +167,13 @@ Return a valid JSON array with an object for each domain."""
         logger.info(f"Request prompt: {prompt[:200]}...")
         
         # Make API call to OpenAI
+        # *** FIX: Properly encode the Authorization header ***
+        auth_header = f"Bearer {OPENAI_API_KEY.strip()}"
+        logger.info(f"Authorization header created (starts with: {auth_header[:15]}...)")
+        
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {OPENAI_API_KEY}"
+            "Authorization": auth_header
         }
         
         data = {
@@ -190,8 +193,11 @@ Return a valid JSON array with an object for each domain."""
         logger.info("⏱️ Making API request - this might take a minute...")
         start_time = time.time()
         
+        # Create a properly formatted request
+        session = requests.Session()
+        
         # Set a long timeout (60 seconds)
-        response = requests.post(
+        response = session.post(
             "https://api.openai.com/v1/chat/completions",
             headers=headers,
             json=data,
@@ -203,7 +209,8 @@ Return a valid JSON array with an object for each domain."""
         logger.info(f"Response status code: {response.status_code}")
         
         if response.status_code != 200:
-            logger.error(f"API error: {response.status_code}, {response.text}")
+            logger.error(f"API error: {response.status_code}")
+            logger.error(f"Response text: {response.text[:500]}")
             return []
         
         # Extract content
