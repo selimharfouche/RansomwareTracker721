@@ -104,125 +104,6 @@ def run_domain_enrichment():
         logger.error(f"STDERR: {e.stderr}")
         return False
 
-def count_processed_entities():
-    """Count newly processed entities"""
-    try:
-        ai_json_path = OUTPUT_DIR / "AI.json"
-        processed_ai_path = OUTPUT_DIR / "processed_AI.json"
-        
-        logger.info(f"Looking for AI.json at: {ai_json_path}")
-        logger.info(f"Looking for processed_AI.json at: {processed_ai_path}")
-        
-        if not ai_json_path.exists():
-            logger.warning(f"AI.json not found at {ai_json_path}")
-            return 0
-        
-        if not processed_ai_path.exists():
-            logger.warning(f"processed_AI.json not found at {processed_ai_path}")
-            return 0
-        
-        with open(ai_json_path, 'r') as f:
-            ai_data = json.load(f)
-        
-        with open(processed_ai_path, 'r') as f:
-            processed_data = json.load(f)
-        
-        ai_count = len(ai_data.get('entities', []))
-        processed_count = len(processed_data.get('entities', []))
-        
-        logger.info(f"AI.json has {ai_count} entities")
-        logger.info(f"processed_AI.json has {processed_count} entities")
-        
-        # Calculate newly processed entities
-        # If we have a way to identify entities uniquely, use that instead
-        return max(0, processed_count - ai_count)
-    except Exception as e:
-        logger.error(f"Error counting entities: {e}")
-        return 0
-
-def get_sample_entities(count):
-    """Get sample information from recently processed entities"""
-    try:
-        processed_ai_path = OUTPUT_DIR / "processed_AI.json"
-        
-        if not processed_ai_path.exists():
-            logger.warning(f"processed_AI.json not found at {processed_ai_path}")
-            return []
-            
-        with open(processed_ai_path, 'r') as f:
-            data = json.load(f)
-        
-        entities = data.get('entities', [])[-count:]
-        return entities[:3]  # Return up to 3 entities
-    except Exception as e:
-        logger.error(f"Error getting sample entities: {e}")
-        return []
-
-def send_notification(newly_processed_count):
-    """Send Telegram notification with results"""
-    try:
-        # Add project root to Python path for imports
-        sys.path.append(str(PROJECT_ROOT))
-        
-        try:
-            from tracker.telegram_bot.notifier import send_telegram_message
-        except ImportError:
-            logger.error("Could not import telegram notifier. Notifications will not be sent.")
-            return False
-        
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
-        
-        if newly_processed_count > 0:
-            message = f"🤖 <b>AI Processing Completed</b>\n\n"
-            message += f"<b>Time:</b> {timestamp}\n"
-            message += f"<b>Newly Processed Entities:</b> {newly_processed_count}\n\n"
-            
-            # Add sample entity information
-            sample_entities = get_sample_entities(newly_processed_count)
-            
-            if sample_entities:
-                message += "<b>Sample Entity Information:</b>\n"
-                
-                for i, entity in enumerate(sample_entities):
-                    message += f"\n<b>Entity {i+1}:</b> {entity.get('domain', 'Unknown')}\n"
-                    
-                    # Organization info
-                    if 'organization' in entity:
-                        org = entity['organization']
-                        message += f"<b>Organization:</b> {org.get('name', 'Unknown')}\n"
-                        message += f"<b>Industry:</b> {org.get('industry', 'Unknown')}\n"
-                    
-                    # Geography info
-                    if 'geography' in entity:
-                        geo = entity['geography']
-                        message += f"<b>Country:</b> {geo.get('country_code', 'Unknown')}\n"
-                        if geo.get('city'):
-                            message += f"<b>Location:</b> {geo.get('city', '')}, {geo.get('region', '')}\n"
-                
-                if newly_processed_count > 3:
-                    message += f"\n... and {newly_processed_count - 3} more entities\n"
-            else:
-                message += "<i>Could not retrieve detailed entity information</i>\n"
-            
-            message += f"\n✅ <i>AI processing complete</i>"
-        else:
-            message = f"🤖 <b>AI Processing Completed - No New Entities</b>\n\n"
-            message += f"<b>Time:</b> {timestamp}\n"
-            message += f"<b>Result:</b> No new entities were processed\n"
-        
-        # Send message
-        success = send_telegram_message(message)
-        
-        if success:
-            logger.info("Notification sent successfully")
-        else:
-            logger.error("Failed to send notification")
-            
-        return success
-    except Exception as e:
-        logger.error(f"Error sending notification: {e}")
-        return False
-
 def main():
     """Main function to coordinate AI processing workflow"""
     logger.info(f"Starting AI processing workflow (GitHub mode: {args.github})...")
@@ -236,13 +117,6 @@ def main():
     if not run_domain_enrichment():
         logger.error("Enrichment script failed")
         return False
-    
-    # Count processed entities
-    newly_processed_count = count_processed_entities()
-    logger.info(f"Newly processed entities: {newly_processed_count}")
-    
-    # Send notification
-    send_notification(newly_processed_count)
     
     logger.info("AI processing workflow completed")
     return True

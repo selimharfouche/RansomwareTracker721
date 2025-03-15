@@ -159,5 +159,3 @@ if __name__ == "__main__":
         logger.info(f"Successfully extracted fields to {OUTPUT_FILE}")
     else:
         logger.error("Failed to extract entity fields")
-
-
