@@ -13,15 +13,19 @@ import time
 import logging
 import argparse
 import traceback
+import sys
 from pathlib import Path
 from typing import List, Dict, Any
 import requests
 from datetime import datetime
 
-# Set up logging
+# Configure very detailed logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.DEBUG,  # Changed from INFO to DEBUG for more details
+    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)  # Force output to stdout for GitHub Actions
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -30,7 +34,11 @@ parser = argparse.ArgumentParser(description="Domain enrichment processor")
 parser.add_argument("--yes", action="store_true", help="Automatically confirm all batches without prompting")
 parser.add_argument("--no-preview", action="store_true", help="Hide the batch preview summary")
 parser.add_argument("--output", type=str, help="Output directory for processed_AI.json")
+parser.add_argument("--debug", action="store_true", help="Run in debug mode with extra logging")
 args = parser.parse_args()
+
+# Force debug mode on
+DEBUG_MODE = True
 
 # Determine output directory
 if args.output:
@@ -39,73 +47,140 @@ else:
     # Default to script directory if no output specified
     OUTPUT_DIR = Path(__file__).parent
 
+logger.debug(f"Output directory set to: {OUTPUT_DIR}")
+
 # Ensure output directory exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+logger.debug(f"Ensured output directory exists: {OUTPUT_DIR}")
 
 # Define file paths relative to the output directory
 INPUT_FILE = OUTPUT_DIR / "AI.json"
 PROCESSED_FILE = OUTPUT_DIR / "processed_AI.json"
 RAW_RESPONSES_DIR = OUTPUT_DIR / "raw_responses"
 BATCH_PREVIEW_DIR = OUTPUT_DIR / "batch_previews"
+DEBUG_LOG_FILE = OUTPUT_DIR / "domain_enrichment_debug.log"
+
+logger.debug(f"Input file path: {INPUT_FILE}")
+logger.debug(f"Processed file path: {PROCESSED_FILE}")
+
+# Additional debug log file
+if DEBUG_MODE:
+    debug_handler = logging.FileHandler(DEBUG_LOG_FILE, mode='w')
+    debug_handler.setLevel(logging.DEBUG)
+    debug_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s'))
+    logging.getLogger().addHandler(debug_handler)
+    logger.debug(f"Added debug log file: {DEBUG_LOG_FILE}")
 
 # Ensure subdirectories exist
 RAW_RESPONSES_DIR.mkdir(exist_ok=True)
 BATCH_PREVIEW_DIR.mkdir(exist_ok=True)
+logger.debug("Created subdirectories for raw responses and batch previews")
 
 # Check for GitHub Actions environment
 IN_GITHUB_ACTIONS = os.environ.get('GITHUB_ACTIONS') == 'true'
+logger.debug(f"Running in GitHub Actions: {IN_GITHUB_ACTIONS}")
+
+# Print all environment variables in debug mode
+if DEBUG_MODE:
+    logger.debug("Environment variables:")
+    for key, value in os.environ.items():
+        if 'KEY' in key or 'TOKEN' in key or 'SECRET' in key:
+            # Mask sensitive values but show they exist
+            logger.debug(f"  {key}: {'*' * (len(value) if value else 0)}")
+        else:
+            logger.debug(f"  {key}: {value}")
 
 # Load environment variables - try different methods depending on environment
 if IN_GITHUB_ACTIONS:
     # In GitHub Actions, read directly from environment
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-    logger.info("Running in GitHub Actions, using environment OPENAI_API_KEY")
+    logger.debug(f"In GitHub Actions, OPENAI_API_KEY {'exists' if OPENAI_API_KEY else 'does not exist'}")
+    if OPENAI_API_KEY:
+        logger.debug(f"OPENAI_API_KEY length: {len(OPENAI_API_KEY)}")
 else:
     # In local development, try to use dotenv
     try:
         from dotenv import load_dotenv
         # Look for .env file at project root
         ENV_FILE = Path(__file__).parent.parent.parent / ".env"
+        logger.debug(f"Loading .env file from: {ENV_FILE}")
         load_dotenv(dotenv_path=ENV_FILE)
         OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-        logger.info(f"Loaded environment from {ENV_FILE}")
+        logger.debug(f"After loading .env, OPENAI_API_KEY {'exists' if OPENAI_API_KEY else 'does not exist'}")
     except ImportError:
         logger.warning("python-dotenv not installed. Using environment variables directly.")
         OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+        logger.debug(f"OPENAI_API_KEY from env: {'exists' if OPENAI_API_KEY else 'does not exist'}")
 
 if not OPENAI_API_KEY:
     logger.error("OpenAI API key not found in environment variables or .env file")
     logger.info("Please set OPENAI_API_KEY in your environment or .env file")
-    exit(1)
-
-logger.info(f"OpenAI API key found, length: {len(OPENAI_API_KEY)}")
+    # Instead of exiting, try fallback options for debugging
+    if DEBUG_MODE:
+        logger.warning("Running in debug mode - will use a fake API key for testing")
+        OPENAI_API_KEY = "DEBUG_MODE_DUMMY_KEY"
+    else:
+        exit(1)
 
 # Batch size for API calls
 BATCH_SIZE = 100
 
 def load_json_file(file_path: Path) -> Dict:
     """Load a JSON file and return its contents."""
+    logger.debug(f"Attempting to load JSON from: {file_path}")
+    
     try:
+        if not file_path.exists():
+            logger.warning(f"File does not exist: {file_path}")
+            return {"entities": []}
+            
         with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            logger.info(f"Successfully loaded {file_path} with {len(data.get('entities', []))} entities")
+            content = f.read()
+            logger.debug(f"File content length: {len(content)} bytes")
+            if content.strip() == "":
+                logger.warning(f"File is empty: {file_path}")
+                return {"entities": []}
+                
+            data = json.loads(content)
+            count = len(data.get('entities', []))
+            logger.debug(f"Successfully loaded {file_path} with {count} entities")
+            
+            # Debug: Print first entity if exists
+            if count > 0:
+                logger.debug(f"First entity sample: {data['entities'][0]}")
+                
             return data
     except FileNotFoundError:
-        logger.info(f"File not found: {file_path}. Will create new file.")
+        logger.warning(f"File not found: {file_path}. Will create new file.")
         return {"entities": []}
-    except json.JSONDecodeError:
-        logger.error(f"Invalid JSON in file: {file_path}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in file: {file_path}. Error: {e}")
+        logger.error(f"Error position: line {e.lineno}, column {e.colno}")
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            logger.debug(f"File content around error: {content[max(0, e.pos-50):min(len(content), e.pos+50)]}")
         return {"entities": []}
     except Exception as e:
         logger.error(f"Error loading {file_path}: {e}")
+        logger.error(traceback.format_exc())
         return {"entities": []}
 
 def save_json_file(data: Dict, file_path: Path) -> bool:
     """Save data to a JSON file."""
+    logger.debug(f"Attempting to save JSON to: {file_path}")
+    logger.debug(f"Data contains {len(data.get('entities', []))} entities")
+    
     try:
+        if file_path.exists():
+            # Create a backup
+            backup_path = file_path.with_suffix(f"{file_path.suffix}.bak")
+            logger.debug(f"Creating backup of existing file: {backup_path}")
+            import shutil
+            shutil.copy2(file_path, backup_path)
+            
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-        logger.info(f"Successfully saved data to {file_path} with {len(data.get('entities', []))} entities")
+        logger.info(f"Successfully saved data to {file_path}")
         return True
     except Exception as e:
         logger.error(f"Error saving to {file_path}: {e}")
@@ -114,6 +189,8 @@ def save_json_file(data: Dict, file_path: Path) -> bool:
 
 def create_enrichment_prompt(domains: List[str]) -> str:
     """Create a prompt for OpenAI API to request enrichment data."""
+    logger.debug(f"Creating enrichment prompt for {len(domains)} domains")
+    
     prompt = """Your task is to provide detailed organizational information for each domain.
 
 For each domain name:
@@ -156,23 +233,92 @@ Domains to research and enrich:
     # Replace the placeholder with the actual count
     prompt = prompt.replace("{num_domains}", str(len(domains)))
     
+    logger.debug(f"Created prompt with length: {len(prompt)} characters")
     return prompt
 
-def save_batch_preview(domains: List[str], batch_number: int) -> Path:
+def get_unprocessed_domains(input_data, processed_data):
     """
-    Save a preview of what will be sent to the OpenAI API for a batch.
-    Returns the path to the preview file.
+    Get domains from input_data that are not in processed_data.
+    Uses id+group_key combination for precise entity matching.
     """
-    # Generate the prompt that will be sent
+    logger.debug(f"Looking for unprocessed domains")
+    logger.debug(f"Input data has {len(input_data.get('entities', []))} entities")
+    logger.debug(f"Processed data has {len(processed_data.get('entities', []))} entities")
+    
+    # Create lookup table using both id and group_key
+    processed_entities = {}
+    for entity in processed_data.get('entities', []):
+        entity_id = entity.get('id')
+        group_key = entity.get('group_key')
+        domain = entity.get('domain')
+        
+        # Primary lookup: id + group_key
+        if entity_id and group_key:
+            entity_key = f"{entity_id}:{group_key}"
+            processed_entities[entity_key] = True
+            logger.debug(f"Added processed entity with key: {entity_key}")
+        
+        # Secondary lookup: just domain as fallback
+        if domain:
+            processed_entities[f"domain:{domain}"] = True
+    
+    unprocessed_entities = []
+    for entity in input_data.get('entities', []):
+        entity_id = entity.get('id')
+        group_key = entity.get('group_key')
+        domain = entity.get('domain')
+        
+        if not domain:
+            # Skip entities without a domain
+            logger.debug(f"Skipping entity without domain: {entity}")
+            continue
+            
+        # Check if the entity exists using id+group_key combination
+        if entity_id and group_key:
+            entity_key = f"{entity_id}:{group_key}"
+            if entity_key not in processed_entities:
+                # Entity with this id+group_key doesn't exist yet
+                unprocessed_entities.append(entity)
+                logger.debug(f"Found unprocessed entity: {domain} (id:{entity_id}, group:{group_key})")
+        else:
+            # Fallback to domain-only checking if id or group_key is missing
+            domain_key = f"domain:{domain}"
+            if domain_key not in processed_entities:
+                unprocessed_entities.append(entity)
+                logger.debug(f"Found unprocessed entity using domain fallback: {domain}")
+    
+    logger.info(f"Found {len(unprocessed_entities)} unprocessed entities out of {len(input_data.get('entities', []))} total")
+    return unprocessed_entities
+
+def batch_domains(domain_entities, batch_size=BATCH_SIZE):
+    """Split domain entities into batches of specified size."""
+    batches = [domain_entities[i:i + batch_size] for i in range(0, len(domain_entities), batch_size)]
+    logger.debug(f"Split {len(domain_entities)} entities into {len(batches)} batches")
+    return batches
+
+def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
+    """
+    Request enrichment data for a batch of domains using OpenAI API.
+    Returns a list of enriched domain data.
+    """
+    if not domains:
+        logger.warning("No domains to enrich in this batch")
+        return []
+    
+    logger.info(f"Enriching batch {batch_number} with {len(domains)} domains")
     prompt = create_enrichment_prompt(domains)
     
-    # Create a preview object with all information that will be sent
-    preview = {
-        "batch_number": batch_number,
-        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
-        "num_domains": len(domains),
-        "domains": domains,
-        "api_request": {
+    try:
+        logger.info(f"Preparing API request for batch {batch_number}")
+        
+        # Make API call to OpenAI
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {OPENAI_API_KEY}"
+        }
+        logger.debug(f"API Headers prepared")
+        
+        data = {
             "model": "o3-mini",  # Using o3-mini as specified
             "messages": [
                 {
@@ -185,21 +331,153 @@ def save_batch_preview(domains: List[str], batch_number: int) -> Path:
                 }
             ]
         }
-    }
-    
-    # Create a filename for the preview
-    timestamp = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
-    preview_file = BATCH_PREVIEW_DIR / f"batch_{batch_number}_{timestamp}_preview.json"
-    
-    # Save the preview to a file
-    try:
-        with open(preview_file, 'w', encoding='utf-8') as f:
-            json.dump(preview, f, indent=2, ensure_ascii=False)
-        logger.info(f"Batch preview saved to {preview_file}")
-        return preview_file
+        logger.debug(f"API Request data prepared. Message count: {len(data['messages'])}")
+        
+        logger.info(f"SENDING API REQUEST TO OPENAI - Batch {batch_number} with {len(domains)} domains")
+        
+        # ** DEBUG MODE HANDLING **
+        if OPENAI_API_KEY == "DEBUG_MODE_DUMMY_KEY":
+            logger.warning("DEBUG MODE: Simulating API response instead of making real API call")
+            
+            # Generate a simulated response for debugging
+            simulated_response = []
+            for domain in domains:
+                simulated_response.append({
+                    "domain": domain,
+                    "geography": {
+                        "country_code": "USA",
+                        "region": "Debug Region",
+                        "city": "Debug City"
+                    },
+                    "organization": {
+                        "name": f"{domain.split('.')[0].capitalize()} Debug Organization",
+                        "industry": "Technology",
+                        "sub_industry": "Debugging",
+                        "size": {
+                            "employees_range": "100-499",
+                            "revenue_range": "$10M-$50M"
+                        },
+                        "status": "Debug"
+                    }
+                })
+            
+            logger.debug(f"Generated simulated response with {len(simulated_response)} entities")
+            
+            # Sleep to simulate API delay
+            logger.info("Simulating API delay (10 seconds)...")
+            time.sleep(10)
+            
+            return simulated_response
+        
+        # Actual API call
+        logger.debug("Making actual API request to OpenAI")
+        # Set a longer timeout (60 seconds)
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=60  # Longer timeout
+        )
+        
+        # Log API response details
+        logger.info(f"Received API response with status code: {response.status_code}")
+        logger.debug(f"Response headers: {response.headers}")
+        
+        # Handle API errors
+        if response.status_code != 200:
+            logger.error(f"API ERROR: {response.status_code}, {response.text}")
+            return []
+        
+        # Extract content
+        logger.debug("Parsing API response JSON")
+        response_data = response.json()
+        logger.debug(f"Response data keys: {list(response_data.keys())}")
+        
+        if 'choices' not in response_data or not response_data['choices']:
+            logger.error("No choices in API response")
+            logger.debug(f"Full response: {response_data}")
+            return []
+            
+        content = response_data['choices'][0]['message']['content']
+        
+        # Log a snippet of the content
+        logger.info(f"API response content (first 100 chars): {content[:100]}...")
+        
+        # Save raw response for inspection
+        timestamp = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
+        save_raw_response(content, batch_number, timestamp)
+        
+        # Try to parse the response
+        try:
+            # The response might be directly parsable as JSON
+            logger.debug("Attempting to parse response as JSON")
+            enriched_data = json.loads(content)
+            
+            if isinstance(enriched_data, list):
+                logger.info(f"Successfully parsed {len(enriched_data)} entities from response")
+                if len(enriched_data) > 0:
+                    logger.debug(f"First entity sample: {enriched_data[0]}")
+                return enriched_data
+            else:
+                logger.warning(f"Response is JSON but not a list: {type(enriched_data)}")
+                
+                # Check if it's a dict with an array inside
+                if isinstance(enriched_data, dict) and "domains" in enriched_data:
+                    logger.info(f"Found domains array in response with {len(enriched_data['domains'])} items")
+                    return enriched_data["domains"]
+                
+                # Error checks
+                if isinstance(enriched_data, dict) and "error" in enriched_data:
+                    logger.error(f"API returned error: {enriched_data['error']}")
+                
+                logger.debug(f"Unexpected JSON structure: {enriched_data}")
+                return []
+        except json.JSONDecodeError:
+            # If not directly parsable, we need to extract the JSON portion
+            logger.warning("Could not parse response as JSON directly, trying to extract JSON portion")
+            
+            # Look for JSON array in the text (basic approach)
+            import re
+            json_match = re.search(r'\[\s*\{\s*"domain"', content)
+            if json_match:
+                logger.debug(f"Found JSON array starting at position {json_match.start()}")
+                start_idx = json_match.start()
+                # Find the closing bracket
+                bracket_count = 0
+                for i, char in enumerate(content[start_idx:]):
+                    if char == '[':
+                        bracket_count += 1
+                    elif char == ']':
+                        bracket_count -= 1
+                        if bracket_count == 0:
+                            # We found the matching closing bracket
+                            end_idx = start_idx + i + 1
+                            json_str = content[start_idx:end_idx]
+                            logger.debug(f"Extracted JSON string of length {len(json_str)}")
+                            try:
+                                data = json.loads(json_str)
+                                logger.info(f"Successfully extracted and parsed JSON array with {len(data)} entities")
+                                return data
+                            except json.JSONDecodeError as e:
+                                logger.error(f"Extracted text is not valid JSON: {e}")
+                                logger.debug(f"JSON snippet: {json_str[:100]}...")
+            
+            logger.error("Could not extract JSON from response")
+            # Save the full response to a debug file
+            debug_file = OUTPUT_DIR / f"debug_failed_response_{batch_number}_{timestamp}.txt"
+            with open(debug_file, 'w') as f:
+                f.write(content)
+            logger.debug(f"Saved full failed response to {debug_file}")
+            return []
+            
+    except requests.RequestException as e:
+        logger.error(f"Network error calling OpenAI API: {e}")
+        logger.error(traceback.format_exc())
+        return []
     except Exception as e:
-        logger.error(f"Error saving batch preview: {e}")
-        return None
+        logger.error(f"Unexpected error calling OpenAI API: {e}")
+        logger.error(traceback.format_exc())
+        return []
 
 def save_raw_response(content, batch_number, timestamp=None):
     """Save the raw API response to a file for inspection."""
@@ -219,191 +497,120 @@ def save_raw_response(content, batch_number, timestamp=None):
         logger.error(f"Error saving content: {e}")
         return None
 
-def get_unprocessed_domains(input_data, processed_data):
+def process_domain_enrichment(auto_confirm=False, show_preview=True):
     """
-    Get domains from input_data that are not in processed_data.
-    Uses id+group_key combination for precise entity matching.
+    Main function to process domain enrichment:
+    1. Load AI.json and processed_AI.json files
+    2. Identify unprocessed domains
+    3. Process domains in batches of 100 with confirmation for each batch
+    4. Parse and add enriched data to processed_AI.json after each batch
+    5. Send notification about processed entities
     """
-    # Create lookup table using both id and group_key
-    processed_entities = {}
-    for entity in processed_data.get('entities', []):
-        entity_id = entity.get('id')
-        group_key = entity.get('group_key')
-        domain = entity.get('domain')
-        
-        # Primary lookup: id + group_key
-        if entity_id and group_key:
-            entity_key = f"{entity_id}:{group_key}"
-            processed_entities[entity_key] = True
-        
-        # Secondary lookup: just domain as fallback
-        if domain:
-            processed_entities[f"domain:{domain}"] = True
+    logger.info("=== Starting domain enrichment process ===")
+    logger.info(f"Input file: {INPUT_FILE}")
+    logger.info(f"Processed file: {PROCESSED_FILE}")
     
-    unprocessed_entities = []
-    for entity in input_data.get('entities', []):
-        entity_id = entity.get('id')
-        group_key = entity.get('group_key')
-        domain = entity.get('domain')
+    # Load input file
+    logger.debug("Loading input data from AI.json")
+    input_data = load_json_file(INPUT_FILE)
+    if not input_data or "entities" not in input_data:
+        logger.error("No valid entities found in the input file")
+        return False
+    
+    # Load processed file (or create empty structure if file doesn't exist)
+    logger.debug("Loading processed data from processed_AI.json")
+    processed_data = load_json_file(PROCESSED_FILE)
+    if not processed_data:
+        logger.info("Creating new processed_AI.json file")
+        processed_data = {"entities": [], "total_count": 0, "last_updated": ""}
+    
+    # Get unprocessed domains
+    logger.debug("Finding unprocessed entities")
+    unprocessed_entities = get_unprocessed_domains(input_data, processed_data)
+    
+    if not unprocessed_entities:
+        logger.info("No new entities to process - all entities are already in processed_AI.json")
+        return True
+    
+    # Split unprocessed entities into batches
+    logger.debug("Splitting entities into batches")
+    batched_entities = batch_domains(unprocessed_entities, BATCH_SIZE)
+    logger.info(f"Found {len(unprocessed_entities)} unprocessed domains, split into {len(batched_entities)} batches of up to {BATCH_SIZE}")
+    
+    # Process each batch
+    total_processed = 0
+    all_newly_processed = []  # Track all newly processed entities for notification
+    
+    for batch_num, entity_batch in enumerate(batched_entities, 1):
+        # Extract just the domains for the API call
+        domains_to_process = [entity.get('domain') for entity in entity_batch if entity.get('domain')]
+        logger.info(f"Processing batch {batch_num}/{len(batched_entities)} with {len(domains_to_process)} domains")
         
-        if not domain:
-            # Skip entities without a domain
+        # Ask for confirmation unless auto_confirm is True
+        if not auto_confirm:
+            confirmation = input(f"Process batch {batch_num} with {len(domains_to_process)} domains? (yes/no): ")
+            if confirmation.lower() != "yes":
+                logger.info(f"Skipping batch {batch_num}")
+                continue
+        
+        # Enrich the domains with the API call
+        logger.info(f"Sending batch {batch_num} to OpenAI for enrichment")
+        enriched_data = enrich_domains_batch(domains_to_process, batch_num)
+        
+        if not enriched_data:
+            logger.error(f"No enriched data obtained from API for batch {batch_num}. Continuing to next batch.")
             continue
-            
-        # Check if the entity exists using id+group_key combination
-        if entity_id and group_key:
-            entity_key = f"{entity_id}:{group_key}"
-            if entity_key not in processed_entities:
-                # Entity with this id+group_key doesn't exist yet
-                unprocessed_entities.append(entity)
-                # Log for debugging
-                logger.info(f"Found unprocessed entity with id+group_key: {entity_id}:{group_key}, domain: {domain}")
-        else:
-            # Fallback to domain-only checking if id or group_key is missing
-            domain_key = f"domain:{domain}"
-            if domain_key not in processed_entities:
-                unprocessed_entities.append(entity)
-                # Log for debugging
-                logger.info(f"Found unprocessed entity using domain fallback: {domain}")
-    
-    logger.info(f"Found {len(unprocessed_entities)} unprocessed entities out of {len(input_data.get('entities', []))} total")
-    return unprocessed_entities
-
-def batch_domains(domain_entities, batch_size=BATCH_SIZE):
-    """Split domain entities into batches of specified size."""
-    return [domain_entities[i:i + batch_size] for i in range(0, len(domain_entities), batch_size)]
-
-def print_batch_preview_summary(domains: List[str], batch_number: int):
-    """Print a summary of the batch preview to the console."""
-    print("\n" + "="*80)
-    print(f"BATCH {batch_number} PREVIEW")
-    print("="*80)
-    print(f"Total domains in batch: {len(domains)}")
-    print("\nFirst 5 domains in batch:")
-    for i, domain in enumerate(domains[:5]):
-        print(f"  {i+1}. {domain}")
-    if len(domains) > 5:
-        print(f"  ... and {len(domains) - 5} more")
-    print("\nThe OpenAI API will be asked to:")
-    print("  1. Research each organization based on its domain")
-    print("  2. Determine the organization's location, industry, and attributes")
-    print("  3. Return the data in a standardized JSON format")
-    print("\nA complete preview of the API request has been saved to the batch_previews directory.")
-    print("="*80 + "\n")
-
-def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
-    """
-    Request enrichment data for a batch of domains using OpenAI API.
-    Returns a list of enriched domain data.
-    """
-    if not domains:
-        return []
-    
-    prompt = create_enrichment_prompt(domains)
-    
-    try:
-        logger.info(f"Sending request to OpenAI API for batch {batch_number} ({len(domains)} domains)")
         
-        # Make API call to OpenAI
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {OPENAI_API_KEY}"
-        }
+        logger.info(f"Received enriched data for {len(enriched_data)} domains from OpenAI API")
         
-        data = {
-            "model": "o3-mini",  # Using o3-mini as specified
-            "messages": [
-                {
-                    "role": "system", 
-                    "content": "You are a helpful assistant that provides accurate information about organizations based on their domain names. Always return data in the exact JSON format requested."
-                },
-                {
-                    "role": "user", 
-                    "content": prompt
-                }
-            ]
-        }
+        # Create a dictionary of enriched data by domain for easy lookup
+        enriched_by_domain = {entity.get('domain'): entity for entity in enriched_data if entity.get('domain')}
+        logger.debug(f"Created lookup dictionary with {len(enriched_by_domain)} domains")
         
-        logger.info(f"Making API request to OpenAI with {len(domains)} domains")
-        
-        response = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers=headers,
-            json=data
-        )
-        
-        # Log API response details
-        logger.info(f"API response status code: {response.status_code}")
-        
-        # Handle API errors
-        if response.status_code != 200:
-            logger.error(f"API error: {response.status_code}, {response.text}")
-            return []
-        
-        # Extract content
-        response_data = response.json()
-        content = response_data['choices'][0]['message']['content']
-        
-        # Log a snippet of the content
-        logger.info(f"API response content (first 100 chars): {content[:100]}...")
-        
-        # Save raw response for inspection
-        timestamp = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
-        save_raw_response(content, batch_number, timestamp)
-        
-        # Try to parse the response
-        try:
-            # The response might be directly parsable as JSON
-            enriched_data = json.loads(content)
-            if isinstance(enriched_data, list):
-                logger.info(f"Successfully parsed {len(enriched_data)} entities from response")
-                return enriched_data
-            else:
-                logger.warning(f"Response is JSON but not a list: {type(enriched_data)}")
+        # Add enrichment data to each entity in this batch
+        newly_processed = []
+        for entity in entity_batch:
+            domain = entity.get('domain')
+            if domain and domain in enriched_by_domain:
+                # Merge the basic entity data with the enrichment data
+                enriched_entity = enriched_by_domain[domain]
                 
-                # Check if it's a dict with an array inside
-                if isinstance(enriched_data, dict) and "domains" in enriched_data:
-                    return enriched_data["domains"]
+                # Keep the original id, group_key, and ransomware_group
+                enriched_entity['id'] = entity.get('id')
+                enriched_entity['group_key'] = entity.get('group_key')
+                enriched_entity['ransomware_group'] = entity.get('ransomware_group')
                 
-                # Error checks
-                if isinstance(enriched_data, dict) and "error" in enriched_data:
-                    logger.error(f"API returned error: {enriched_data['error']}")
-                    
-                return []
-        except json.JSONDecodeError:
-            # If not directly parsable, we need to extract the JSON portion
-            logger.warning("Could not parse response as JSON directly, will try to extract JSON portion")
+                newly_processed.append(enriched_entity)
+                all_newly_processed.append(enriched_entity)  # Add to the complete list for notification
+                logger.debug(f"Added enriched entity for domain: {domain}")
+        
+        # Add newly processed entities to the processed data
+        if newly_processed:
+            logger.info(f"Adding {len(newly_processed)} newly processed entities to processed_AI.json")
+            processed_data['entities'].extend(newly_processed)
+            total_processed += len(newly_processed)
+            processed_data['total_count'] = len(processed_data['entities'])
+            processed_data['last_updated'] = time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())
             
-            # Look for JSON array in the text (basic approach)
-            import re
-            json_match = re.search(r'\[\s*\{\s*"domain"', content)
-            if json_match:
-                start_idx = json_match.start()
-                # Find the closing bracket
-                bracket_count = 0
-                for i, char in enumerate(content[start_idx:]):
-                    if char == '[':
-                        bracket_count += 1
-                    elif char == ']':
-                        bracket_count -= 1
-                        if bracket_count == 0:
-                            # We found the matching closing bracket
-                            end_idx = start_idx + i + 1
-                            json_str = content[start_idx:end_idx]
-                            try:
-                                data = json.loads(json_str)
-                                logger.info(f"Successfully extracted and parsed JSON array with {len(data)} entities")
-                                return data
-                            except json.JSONDecodeError:
-                                logger.error(f"Extracted text is not valid JSON: {json_str[:100]}...")
-            
-            logger.error("Could not extract JSON from response")
-            return []
-            
-    except Exception as e:
-        logger.error(f"Error calling OpenAI API: {e}")
-        logger.error(traceback.format_exc())
-        return []
+            # Save the updated processed data after each batch
+            save_json_file(processed_data, PROCESSED_FILE)
+            logger.info(f"Saved batch {batch_num} with {len(newly_processed)} entities to processed_AI.json")
+        
+        # Add delay between batches to avoid rate limiting
+        if batch_num < len(batched_entities):
+            delay = 2  # 2 second delay between batches
+            logger.info(f"Waiting {delay} seconds before processing next batch")
+            time.sleep(delay)
+    
+    logger.info(f"Total entities processed: {total_processed}")
+    
+    # Send notification about all newly processed entities
+    if all_newly_processed:
+        logger.info(f"Sending notification for {len(all_newly_processed)} newly processed entities")
+        success = send_telegram_notification(all_newly_processed)
+        logger.info(f"Notification sent successfully: {success}")
+    
+    return True
 
 def send_telegram_notification(newly_processed_entities):
     """Send a Telegram notification with details about newly processed entities."""
@@ -418,11 +625,12 @@ def send_telegram_notification(newly_processed_entities):
         sys.path.append(str(PROJECT_ROOT))
         
         try:
+            logger.debug(f"Attempting to import telegram_bot.notifier")
             from tracker.telegram_bot.notifier import send_telegram_message
+            logger.debug(f"Successfully imported telegram_bot.notifier")
         except ImportError as e:
             logger.error(f"Failed to import telegram notifier module: {e}")
-            logger.info("If you want to use Telegram notifications, make sure 'requests' is installed")
-            logger.info("For local development, also install 'python-dotenv'")
+            logger.error(traceback.format_exc())
             return False
         
         # Format the notification message
@@ -487,7 +695,7 @@ def send_telegram_notification(newly_processed_entities):
             message += f"\n... and {len(newly_processed_entities) - 5} more entities\n"
         
         # Send the message
-        logger.info(f"Sending Telegram notification for {len(newly_processed_entities)} entities")
+        logger.debug(f"Sending Telegram notification message of length {len(message)}")
         success = send_telegram_message(message)
         
         if success:
@@ -501,189 +709,6 @@ def send_telegram_notification(newly_processed_entities):
         logger.error(f"Error sending Telegram notification: {e}")
         logger.error(traceback.format_exc())
         return False
-
-def process_domain_enrichment(auto_confirm=False, show_preview=True):
-    """
-    Main function to process domain enrichment:
-    1. Load AI.json and processed_AI.json files
-    2. Identify unprocessed domains
-    3. Process domains in batches of 100 with confirmation for each batch
-    4. Parse and add enriched data to processed_AI.json after each batch
-    5. Send notification about processed entities
-    """
-    logger.info("=== Starting domain enrichment process ===")
-    logger.info(f"Input file: {INPUT_FILE}")
-    logger.info(f"Processed file: {PROCESSED_FILE}")
-    
-    # Load input file
-    input_data = load_json_file(INPUT_FILE)
-    if not input_data or "entities" not in input_data:
-        logger.error("No valid entities found in the input file")
-        return False
-    
-    # Load processed file (or create empty structure if file doesn't exist)
-    processed_data = load_json_file(PROCESSED_FILE)
-    if not processed_data:
-        processed_data = {"entities": [], "total_count": 0, "last_updated": ""}
-    
-    # Get unprocessed domains
-    unprocessed_entities = get_unprocessed_domains(input_data, processed_data)
-    
-    if not unprocessed_entities:
-        logger.info("No new entities to process - all entities are already in processed_AI.json")
-        return True
-    
-    # Split unprocessed entities into batches
-    batched_entities = batch_domains(unprocessed_entities, BATCH_SIZE)
-    logger.info(f"Found {len(unprocessed_entities)} unprocessed domains, split into {len(batched_entities)} batches of up to {BATCH_SIZE}")
-    
-    # Process each batch
-    total_processed = 0
-    all_newly_processed = []  # Track all newly processed entities for notification
-    
-    for batch_num, entity_batch in enumerate(batched_entities, 1):
-        # Extract just the domains for the API call
-        domains_to_process = [entity.get('domain') for entity in entity_batch if entity.get('domain')]
-        logger.info(f"Batch {batch_num}/{len(batched_entities)} with {len(domains_to_process)} domains")
-        
-        # Create and save a preview of what will be sent to the API
-        preview_file = save_batch_preview(domains_to_process, batch_num)
-        
-        # Show a summary of the batch preview if requested
-        if show_preview:
-            print_batch_preview_summary(domains_to_process, batch_num)
-        
-        # Ask for confirmation unless auto_confirm is True
-        if not auto_confirm:
-            confirmation = input(f"Process batch {batch_num} with {len(domains_to_process)} domains? (yes/no): ")
-            if confirmation.lower() != "yes":
-                logger.info(f"Skipping batch {batch_num}")
-                continue
-        
-        # Enrich the domains with the API call
-        enriched_data = enrich_domains_batch(domains_to_process, batch_num)
-        
-        if not enriched_data:
-            logger.error(f"No enriched data obtained from API for batch {batch_num}. Continuing to next batch.")
-            continue
-        
-        logger.info(f"Received enriched data for {len(enriched_data)} domains from OpenAI API")
-        
-        # Create a dictionary of enriched data by domain for easy lookup
-        enriched_by_domain = {entity.get('domain'): entity for entity in enriched_data if entity.get('domain')}
-        
-        # Add enrichment data to each entity in this batch
-        newly_processed = []
-        for entity in entity_batch:
-            domain = entity.get('domain')
-            if domain and domain in enriched_by_domain:
-                # Merge the basic entity data with the enrichment data
-                enriched_entity = enriched_by_domain[domain]
-                
-                # Keep the original id, group_key, and ransomware_group
-                enriched_entity['id'] = entity.get('id')
-                enriched_entity['group_key'] = entity.get('group_key')
-                enriched_entity['ransomware_group'] = entity.get('ransomware_group')
-                
-                newly_processed.append(enriched_entity)
-                all_newly_processed.append(enriched_entity)  # Add to the complete list for notification
-        
-        # Add newly processed entities to the processed data
-        if newly_processed:
-            processed_data['entities'].extend(newly_processed)
-            total_processed += len(newly_processed)
-            processed_data['total_count'] = len(processed_data['entities'])
-            processed_data['last_updated'] = time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())
-            
-            # Save the updated processed data after each batch
-            save_json_file(processed_data, PROCESSED_FILE)
-            logger.info(f"Added {len(newly_processed)} newly processed entities from batch {batch_num} to processed_AI.json")
-        
-        # Add delay between batches to avoid rate limiting
-        if batch_num < len(batched_entities):
-            delay = 2  # 2 second delay between batches
-            logger.info(f"Waiting {delay} seconds before processing next batch")
-            time.sleep(delay)
-    
-    logger.info(f"Total entities processed: {total_processed}")
-    
-    # Send notification about all newly processed entities
-    if all_newly_processed:
-        send_telegram_notification(all_newly_processed)
-    
-    return True
-
-def simulate_enrichment():
-    """
-    Simulate enrichment for environments without an OpenAI API key.
-    This creates placeholder enrichment data.
-    """
-    logger.info("Running in simulation mode (no real API calls will be made)")
-    
-    # Load input file
-    input_data = load_json_file(INPUT_FILE)
-    if not input_data or "entities" not in input_data:
-        logger.error(f"No valid entities found in the input file: {INPUT_FILE}")
-        return False
-    
-    # Load processed file (or create empty structure if file doesn't exist)
-    processed_data = load_json_file(PROCESSED_FILE)
-    if not processed_data:
-        processed_data = {"entities": [], "total_count": 0, "last_updated": ""}
-    
-    # Get unprocessed domains
-    unprocessed_entities = get_unprocessed_domains(input_data, processed_data)
-    
-    if not unprocessed_entities:
-        logger.info("No new entities to process")
-        return True
-    
-    # Create placeholder enrichment for each entity
-    newly_processed = []
-    for entity in unprocessed_entities:
-        domain = entity.get('domain')
-        if not domain:
-            continue
-            
-        # Create placeholder enriched entity
-        enriched_entity = {
-            "id": entity.get('id'),
-            "domain": domain,
-            "group_key": entity.get('group_key'),
-            "ransomware_group": entity.get('ransomware_group'),
-            "geography": {
-                "country_code": "USA",
-                "region": "Unknown Region",
-                "city": "Unknown City"
-            },
-            "organization": {
-                "name": f"{domain.split('.')[0].capitalize()} Organization",
-                "industry": "Technology",
-                "sub_industry": "Software",
-                "size": {
-                    "employees_range": "100-499",
-                    "revenue_range": "$10M-$50M"
-                },
-                "status": "Private"
-            }
-        }
-        
-        newly_processed.append(enriched_entity)
-    
-    # Add newly processed entities to the processed data
-    if newly_processed:
-        processed_data['entities'].extend(newly_processed)
-        processed_data['total_count'] = len(processed_data['entities'])
-        processed_data['last_updated'] = time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())
-        
-        # Save the updated processed data
-        save_json_file(processed_data, PROCESSED_FILE)
-        logger.info(f"Added {len(newly_processed)} simulated enriched entities")
-        
-        # Send notification about simulated entities
-        send_telegram_notification(newly_processed)
-    
-    return True
 
 if __name__ == "__main__":
     logger.info("Starting domain enrichment process")
