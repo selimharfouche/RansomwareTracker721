@@ -5,6 +5,7 @@ import datetime
 import argparse
 import json
 import sys
+import subprocess
 from pathlib import Path
 
 # Add the project root to the path
@@ -109,8 +110,38 @@ def process_site(driver, site_config):
         logger.error(f"Error processing {site_name}: {e}")
         return False
 
+def run_ai_processing():
+    """Run the AI processing workflow"""
+    logger.info("Starting AI processing workflow...")
+    
+    try:
+        # Get the path to the AI processing script
+        ai_script_path = os.path.join(PROJECT_ROOT, "tracker", "processing", "run_ai_processing.py")
+        
+        # Run the script with appropriate flags
+        cmd = [sys.executable, ai_script_path, "--github"]
+        
+        # Use subprocess to run the script
+        result = subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        
+        logger.info("AI processing completed successfully")
+        logger.debug(f"AI processing output: {result.stdout}")
+        return True
+    except subprocess.CalledProcessError as e:
+        logger.error(f"AI processing failed: {e}")
+        logger.error(f"Error output: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Error running AI processing: {e}")
+        return False
+
 def main(target_sites=None, skip_processing=False, disable_telegram=False, 
-         browser_config_overrides=None):
+         browser_config_overrides=None, constant_monitoring=False):
     """
     Main function to scrape multiple sites based on configuration files
     
@@ -119,8 +150,11 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
         skip_processing (bool): If True, skip entity processing after scraping
         disable_telegram (bool): If True, disable all Telegram notifications
         browser_config_overrides (list): List of browser config overrides in format "key.subkey=value"
+        constant_monitoring (bool): If True, only send notifications when new entities are found
+                                   and trigger AI processing for new entities
     """
     logger.info(f"Starting ransomware leak site tracker at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"Constant monitoring mode: {constant_monitoring}")
     
     # Set target_sites in environment if specified for site filtering
     if target_sites:
@@ -135,6 +169,22 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
                 env_key = "BROWSER_" + key_path.upper().replace('.', '_')
                 os.environ[env_key] = value
                 logger.info(f"Set environment variable {env_key}={value}")
+    
+    # Check for new_entities.json to see if it exists and has content
+    new_entities_file = os.path.join(OUTPUT_DIR, "new_entities.json")
+    had_new_entities_file = os.path.exists(new_entities_file)
+    if had_new_entities_file:
+        try:
+            with open(new_entities_file, 'r') as f:
+                new_entities_data = json.load(f)
+                initial_entities_count = len(new_entities_data.get('entities', []))
+                logger.info(f"Initial new_entities.json has {initial_entities_count} entities")
+        except Exception as e:
+            logger.error(f"Error reading new_entities.json: {e}")
+            initial_entities_count = 0
+    else:
+        initial_entities_count = 0
+        logger.info("No new_entities.json file found initially")
                 
     # Initialize tracking variables for the final notification
     sites_processed = []
@@ -187,7 +237,11 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
     logger.info(f"Will process these sites: {', '.join(target_sites)}")
     
     # Set Telegram notification state in environment
-    if disable_telegram:
+    # In constant_monitoring mode, we'll decide later if we want to send notifications
+    if constant_monitoring:
+        logger.info("Constant monitoring mode: Telegram notifications will only be sent for new entities")
+        os.environ['DISABLE_TELEGRAM'] = 'true'  # Start with disabled
+    elif disable_telegram:
         logger.info("Telegram notifications are disabled")
         os.environ['DISABLE_TELEGRAM'] = 'true'
     else:
@@ -245,8 +299,27 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
         if driver:
             driver.quit()
         
+        # In constant monitoring mode, check if we found new entities
+        found_new_entities = False
+        if constant_monitoring:
+            # Check for new entities by comparing new_entities.json with its initial state
+            if os.path.exists(new_entities_file):
+                try:
+                    with open(new_entities_file, 'r') as f:
+                        new_entities_data = json.load(f)
+                        current_entities_count = len(new_entities_data.get('entities', []))
+                        
+                    if current_entities_count > initial_entities_count:
+                        found_new_entities = True
+                        logger.info(f"Found {current_entities_count - initial_entities_count} new entities")
+                        
+                        # Enable Telegram notifications for the scan completion
+                        os.environ['DISABLE_TELEGRAM'] = 'false'
+                except Exception as e:
+                    logger.error(f"Error reading new_entities.json: {e}")
+        
         # Send completion notification if Telegram is enabled
-        if not disable_telegram:
+        if not disable_telegram and (not constant_monitoring or found_new_entities):
             try:
                 # Import the notifier dynamically to avoid module import issues
                 from tracker.telegram_bot.notifier import send_scan_completion_notification
@@ -261,7 +334,10 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
             except Exception as e:
                 logger.error(f"Failed to send scan completion notification: {e}")
         else:
-            logger.info("Skipping scan completion notification (Telegram notifications disabled)")
+            if constant_monitoring and not found_new_entities:
+                logger.info("No new entities found, skipping completion notification in constant monitoring mode")
+            else:
+                logger.info("Skipping scan completion notification (Telegram notifications disabled)")
         
         # Process entities if not skipped
         if not skip_processing:
@@ -278,6 +354,11 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
                 logger.error(f"Error during entity processing: {e}")
         else:
             logger.info("Entity processing skipped (--no-process flag was used)")
+            
+        # In constant monitoring mode, run AI processing if new entities were found
+        if constant_monitoring and found_new_entities:
+            logger.info("New entities found in constant monitoring mode, running AI processing...")
+            run_ai_processing()
 
 if __name__ == "__main__":
     # Parse command line arguments
@@ -286,6 +367,8 @@ if __name__ == "__main__":
     parser.add_argument('--headless', action='store_true', help='Run browser in headless mode')
     parser.add_argument('--no-process', action='store_true', help='Skip entity processing after scraping')
     parser.add_argument('--no-telegram', action='store_true', help='Disable Telegram notifications')
+    parser.add_argument('--constant-monitoring', action='store_true', 
+                       help='Only send notifications for new entities and run AI processing when new entities are found')
     
     # Configuration override arguments - only browser config is available now
     parser.add_argument('--browser-config', type=str, nargs='+', 
@@ -294,4 +377,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Run the main function with the parsed arguments
-    main(args.sites, args.no_process, args.no_telegram, args.browser_config)
+    main(args.sites, args.no_process, args.no_telegram, args.browser_config, args.constant_monitoring)
