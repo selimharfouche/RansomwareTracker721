@@ -387,7 +387,7 @@ def enrich_domains_batch(domains: List[str], batch_number: int) -> List[Dict]:
         logger.error(f"Error calling OpenAI API: {e}")
         return []
 
-def process_domain_enrichment():
+def process_domain_enrichment(auto_confirm=False, show_preview=True):
     """
     Main function to process domain enrichment:
     1. Load AI.json and processed_AI.json files
@@ -398,7 +398,7 @@ def process_domain_enrichment():
     # Load input file
     input_data = load_json_file(INPUT_FILE)
     if not input_data or "entities" not in input_data:
-        logger.error(f"No valid entities found in the input file: {INPUT_FILE}")
+        logger.error("No valid entities found in the input file")
         return False
     
     # Load processed file (or create empty structure if file doesn't exist)
@@ -410,7 +410,7 @@ def process_domain_enrichment():
     unprocessed_entities = get_unprocessed_domains(input_data, processed_data)
     
     if not unprocessed_entities:
-        logger.info("No new entities to process")
+        logger.info("No new entities to process - all entities are already in processed_AI.json")
         return True
     
     # Split unprocessed entities into batches
@@ -429,11 +429,11 @@ def process_domain_enrichment():
         preview_file = save_batch_preview(domains_to_process, batch_num)
         
         # Show a summary of the batch preview if requested
-        if not args.no_preview:
+        if show_preview:
             print_batch_preview_summary(domains_to_process, batch_num)
         
         # Ask for confirmation unless auto_confirm is True
-        if not args.yes:
+        if not auto_confirm:
             confirmation = input(f"Process batch {batch_num} with {len(domains_to_process)} domains? (yes/no): ")
             if confirmation.lower() != "yes":
                 logger.info(f"Skipping batch {batch_num}")
@@ -483,6 +483,9 @@ def process_domain_enrichment():
     
     logger.info(f"Total entities processed: {total_processed}")
     return True
+
+
+
 
 def simulate_enrichment():
     """
