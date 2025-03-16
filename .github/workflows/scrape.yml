@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      found_new_entities: ${{ steps.check_new_entities.outputs.found_new_entities }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -84,6 +86,18 @@ jobs:
         run: |
           mkdir -p data/output data/snapshots/html_snapshots data/snapshots/new_entities_snapshot logs
 
+      # Count snapshot files before scraping
+      - name: Count initial snapshot files
+        id: initial_count
+        run: |
+          SNAPSHOT_DIR="data/snapshots/new_entities_snapshot"
+          mkdir -p "$SNAPSHOT_DIR"
+          
+          # Count initial files
+          INITIAL_COUNT=$(find "$SNAPSHOT_DIR" -name "new_entities_*.json" -type f | wc -l)
+          echo "initial_count=$INITIAL_COUNT" >> $GITHUB_OUTPUT
+          echo "Initial count of snapshot files: $INITIAL_COUNT"
+
       # Run scraper with Telegram environmental variables and constant-monitoring flag
       - name: Run scraper and process entities
         env:
@@ -99,6 +113,34 @@ jobs:
           python main.py --constant-monitoring
           echo "Scraper and entity processing completed"
 
+      # Count snapshot files after scraping and check if new files were created
+      - name: Check for new entities
+        id: check_new_entities
+        run: |
+          SNAPSHOT_DIR="data/snapshots/new_entities_snapshot"
+          
+          # Count files after scraping
+          FINAL_COUNT=$(find "$SNAPSHOT_DIR" -name "new_entities_*.json" -type f | wc -l)
+          echo "Final count of snapshot files: $FINAL_COUNT"
+          
+          # Get the initial count from previous step
+          INITIAL_COUNT=${{ steps.initial_count.outputs.initial_count }}
+          echo "Initial count was: $INITIAL_COUNT"
+          
+          # Compare counts
+          if [ "$FINAL_COUNT" -gt "$INITIAL_COUNT" ]; then
+            echo "New snapshot files detected!"
+            echo "found_new_entities=true" >> $GITHUB_OUTPUT
+            echo "NEW_ENTITIES_FOUND=true" >> $GITHUB_ENV
+          else
+            echo "No new snapshot files detected."
+            echo "found_new_entities=false" >> $GITHUB_OUTPUT
+            echo "NEW_ENTITIES_FOUND=false" >> $GITHUB_ENV
+          fi
+          
+          # Print the output value for verification
+          echo "Output value set to: $(cat $GITHUB_OUTPUT)"
+
       # Commit changes
       - name: Commit and push if there are changes
         run: |
@@ -113,3 +155,18 @@ jobs:
           else
             echo "No changes to commit"
           fi
+      
+      # Add a debug step
+      - name: Debug output value
+        run: |
+          echo "Found new entities value: ${{ steps.check_new_entities.outputs.found_new_entities }}"
+          echo "Initial snapshot count: ${{ steps.initial_count.outputs.initial_count }}"
+          echo "This should be 'true' if new snapshots were created, 'false' otherwise"
+      
+      # Only dispatch if new entities were found
+      - name: Trigger AI workflow
+        if: steps.check_new_entities.outputs.found_new_entities == 'true'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: run-ai-processing
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -110,36 +110,6 @@ def process_site(driver, site_config):
         logger.error(f"Error processing {site_name}: {e}")
         return False
 
-def run_ai_processing():
-    """Run the AI processing workflow"""
-    logger.info("Starting AI processing workflow...")
-    
-    try:
-        # Get the path to the AI processing script
-        ai_script_path = os.path.join(PROJECT_ROOT, "tracker", "processing", "run_ai_processing.py")
-        
-        # Run the script with appropriate flags
-        cmd = [sys.executable, ai_script_path, "--github"]
-        
-        # Use subprocess to run the script
-        result = subprocess.run(
-            cmd,
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        
-        logger.info("AI processing completed successfully")
-        logger.debug(f"AI processing output: {result.stdout}")
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"AI processing failed: {e}")
-        logger.error(f"Error output: {e.stderr}")
-        return False
-    except Exception as e:
-        logger.error(f"Error running AI processing: {e}")
-        return False
-
 def main(target_sites=None, skip_processing=False, disable_telegram=False, 
          browser_config_overrides=None, constant_monitoring=False):
     """
@@ -358,7 +328,8 @@ def main(target_sites=None, skip_processing=False, disable_telegram=False,
         # In constant monitoring mode, run AI processing if new entities were found
         if constant_monitoring and found_new_entities:
             logger.info("New entities found in constant monitoring mode, running AI processing...")
-            run_ai_processing()
+            logger.info("AI processing will be executed by separate workflow")
+
 
 if __name__ == "__main__":
     # Parse command line arguments

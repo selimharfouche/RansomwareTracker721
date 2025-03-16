@@ -1,10 +1,10 @@
 name: AI Processing Workflow
 
 on:
-  schedule:
-    # Run every 48 hours
-    - cron: '0 12 */2 * *'
-  # Allow manual triggering
+  # Listen for repository dispatch events
+  repository_dispatch:
+    types: [run-ai-processing]
+  # Also allow manual triggering
   workflow_dispatch:
 
 jobs:
@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          # Get the latest code including the commits from the scrape workflow
+          ref: main  # or your default branch
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -30,13 +34,21 @@ jobs:
         run: |
           mkdir -p data/AI logs
 
-      - name: Run AI processing with GitHub flag
+      - name: Extract AI fields
+        run: |
+          echo "Running extract_ai_fields.py..."
+          python tracker/AI/extract_ai_fields.py --output data/AI
+          echo "Extraction completed"
+        
+      - name: Run domain enrichment
         env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # Add this line
         run: |
-          python tracker/processing/run_ai_processing.py --github
+          echo "Running domain_enrichment.py..."
+          python tracker/AI/domain_enrichment.py --yes --output data/AI
+          echo "Domain enrichment completed"
 
       - name: Commit changes
         run: |
