@@ -25266,8 +25266,29 @@
       "id": "e0d0bae5-60d3-4211-8b18-61600e38896b",
       "group_key": "ransomhub",
       "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "www.ameda.com",
+      "geography": {
+        "country_code": "US",
+        "region": "NJ",
+        "city": "Piscataway"
+      },
+      "organization_details": {
+        "name": "Ameda, Inc.",
+        "industry": "Medical Devices",
+        "sub_industry": "Mother & Child Health"
+      },
+      "size_information": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "organization_status": "Active",
+      "id": "cf411b02-2a88-4e83-a6b0-61da3a089396",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1203,
-  "last_updated": "2025-03-15 17:51:34 UTC"
+  "total_count": 1204,
+  "last_updated": "2025-03-16 17:31:53 UTC"
 }
