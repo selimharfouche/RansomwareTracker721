@@ -67,7 +67,7 @@ class BaseParser(ABC):
     def update_entities_database(self, new_entities):
         """
         Update the entities database with the newly scraped entities.
-        This completely overwrites the existing file with new data.
+        This merges new and existing entities rather than replacing them.
         
         Args:
             new_entities: List of entities scraped from the site
@@ -76,13 +76,15 @@ class BaseParser(ABC):
         existing_entities = load_json(self.json_file, self.per_group_dir)  # Use per_group_dir for group files
         existing_dict = {entity.get('id'): entity for entity in existing_entities.get('entities', [])}
         
-        # Create a completely new database with all current entities
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
         
         # List to track truly new entities for the new_entities.json file
         truly_new_entities = []
         
-        # Process entities and preserve first_seen dates for existing ones
+        # Create a dictionary with all entities by ID for easier manipulation
+        all_entities_dict = existing_dict.copy()
+        
+        # Process each newly scraped entity
         for entity in new_entities:
             entity_id = entity.get('id')
             if not entity_id:
@@ -117,26 +119,41 @@ class BaseParser(ABC):
                         logger.error(f"Failed to send Telegram notification: {e}")
                 else:
                     logger.debug(f"Telegram notification skipped for {entity.get('domain', entity_id)} (notifications disabled)")
+                
+                # Add the new entity to our merged dictionary
+                all_entities_dict[entity_id] = entity
             else:
-                # This is an existing entity, preserve its first_seen date
-                entity['first_seen'] = existing_dict[entity_id].get('first_seen', current_time)
+                # This is an existing entity - update it while preserving first_seen date
+                updated_entity = entity.copy()
+                updated_entity['first_seen'] = existing_dict[entity_id].get('first_seen', current_time)
+                
+                # Preserve any important metadata that might be missing in the new entity
+                for key in ['ransomware_group', 'group_key']:
+                    if key not in updated_entity and key in existing_dict[entity_id]:
+                        updated_entity[key] = existing_dict[entity_id][key]
+                
+                # Update the entity in our merged dictionary
+                all_entities_dict[entity_id] = updated_entity
         
-        # Create the complete updated database
+        # Convert the dictionary back to a list for saving
+        merged_entities = list(all_entities_dict.values())
+        
+        # Create the complete updated database with merged entities
         updated_db = {
-            'entities': new_entities,
+            'entities': merged_entities,
             'last_updated': current_time,
-            'total_count': len(new_entities)
+            'total_count': len(merged_entities)
         }
         
         # Save the group-specific entity file to the per_group directory 
         save_json(updated_db, self.json_file, self.per_group_dir)  # Use per_group_dir for group files
-        logger.info(f"Saved complete database with {len(new_entities)} entities to {os.path.join(self.per_group_dir, self.json_file)}")
+        logger.info(f"Saved merged database with {len(merged_entities)} entities to {os.path.join(self.per_group_dir, self.json_file)}")
         
         # Update the new_entities.json file if we discovered truly new entities
         if truly_new_entities:
             self.update_new_entities_file(truly_new_entities)
             
-        return updated_db, len(truly_new_entities), len(new_entities)
+        return updated_db, len(truly_new_entities), len(merged_entities)
     
     def update_new_entities_file(self, truly_new_entities):
         """
