@@ -21659,9 +21659,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "cf411b02-2a88-4e83-a6b0-61da3a089396",
+      "domain": "www.ameda.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-15 17:47:43 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "10D 18h 29m 55s",
+        "days": 10,
+        "hours": 18,
+        "minutes": 29,
+        "seconds": 55
+      },
+      "estimated_publish_date": "2025-03-27 12:00:01 UTC",
+      "first_seen": "2025-03-16 17:30:06 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-16 14:43:48 UTC",
-  "total_count": 1199,
+  "last_updated": "2025-03-16 17:31:10 UTC",
+  "total_count": 1200,
   "description": "Complete archive of all discovered ransomware entities"
 }
