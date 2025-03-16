@@ -5,10 +5,10 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "14D 23h 43m 59s",
+                "countdown_text": "14D 23h 5m 59s",
                 "days": 14,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-14 14:53:56",
@@ -20,10 +20,10 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "7D 23h 43m 59s",
+                "countdown_text": "7D 23h 5m 59s",
                 "days": 7,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-14 12:15:55",
@@ -35,10 +35,10 @@
             "domain": "dtrglaw.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "2D 23h 43m 59s",
+                "countdown_text": "2D 23h 5m 59s",
                 "days": 2,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-13 19:43:34",
@@ -50,10 +50,10 @@
             "domain": "dccsagroup.com&csahome.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "23h 43m 59s",
+                "countdown_text": "23h 5m 59s",
                 "days": 0,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-02-14 19:33:44",
@@ -65,10 +65,10 @@
             "domain": "www.dcarosolutions.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 23h 43m 59s",
+                "countdown_text": "1D 23h 5m 59s",
                 "days": 1,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-08 17:36:11",
@@ -80,10 +80,10 @@
             "domain": "www.convention.qc.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "2D 23h 43m 59s",
+                "countdown_text": "2D 23h 5m 59s",
                 "days": 2,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-05 14:11:33",
@@ -95,10 +95,10 @@
             "domain": "www.centersheetmetal.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "2D 23h 43m 59s",
+                "countdown_text": "2D 23h 5m 59s",
                 "days": 2,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-05 14:08:41",
@@ -110,10 +110,10 @@
             "domain": "www.hinton.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "2D 23h 43m 59s",
+                "countdown_text": "2D 23h 5m 59s",
                 "days": 2,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-05 14:05:42",
@@ -125,10 +125,10 @@
             "domain": "www.portlandschools.org",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "2D 23h 43m 59s",
+                "countdown_text": "2D 23h 5m 59s",
                 "days": 2,
                 "hours": 23,
-                "minutes": 43,
+                "minutes": 5,
                 "seconds": 59
             },
             "updated": "2025-03-05 14:03:01",
@@ -4497,6 +4497,6 @@
             "first_seen": "2025-03-13 17:39:59 UTC"
         }
     ],
-    "last_updated": "2025-03-16 12:16:02 UTC",
+    "last_updated": "2025-03-16 12:54:02 UTC",
     "total_count": 632
 }
