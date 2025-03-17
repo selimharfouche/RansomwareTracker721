@@ -7199,9 +7199,39 @@
       "domain": "www.ameda.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "1bdcea46-3f72-4c74-8513-d48d92cc92e5",
+      "domain": "www.jhayber.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "6a34d66f-9aab-42bc-a6bd-6bde56488560",
+      "domain": "oneill.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
+      "domain": "mitchellmcnutt.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "4cc7a6f0-9a3f-434d-82a9-796b4ef44381",
+      "domain": "lovesac.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "b6744053-8792-4c1c-b498-a2f1f13368b3",
+      "domain": "goencon.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1200,
-  "last_updated": "2025-03-16 17:31:10 UTC",
+  "total_count": 1205,
+  "last_updated": "2025-03-17 18:23:48 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

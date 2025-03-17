@@ -25245,8 +25245,113 @@
       "id": "cf411b02-2a88-4e83-a6b0-61da3a089396",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.jhayber.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "Los Angeles"
+      },
+      "organization": {
+        "name": "J Hayber Consulting",
+        "industry": "Consulting",
+        "sub_industry": "Personal Branding"
+      },
+      "size": {
+        "employees_range": "1-10",
+        "revenue_range": "$0-1M"
+      },
+      "status": "Active",
+      "id": "1bdcea46-3f72-4c74-8513-d48d92cc92e5",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "oneill.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "Santa Cruz"
+      },
+      "organization": {
+        "name": "O'Neill Inc.",
+        "industry": "Apparel & Fashion",
+        "sub_industry": "Sportswear"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Active",
+      "id": "6a34d66f-9aab-42bc-a6bd-6bde56488560",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "mitchellmcnutt.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Illinois",
+        "city": "Chicago"
+      },
+      "organization": {
+        "name": "Mitchell McNutt Associates",
+        "industry": "Consulting Services",
+        "sub_industry": "Management Consulting"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "status": "Active",
+      "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "lovesac.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Connecticut",
+        "city": "Stamford"
+      },
+      "organization": {
+        "name": "LoveSac Inc.",
+        "industry": "Retail",
+        "sub_industry": "Furniture"
+      },
+      "size": {
+        "employees_range": "501-1000",
+        "revenue_range": "$100M-$500M"
+      },
+      "status": "Active",
+      "id": "4cc7a6f0-9a3f-434d-82a9-796b4ef44381",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "goencon.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Texas",
+        "city": "Austin"
+      },
+      "organization": {
+        "name": "Goen Con LLC",
+        "industry": "Technology",
+        "sub_industry": "Software Development"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "status": "Active",
+      "id": "b6744053-8792-4c1c-b498-a2f1f13368b3",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1204,
-  "last_updated": "2025-03-16 17:31:53 UTC"
+  "total_count": 1207,
+  "last_updated": "2025-03-17 18:24:29 UTC"
 }
