@@ -7235,9 +7235,15 @@
       "domain": "www.baxterlaboratories.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "b1f5d6c8-336f-4122-9f56-f904508726d5",
+      "domain": "ccktech.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1206,
-  "last_updated": "2025-03-17 19:10:01 UTC",
+  "total_count": 1207,
+  "last_updated": "2025-03-17 19:55:42 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

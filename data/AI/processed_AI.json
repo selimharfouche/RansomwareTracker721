@@ -25371,8 +25371,29 @@
       "id": "6444dfe0-86b4-454e-9bc2-8394701144df",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "ccktech.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "San Francisco"
+      },
+      "organization_details": {
+        "name": "CCK Technologies Inc.",
+        "industry": "Information Technology",
+        "sub_industry": "Software Development"
+      },
+      "size_information": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "organization_status": "Active",
+      "id": "b1f5d6c8-336f-4122-9f56-f904508726d5",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1208,
-  "last_updated": "2025-03-17 19:10:24 UTC"
+  "total_count": 1209,
+  "last_updated": "2025-03-17 19:56:11 UTC"
 }
