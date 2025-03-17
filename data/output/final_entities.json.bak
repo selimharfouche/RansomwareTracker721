@@ -21803,9 +21803,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "6444dfe0-86b4-454e-9bc2-8394701144df",
+      "domain": "www.baxterlaboratories.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-17 19:06:34 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "7D 16h 50m 56s",
+        "days": 7,
+        "hours": 16,
+        "minutes": 50,
+        "seconds": 56
+      },
+      "estimated_publish_date": "2025-03-25 12:00:00 UTC",
+      "first_seen": "2025-03-17 19:09:04 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-17 19:09:56 UTC",
-  "total_count": 1205,
+  "last_updated": "2025-03-17 19:24:41 UTC",
+  "total_count": 1206,
   "description": "Complete archive of all discovered ransomware entities"
 }
