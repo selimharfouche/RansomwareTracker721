@@ -5,14 +5,14 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "13D 22h 39m 29s",
+                "countdown_text": "13D 17h 37m 1s",
                 "days": 13,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-14 14:53:56",
-            "estimated_publish_date": "2025-03-31 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-31 12:00:01 UTC",
             "first_seen": "2025-03-14 19:16:55 UTC"
         },
         {
@@ -20,14 +20,14 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "6D 22h 39m 29s",
+                "countdown_text": "6D 17h 37m 1s",
                 "days": 6,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-14 12:15:55",
-            "estimated_publish_date": "2025-03-24 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-24 12:00:01 UTC",
             "first_seen": "2025-03-14 14:22:15 UTC"
         },
         {
@@ -35,14 +35,14 @@
             "domain": "dtrglaw.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 22h 39m 29s",
+                "countdown_text": "1D 17h 37m 1s",
                 "days": 1,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-13 19:43:34",
-            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
             "first_seen": "2025-03-14 01:14:35 UTC"
         },
         {
@@ -57,14 +57,14 @@
             "domain": "www.dcarosolutions.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "22h 39m 29s",
+                "countdown_text": "17h 37m 1s",
                 "days": 0,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-08 17:36:11",
-            "estimated_publish_date": "2025-03-18 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-18 12:00:01 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -72,14 +72,14 @@
             "domain": "www.convention.qc.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 22h 39m 29s",
+                "countdown_text": "1D 17h 37m 1s",
                 "days": 1,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-05 14:11:33",
-            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -87,14 +87,14 @@
             "domain": "www.centersheetmetal.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 22h 39m 29s",
+                "countdown_text": "1D 17h 37m 1s",
                 "days": 1,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-05 14:08:41",
-            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -102,14 +102,14 @@
             "domain": "www.hinton.ca",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 22h 39m 29s",
+                "countdown_text": "1D 17h 37m 1s",
                 "days": 1,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-05 14:05:42",
-            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -117,14 +117,14 @@
             "domain": "www.portlandschools.org",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 22h 39m 29s",
+                "countdown_text": "1D 17h 37m 1s",
                 "days": 1,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-05 14:03:01",
-            "estimated_publish_date": "2025-03-19 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
             "first_seen": "2025-03-13 17:39:59 UTC"
         },
         {
@@ -4493,17 +4493,92 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "9D 22h 39m 29s",
+                "countdown_text": "9D 17h 37m 1s",
                 "days": 9,
-                "hours": 22,
-                "minutes": 39,
-                "seconds": 29
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
             },
             "updated": "2025-03-15 17:47:43",
-            "estimated_publish_date": "2025-03-27 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-27 12:00:01 UTC",
             "first_seen": "2025-03-16 17:30:06 UTC"
+        },
+        {
+            "id": "1bdcea46-3f72-4c74-8513-d48d92cc92e5",
+            "domain": "www.jhayber.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "1D 17h 37m 1s",
+                "days": 1,
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
+            },
+            "updated": "2025-03-17 16:35:42",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
+            "first_seen": "2025-03-17 18:23:01 UTC"
+        },
+        {
+            "id": "6a34d66f-9aab-42bc-a6bd-6bde56488560",
+            "domain": "oneill.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "3D 17h 37m 1s",
+                "days": 3,
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
+            },
+            "updated": "2025-03-03 13:03:27",
+            "estimated_publish_date": "2025-03-21 12:00:01 UTC",
+            "first_seen": "2025-03-17 18:23:01 UTC"
+        },
+        {
+            "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
+            "domain": "mitchellmcnutt.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "1D 17h 37m 1s",
+                "days": 1,
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
+            },
+            "updated": "2025-03-06 15:45:25",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
+            "first_seen": "2025-03-17 18:23:01 UTC"
+        },
+        {
+            "id": "4cc7a6f0-9a3f-434d-82a9-796b4ef44381",
+            "domain": "lovesac.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "1D 17h 37m 1s",
+                "days": 1,
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
+            },
+            "updated": "2025-03-06 16:12:48",
+            "estimated_publish_date": "2025-03-19 12:00:01 UTC",
+            "first_seen": "2025-03-17 18:23:01 UTC"
+        },
+        {
+            "id": "b6744053-8792-4c1c-b498-a2f1f13368b3",
+            "domain": "goencon.com",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "3D 17h 37m 1s",
+                "days": 3,
+                "hours": 17,
+                "minutes": 37,
+                "seconds": 1
+            },
+            "updated": "2025-03-04 09:03:02",
+            "estimated_publish_date": "2025-03-21 12:00:01 UTC",
+            "first_seen": "2025-03-17 18:23:01 UTC"
         }
     ],
-    "last_updated": "2025-03-17 13:20:31 UTC",
-    "total_count": 633
+    "last_updated": "2025-03-17 18:23:01 UTC",
+    "total_count": 638
 }
