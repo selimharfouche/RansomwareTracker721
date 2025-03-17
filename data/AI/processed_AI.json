@@ -25350,8 +25350,29 @@
       "id": "b6744053-8792-4c1c-b498-a2f1f13368b3",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.baxterlaboratories.com",
+      "geography": {
+        "country_code": "US",
+        "region": "IL",
+        "city": "Deerfield"
+      },
+      "organization": {
+        "name": "Baxter International Inc.",
+        "industry": "Healthcare",
+        "sub_industry": "Medical Devices"
+      },
+      "size": {
+        "employees_range": "10001-50000",
+        "revenue_range": "$10B-$20B"
+      },
+      "status": "active",
+      "id": "6444dfe0-86b4-454e-9bc2-8394701144df",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1207,
-  "last_updated": "2025-03-17 18:24:29 UTC"
+  "total_count": 1208,
+  "last_updated": "2025-03-17 19:10:24 UTC"
 }

@@ -7229,9 +7229,15 @@
       "domain": "goencon.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "6444dfe0-86b4-454e-9bc2-8394701144df",
+      "domain": "www.baxterlaboratories.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1205,
-  "last_updated": "2025-03-17 18:23:48 UTC",
+  "total_count": 1206,
+  "last_updated": "2025-03-17 19:10:01 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }
