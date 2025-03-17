@@ -127,27 +127,6 @@
       "ransomware_group": "RansomHub"
     },
     {
-      "domain": "mitchellmcnutt.com",
-      "geography": {
-        "country_code": "USA",
-        "region": "California",
-        "city": "San Francisco"
-      },
-      "organization": {
-        "name": "Mitchell McNutt",
-        "industry": "Creative Services",
-        "sub_industry": "Digital Media & Web Design",
-        "size": {
-          "employees_range": "1-10",
-          "revenue_range": "$0-$1M"
-        },
-        "status": "Private"
-      },
-      "id": "4a06dac9-30bb-4df4-9f77-856c4cedbdb7",
-      "group_key": "ransomhub",
-      "ransomware_group": "RansomHub"
-    },
-    {
       "domain": "www.jpwindindustries.com",
       "geography": {
         "country_code": "USA",
@@ -207,27 +186,6 @@
         "status": "Private"
       },
       "id": "121e0987-19c9-4a99-8799-cade8e753280",
-      "group_key": "ransomhub",
-      "ransomware_group": "RansomHub"
-    },
-    {
-      "domain": "lovesac.com",
-      "geography": {
-        "country_code": "USA",
-        "region": "Connecticut",
-        "city": "Stamford"
-      },
-      "organization": {
-        "name": "Lovesac Inc.",
-        "industry": "Retail",
-        "sub_industry": "Furniture Retail",
-        "size": {
-          "employees_range": "100-499",
-          "revenue_range": "$50M-$100M"
-        },
-        "status": "Private"
-      },
-      "id": "4cc7a6f0-9a3f-434d-82a9-796b4ef44381",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
     },
