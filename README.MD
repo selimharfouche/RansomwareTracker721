@@ -1,14 +1,14 @@
-# RansomwareTracker721
-
-![RansomwareTracker](https://img.shields.io/badge/RansomwareTracker-1.0-blue)
-
-Un système de suivi complet pour surveiller les entités divulguées par différents groupes de ransomware. Ce projet automatise la collecte de données via Tor, standardise les formats de date, et enrichit les informations par IA.
-
-## Table des matières
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
+# RansomwareTracker721       	
+ 			  		
+![RansomwareTracker](https://img.shields.io/badge/RansomwareTracker-1.0-blue) 		  	 	
+ 			  	 
+Un système de suivi complet pour surveiller les entités divulguées par différents groupes de ransomware. Ce projet automatise la collecte de données via Tor, standardise les formats de date, et enrichit les informations par IA. 		  			
+ 		  	 	
+## Table des matières 			  		
+ 		  	 	
+- [Introduction](#introduction) 		 		  
+- [Installation](#installation) 		 	  	
+- [Configuration](#configuration) 		 		 	
 - [Utilisation](#utilisation)
 - [Structure du projet](#structure-du-projet)
 - [Fonctionnalités](#fonctionnalités)
@@ -49,7 +49,7 @@ pip install -r requirements.txt
 ### Prérequis
 
 - Python 3.9+
-- Tor 
+- Tor
 - Firefox et Geckodriver
 
 ## Configuration
