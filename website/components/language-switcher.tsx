@@ -1,29 +1,21 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useTranslation } from "@/utils/translation"
 import { Button } from "@/components/ui/button"
 import { Globe } from "lucide-react"
 
-export function LanguageSwitcher() {
-  const { language, setLanguage } = useTranslation()
-  
+const LanguageSwitcher = ({ currentLanguage, onLanguageChange }) => {
   const toggleLanguage = () => {
-    const newLanguage = language === 'en' ? 'fr' : 'en'
-    setLanguage(newLanguage)
-    localStorage.setItem('language', newLanguage)
+    const newLanguage = currentLanguage === "en" ? "fr" : "en"
+    onLanguageChange(newLanguage)
   }
-  
+
   return (
-    <Button 
-      variant="ghost" 
-      size="icon"
-      onClick={toggleLanguage}
-      aria-label={`Switch to ${language === 'en' ? 'French' : 'English'}`}
-      className="flex items-center gap-1"
-    >
-      <Globe className="h-5 w-5" />
-      <span className="ml-1 text-xs font-bold">{language.toUpperCase()}</span>
+    <Button variant="outline" size="sm" onClick={toggleLanguage} className="flex items-center gap-2">
+      <Globe className="h-4 w-4" />
+      <span>{currentLanguage === "en" ? "FR" : "EN"}</span>
     </Button>
   )
 }
+
+export default LanguageSwitcher
+
