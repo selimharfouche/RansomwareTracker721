@@ -7241,9 +7241,15 @@
       "domain": "ccktech.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "post/aJgAPtwsixzCclDC67d9aab3014ca",
+      "domain": "51talk.com",
+      "ransomware_group": "LockBit",
+      "group_key": "lockbit"
     }
   ],
-  "total_count": 1207,
-  "last_updated": "2025-03-18 16:57:41 UTC",
+  "total_count": 1208,
+  "last_updated": "2025-03-18 17:19:28 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

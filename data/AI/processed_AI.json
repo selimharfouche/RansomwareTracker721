@@ -25392,8 +25392,29 @@
       "id": "post/PQqRostAreVwtVIh663cf766828c4",
       "group_key": "lockbit",
       "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "51talk.com",
+      "geography": {
+        "country_code": "CN",
+        "region": "Beijing",
+        "city": "Beijing"
+      },
+      "organization": {
+        "name": "51Talk International Education Group",
+        "industry": "Education Management",
+        "sub_industry": "Online English Education"
+      },
+      "size": {
+        "employees_range": "1001-5000",
+        "revenue_range": "10M-50M"
+      },
+      "status": "Active",
+      "id": "post/aJgAPtwsixzCclDC67d9aab3014ca",
+      "group_key": "lockbit",
+      "ransomware_group": "LockBit"
     }
   ],
-  "total_count": 1209,
-  "last_updated": "2025-03-18 17:04:59 UTC"
+  "total_count": 1210,
+  "last_updated": "2025-03-18 17:19:53 UTC"
 }
