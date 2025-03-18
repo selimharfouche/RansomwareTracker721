@@ -25203,8 +25203,197 @@
       "id": "b1f5d6c8-336f-4122-9f56-f904508726d5",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "sdfab.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "San Francisco"
+      },
+      "organization": {
+        "name": "SDFAB Technologies",
+        "industry": "Technology",
+        "sub_industry": "Software Development"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "organization_status": "active",
+      "id": "c2a583b7-349a-47af-91aa-739a067176e9",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "groupegm.com",
+      "geography": {
+        "country_code": "FR",
+        "region": "Île-de-France",
+        "city": "Paris"
+      },
+      "organization": {
+        "name": "Groupe GM",
+        "industry": "Manufacturing",
+        "sub_industry": "Automotive Components"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "organization_status": "active",
+      "id": "266aab6a-710c-4b26-b6f3-b6a15bea70ab",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "Jeffersoncountyclerk.org",
+      "geography": {
+        "country_code": "US",
+        "region": "Kentucky",
+        "city": "Louisville"
+      },
+      "organization": {
+        "name": "Jefferson County Clerk's Office",
+        "industry": "Government",
+        "sub_industry": "Public Administration"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "Not Applicable"
+      },
+      "organization_status": "active",
+      "id": "b61b44f6-9b2b-42d6-8fd8-630e3535dbd6",
+      "group_key": "ransomhub",
+      "ransomware_group": "ransomhub"
+    },
+    {
+      "domain": "siapenet.gov.br",
+      "geography": {
+        "country_code": "BR",
+        "region": "São Paulo",
+        "city": "São Paulo"
+      },
+      "organization": {
+        "name": "SIAPENET Government Portal",
+        "industry": "Government",
+        "sub_industry": "Information Technology - Government Services"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "Not Applicable"
+      },
+      "organization_status": "active",
+      "id": "94",
+      "group_key": "bashe",
+      "ransomware_group": "bashe"
+    },
+    {
+      "domain": "fanningfanning.com",
+      "geography": {
+        "country_code": "GB",
+        "region": "England",
+        "city": "London"
+      },
+      "organization": {
+        "name": "Fanning Fanning Ltd.",
+        "industry": "Retail",
+        "sub_industry": "E-commerce"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$10M"
+      },
+      "organization_status": "active",
+      "id": "post/BiNWmkP5UCFvF2pO66d193282b7e7",
+      "group_key": "lockbit",
+      "ransomware_group": "lockbit"
+    },
+    {
+      "domain": "emanic.net",
+      "geography": {
+        "country_code": "IT",
+        "region": "Lombardy",
+        "city": "Milan"
+      },
+      "organization": {
+        "name": "Emanic Solutions",
+        "industry": "Finance",
+        "sub_industry": "FinTech"
+      },
+      "size": {
+        "employees_range": "501-1000",
+        "revenue_range": "$100M-$500M"
+      },
+      "organization_status": "active",
+      "id": "post/AeD6czknaXUC03BO66b850feea14c",
+      "group_key": "lockbit",
+      "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "ciberviaxesespecial.net",
+      "geography": {
+        "country_code": "ES",
+        "region": "Community of Madrid",
+        "city": "Madrid"
+      },
+      "organization": {
+        "name": "Ciber Via X Especial",
+        "industry": "Information Technology",
+        "sub_industry": "Cybersecurity"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$5M-$20M"
+      },
+      "organization_status": "active",
+      "id": "post/7SkDzRungn4ObwHz66a6395a0ac62",
+      "group_key": "lockbit",
+      "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "lockbit.newcontacts",
+      "geography": {
+        "country_code": "RU",
+        "region": "Moscow",
+        "city": "Moscow"
+      },
+      "organization": {
+        "name": "LockBit Cyber Collective",
+        "industry": "Cybercrime",
+        "sub_industry": "Ransomware Operations"
+      },
+      "size": {
+        "employees_range": "Unknown",
+        "revenue_range": "Unknown"
+      },
+      "organization_status": "active (illicit)",
+      "id": "post/pUU7Kf8nrb9Y3yGO6699202907991",
+      "group_key": "lockbit",
+      "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "disb.dc.gov",
+      "geography": {
+        "country_code": "US",
+        "region": "District of Columbia",
+        "city": "Washington"
+      },
+      "organization": {
+        "name": "DC Office of Small Business",
+        "industry": "Government",
+        "sub_industry": "Economic Development"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "Not Applicable"
+      },
+      "organization_status": "active",
+      "id": "post/PQqRostAreVwtVIh663cf766828c4",
+      "group_key": "lockbit",
+      "ransomware_group": "LockBit"
     }
   ],
   "total_count": 1209,
-  "last_updated": "2025-03-17 19:56:11 UTC"
+  "last_updated": "2025-03-18 17:04:59 UTC"
 }
