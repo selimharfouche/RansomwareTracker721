@@ -1975,27 +1975,6 @@
       "ransomware_group": "RansomHub"
     },
     {
-      "domain": "sdfab.com",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Unknown",
-        "city": "Unknown"
-      },
-      "organization": {
-        "name": "Not Available",
-        "industry": "Not Available",
-        "sub_industry": "Not Available",
-        "size": {
-          "employees_range": "Not Available",
-          "revenue_range": "Not Available"
-        },
-        "status": "Private"
-      },
-      "id": "c2a583b7-349a-47af-91aa-739a067176e9",
-      "group_key": "ransomhub",
-      "ransomware_group": "RansomHub"
-    },
-    {
       "domain": "bazcooil.com",
       "geography": {
         "country_code": "USA",
@@ -3105,27 +3084,6 @@
         "status": "Public"
       },
       "id": "47754ccf-3e5c-4d92-97b9-e9ffb4133e59",
-      "group_key": "ransomhub",
-      "ransomware_group": "RansomHub"
-    },
-    {
-      "domain": "groupegm.com",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Unknown",
-        "city": "Unknown"
-      },
-      "organization": {
-        "name": "Groupe GM",
-        "industry": "Not Available",
-        "sub_industry": "Not Available",
-        "size": {
-          "employees_range": "Not Available",
-          "revenue_range": "Not Available"
-        },
-        "status": "Private"
-      },
-      "id": "266aab6a-710c-4b26-b6f3-b6a15bea70ab",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
     },
@@ -10146,27 +10104,6 @@
       "ransomware_group": "RansomHub"
     },
     {
-      "domain": "Jeffersoncountyclerk.org",
-      "geography": {
-        "country_code": "USA",
-        "region": "Alabama",
-        "city": "Birmingham"
-      },
-      "organization": {
-        "name": "Jefferson County Clerk's Office",
-        "industry": "Government",
-        "sub_industry": "Local Government Administration",
-        "size": {
-          "employees_range": "50-249",
-          "revenue_range": "Not Applicable"
-        },
-        "status": "Government"
-      },
-      "id": "b61b44f6-9b2b-42d6-8fd8-630e3535dbd6",
-      "group_key": "ransomhub",
-      "ransomware_group": "RansomHub"
-    },
-    {
       "domain": "alliuminteriors.co.nz",
       "geography": {
         "country_code": "NZL",
@@ -14220,27 +14157,6 @@
       "ransomware_group": "LockBit"
     },
     {
-      "domain": "fanningfanning.com",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Unknown",
-        "city": "Unknown"
-      },
-      "organization": {
-        "name": "Not Available",
-        "industry": "Not Available",
-        "sub_industry": "Not Available",
-        "size": {
-          "employees_range": "Not Available",
-          "revenue_range": "Not Available"
-        },
-        "status": "Not Available"
-      },
-      "id": "post/BiNWmkP5UCFvF2pO66d193282b7e7",
-      "group_key": "lockbit",
-      "ransomware_group": "LockBit"
-    },
-    {
       "domain": "akanea.com",
       "geography": {
         "country_code": "FRA",
@@ -15984,27 +15900,6 @@
       "ransomware_group": "LockBit"
     },
     {
-      "domain": "emanic.net",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Not Available",
-        "city": "Not Available"
-      },
-      "organization": {
-        "name": "Not Available",
-        "industry": "Not Available",
-        "sub_industry": "Not Available",
-        "size": {
-          "employees_range": "Not Available",
-          "revenue_range": "Not Available"
-        },
-        "status": "Private"
-      },
-      "id": "post/AeD6czknaXUC03BO66b850feea14c",
-      "group_key": "lockbit",
-      "ransomware_group": "LockBit"
-    },
-    {
       "domain": "southernspecialtysupply.com",
       "geography": {
         "country_code": "USA",
@@ -16782,27 +16677,6 @@
       "ransomware_group": "LockBit"
     },
     {
-      "domain": "ciberviaxesespecial.net",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Unknown",
-        "city": "Unknown"
-      },
-      "organization": {
-        "name": "Information Not Available",
-        "industry": "Information Not Available",
-        "sub_industry": "Information Not Available",
-        "size": {
-          "employees_range": "Information Not Available",
-          "revenue_range": "Information Not Available"
-        },
-        "status": "Information Not Available"
-      },
-      "id": "post/7SkDzRungn4ObwHz66a6395a0ac62",
-      "group_key": "lockbit",
-      "ransomware_group": "LockBit"
-    },
-    {
       "domain": "agapefrance.org",
       "geography": {
         "country_code": "FRA",
@@ -17576,27 +17450,6 @@
         "status": "Government"
       },
       "id": "post/3dAotVC3NBrreo986699282c75613",
-      "group_key": "lockbit",
-      "ransomware_group": "LockBit"
-    },
-    {
-      "domain": "lockbit.newcontacts",
-      "geography": {
-        "country_code": "UNK",
-        "region": "Not Disclosed",
-        "city": "Not Disclosed"
-      },
-      "organization": {
-        "name": "LockBit",
-        "industry": "Cybercrime",
-        "sub_industry": "Ransomware",
-        "size": {
-          "employees_range": "Unknown",
-          "revenue_range": "Unknown"
-        },
-        "status": "Private"
-      },
-      "id": "post/pUU7Kf8nrb9Y3yGO6699202907991",
       "group_key": "lockbit",
       "ransomware_group": "LockBit"
     },
@@ -19004,27 +18857,6 @@
         "status": "Non-profit"
       },
       "id": "post/qf596R3o06DjgMQ9663cf7e04627b",
-      "group_key": "lockbit",
-      "ransomware_group": "LockBit"
-    },
-    {
-      "domain": "disb.dc.gov",
-      "geography": {
-        "country_code": "USA",
-        "region": "District of Columbia",
-        "city": "Washington"
-      },
-      "organization": {
-        "name": "District of Columbia Government – DISB Division",
-        "industry": "Government",
-        "sub_industry": "Public Administration",
-        "size": {
-          "employees_range": "100-499",
-          "revenue_range": "Not Applicable"
-        },
-        "status": "Government"
-      },
-      "id": "post/PQqRostAreVwtVIh663cf766828c4",
       "group_key": "lockbit",
       "ransomware_group": "LockBit"
     },
@@ -23857,27 +23689,6 @@
         "status": "Private"
       },
       "id": "95",
-      "group_key": "bashe",
-      "ransomware_group": "Bashe"
-    },
-    {
-      "domain": "siapenet.gov.br",
-      "geography": {
-        "country_code": "BRA",
-        "region": "Distrito Federal",
-        "city": "Brasília"
-      },
-      "organization": {
-        "name": "Sistema Integrado de Administração de Pessoal (SIAPE)",
-        "industry": "Government",
-        "sub_industry": "Public Administration - Human Resources Management",
-        "size": {
-          "employees_range": "Not Available",
-          "revenue_range": "Not Applicable"
-        },
-        "status": "Government"
-      },
-      "id": "94",
       "group_key": "bashe",
       "ransomware_group": "Bashe"
     },
