@@ -5,11 +5,11 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "11D 15h 36m 55s",
+                "countdown_text": "11D 15h 21m 15s",
                 "days": 11,
                 "hours": 15,
-                "minutes": 36,
-                "seconds": 55
+                "minutes": 21,
+                "seconds": 15
             },
             "updated": "2025-03-14 14:53:56",
             "estimated_publish_date": "2025-03-31 12:00:00 UTC",
@@ -20,11 +20,11 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 15h 36m 55s",
+                "countdown_text": "4D 15h 21m 15s",
                 "days": 4,
                 "hours": 15,
-                "minutes": 36,
-                "seconds": 55
+                "minutes": 21,
+                "seconds": 15
             },
             "updated": "2025-03-14 12:15:55",
             "estimated_publish_date": "2025-03-24 12:00:00 UTC",
@@ -4445,11 +4445,11 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "7D 15h 36m 55s",
+                "countdown_text": "7D 15h 21m 15s",
                 "days": 7,
                 "hours": 15,
-                "minutes": 36,
-                "seconds": 55
+                "minutes": 21,
+                "seconds": 15
             },
             "updated": "2025-03-15 17:47:43",
             "estimated_publish_date": "2025-03-27 12:00:00 UTC",
@@ -4519,11 +4519,11 @@
             "domain": "www.baxterlaboratories.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 15h 36m 55s",
+                "countdown_text": "5D 15h 21m 15s",
                 "days": 5,
                 "hours": 15,
-                "minutes": 36,
-                "seconds": 55
+                "minutes": 21,
+                "seconds": 15
             },
             "updated": "2025-03-17 19:06:34",
             "estimated_publish_date": "2025-03-25 12:00:00 UTC",
@@ -4534,11 +4534,11 @@
             "domain": "ccktech.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 15h 36m 55s",
+                "countdown_text": "4D 15h 21m 15s",
                 "days": 4,
                 "hours": 15,
-                "minutes": 36,
-                "seconds": 55
+                "minutes": 21,
+                "seconds": 15
             },
             "updated": "2025-03-17 19:47:37",
             "estimated_publish_date": "2025-03-24 12:00:00 UTC",
@@ -4552,6 +4552,6 @@
             "first_seen": "2025-03-19 15:47:39 UTC"
         }
     ],
-    "last_updated": "2025-03-19 20:23:05 UTC",
+    "last_updated": "2025-03-19 20:38:46 UTC",
     "total_count": 641
 }
