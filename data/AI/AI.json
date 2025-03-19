@@ -7247,9 +7247,15 @@
       "domain": "51talk.com",
       "ransomware_group": "LockBit",
       "group_key": "lockbit"
+    },
+    {
+      "id": "dd83fdc2-1ae8-490a-bbc6-73b788260299",
+      "domain": "controlledair.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1208,
-  "last_updated": "2025-03-18 17:19:28 UTC",
+  "total_count": 1209,
+  "last_updated": "2025-03-19 15:48:23 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

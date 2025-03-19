@@ -25413,8 +25413,29 @@
       "id": "post/aJgAPtwsixzCclDC67d9aab3014ca",
       "group_key": "lockbit",
       "ransomware_group": "LockBit"
+    },
+    {
+      "domain": "controlledair.com",
+      "geography": {
+        "country_code": "US",
+        "region": "TX",
+        "city": "Houston"
+      },
+      "organization_details": {
+        "name": "Controlled Air, Inc.",
+        "industry": "Industrial Manufacturing",
+        "sub_industry": "Air Handling & Filtration"
+      },
+      "size_information": {
+        "employees_range": "51-200",
+        "revenue_range": "$5M-$25M"
+      },
+      "organization_status": "active",
+      "id": "dd83fdc2-1ae8-490a-bbc6-73b788260299",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1210,
-  "last_updated": "2025-03-18 17:19:53 UTC"
+  "total_count": 1211,
+  "last_updated": "2025-03-19 15:48:49 UTC"
 }
