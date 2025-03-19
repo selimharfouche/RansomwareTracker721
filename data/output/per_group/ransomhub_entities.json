@@ -5,14 +5,14 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "11D 21h 58m 6s",
+                "countdown_text": "11D 21h 34m 17s",
                 "days": 11,
                 "hours": 21,
-                "minutes": 58,
-                "seconds": 6
+                "minutes": 34,
+                "seconds": 17
             },
             "updated": "2025-03-14 14:53:56",
-            "estimated_publish_date": "2025-03-31 12:00:01 UTC",
+            "estimated_publish_date": "2025-03-31 12:00:00 UTC",
             "first_seen": "2025-03-14 19:16:55 UTC"
         },
         {
@@ -20,14 +20,14 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 21h 58m 6s",
+                "countdown_text": "4D 21h 34m 17s",
                 "days": 4,
                 "hours": 21,
-                "minutes": 58,
-                "seconds": 6
+                "minutes": 34,
+                "seconds": 17
             },
             "updated": "2025-03-14 12:15:55",
-            "estimated_publish_date": "2025-03-24 12:00:01 UTC",
+            "estimated_publish_date": "2025-03-24 12:00:00 UTC",
             "first_seen": "2025-03-14 14:22:15 UTC"
         },
         {
@@ -4445,14 +4445,14 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "7D 21h 58m 6s",
+                "countdown_text": "7D 21h 34m 17s",
                 "days": 7,
                 "hours": 21,
-                "minutes": 58,
-                "seconds": 6
+                "minutes": 34,
+                "seconds": 17
             },
             "updated": "2025-03-15 17:47:43",
-            "estimated_publish_date": "2025-03-27 12:00:01 UTC",
+            "estimated_publish_date": "2025-03-27 12:00:00 UTC",
             "first_seen": "2025-03-16 17:30:06 UTC"
         },
         {
@@ -4519,14 +4519,14 @@
             "domain": "www.baxterlaboratories.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "5D 21h 58m 6s",
+                "countdown_text": "5D 21h 34m 17s",
                 "days": 5,
                 "hours": 21,
-                "minutes": 58,
-                "seconds": 6
+                "minutes": 34,
+                "seconds": 17
             },
             "updated": "2025-03-17 19:06:34",
-            "estimated_publish_date": "2025-03-25 12:00:01 UTC",
+            "estimated_publish_date": "2025-03-25 12:00:00 UTC",
             "first_seen": "2025-03-17 19:09:04 UTC"
         },
         {
@@ -4534,17 +4534,17 @@
             "domain": "ccktech.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 21h 58m 6s",
+                "countdown_text": "4D 21h 34m 17s",
                 "days": 4,
                 "hours": 21,
-                "minutes": 58,
-                "seconds": 6
+                "minutes": 34,
+                "seconds": 17
             },
             "updated": "2025-03-17 19:47:37",
-            "estimated_publish_date": "2025-03-24 12:00:01 UTC",
+            "estimated_publish_date": "2025-03-24 12:00:00 UTC",
             "first_seen": "2025-03-17 19:54:47 UTC"
         }
     ],
-    "last_updated": "2025-03-19 14:01:55 UTC",
+    "last_updated": "2025-03-19 14:25:43 UTC",
     "total_count": 640
 }
