@@ -21875,9 +21875,27 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "dd83fdc2-1ae8-490a-bbc6-73b788260299",
+      "domain": "controlledair.com",
+      "status": "published",
+      "description_preview": null,
+      "updated": "2025-03-17 15:47:29 UTC",
+      "views": null,
+      "countdown_remaining": null,
+      "estimated_publish_date": null,
+      "first_seen": "2025-03-19 15:47:39 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-19 15:33:50 UTC",
-  "total_count": 1208,
+  "last_updated": "2025-03-19 15:48:23 UTC",
+  "total_count": 1209,
   "description": "Complete archive of all discovered ransomware entities"
 }
