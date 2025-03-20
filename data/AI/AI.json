@@ -7259,9 +7259,15 @@
       "domain": "www.janvier-labs.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "58e0e2a0-31aa-4dfb-90df-da2b4862b6a8",
+      "domain": "georghay.co.uk",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1210,
-  "last_updated": "2025-03-20 16:34:25 UTC",
+  "total_count": 1211,
+  "last_updated": "2025-03-20 17:01:34 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }
