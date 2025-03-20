@@ -5,11 +5,11 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "10D 12h 19m 12s",
+                "countdown_text": "10D 12h 9m 11s",
                 "days": 10,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-14 14:53:56",
             "estimated_publish_date": "2025-03-31 12:00:00 UTC",
@@ -20,11 +20,11 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 12h 19m 12s",
+                "countdown_text": "3D 12h 9m 11s",
                 "days": 3,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-14 12:15:55",
             "estimated_publish_date": "2025-03-24 12:00:00 UTC",
@@ -4445,11 +4445,11 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "6D 12h 19m 12s",
+                "countdown_text": "6D 12h 9m 11s",
                 "days": 6,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-15 17:47:43",
             "estimated_publish_date": "2025-03-27 12:00:00 UTC",
@@ -4519,11 +4519,11 @@
             "domain": "www.baxterlaboratories.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 12h 19m 12s",
+                "countdown_text": "4D 12h 9m 11s",
                 "days": 4,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-17 19:06:34",
             "estimated_publish_date": "2025-03-25 12:00:00 UTC",
@@ -4534,11 +4534,11 @@
             "domain": "ccktech.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 12h 19m 12s",
+                "countdown_text": "3D 12h 9m 11s",
                 "days": 3,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-17 19:47:37",
             "estimated_publish_date": "2025-03-24 12:00:00 UTC",
@@ -4556,11 +4556,11 @@
             "domain": "www.janvier-labs.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "20h 19m 12s",
+                "countdown_text": "20h 9m 11s",
                 "days": 0,
                 "hours": 20,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-20 15:49:37",
             "estimated_publish_date": "2025-03-21 20:00:00 UTC",
@@ -4593,17 +4593,17 @@
             "domain": "www.mslglobalexp.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "7D 12h 19m 12s",
+                "countdown_text": "7D 12h 9m 11s",
                 "days": 7,
                 "hours": 12,
-                "minutes": 19,
-                "seconds": 12
+                "minutes": 9,
+                "seconds": 11
             },
             "updated": "2025-03-17 11:36:52",
             "estimated_publish_date": "2025-03-28 12:00:00 UTC",
             "first_seen": "2025-03-20 22:43:37 UTC"
         }
     ],
-    "last_updated": "2025-03-20 23:40:49 UTC",
+    "last_updated": "2025-03-20 23:50:49 UTC",
     "total_count": 645
 }
