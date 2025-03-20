@@ -25434,8 +25434,29 @@
       "id": "dd83fdc2-1ae8-490a-bbc6-73b788260299",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.janvier-labs.com",
+      "geography": {
+        "country_code": "FR",
+        "region": "Île-de-France",
+        "city": "Paris"
+      },
+      "organization": {
+        "name": "Janvier Labs",
+        "industry": "Research & Technology",
+        "sub_industry": "Laboratory Automation"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "status": "Active",
+      "id": "c41f4ee9-4edb-4b84-b8d4-cb4d1037db29",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1211,
-  "last_updated": "2025-03-19 15:48:49 UTC"
+  "total_count": 1212,
+  "last_updated": "2025-03-20 16:34:54 UTC"
 }

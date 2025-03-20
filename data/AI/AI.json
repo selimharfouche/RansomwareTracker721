@@ -7253,9 +7253,15 @@
       "domain": "controlledair.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "c41f4ee9-4edb-4b84-b8d4-cb4d1037db29",
+      "domain": "www.janvier-labs.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1209,
-  "last_updated": "2025-03-19 15:48:23 UTC",
+  "total_count": 1210,
+  "last_updated": "2025-03-20 16:34:25 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }
