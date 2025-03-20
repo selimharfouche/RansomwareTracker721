@@ -5,14 +5,14 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "10D 18h 21m 24s",
+                "countdown_text": "10D 18h 11m 19s",
                 "days": 10,
                 "hours": 18,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-14 14:53:56",
-            "estimated_publish_date": "2025-03-31 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-31 12:00:01 UTC",
             "first_seen": "2025-03-14 19:16:55 UTC"
         },
         {
@@ -20,14 +20,14 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 18h 21m 24s",
+                "countdown_text": "3D 18h 11m 19s",
                 "days": 3,
                 "hours": 18,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-14 12:15:55",
-            "estimated_publish_date": "2025-03-24 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-24 12:00:01 UTC",
             "first_seen": "2025-03-14 14:22:15 UTC"
         },
         {
@@ -4445,14 +4445,14 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "6D 18h 21m 24s",
+                "countdown_text": "6D 18h 11m 19s",
                 "days": 6,
                 "hours": 18,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-15 17:47:43",
-            "estimated_publish_date": "2025-03-27 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-27 12:00:01 UTC",
             "first_seen": "2025-03-16 17:30:06 UTC"
         },
         {
@@ -4519,14 +4519,14 @@
             "domain": "www.baxterlaboratories.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 18h 21m 24s",
+                "countdown_text": "4D 18h 11m 19s",
                 "days": 4,
                 "hours": 18,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-17 19:06:34",
-            "estimated_publish_date": "2025-03-25 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-25 12:00:01 UTC",
             "first_seen": "2025-03-17 19:09:04 UTC"
         },
         {
@@ -4534,14 +4534,14 @@
             "domain": "ccktech.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 18h 21m 24s",
+                "countdown_text": "3D 18h 11m 19s",
                 "days": 3,
                 "hours": 18,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-17 19:47:37",
-            "estimated_publish_date": "2025-03-24 12:00:00 UTC",
+            "estimated_publish_date": "2025-03-24 12:00:01 UTC",
             "first_seen": "2025-03-17 19:54:47 UTC"
         },
         {
@@ -4556,14 +4556,14 @@
             "domain": "www.janvier-labs.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "1D 2h 21m 24s",
+                "countdown_text": "1D 2h 11m 19s",
                 "days": 1,
                 "hours": 2,
-                "minutes": 21,
-                "seconds": 24
+                "minutes": 11,
+                "seconds": 19
             },
             "updated": "2025-03-20 15:49:37",
-            "estimated_publish_date": "2025-03-21 20:00:00 UTC",
+            "estimated_publish_date": "2025-03-21 20:00:01 UTC",
             "first_seen": "2025-03-20 16:33:29 UTC"
         },
         {
@@ -4580,8 +4580,23 @@
             "updated": "2025-03-20 16:57:20",
             "estimated_publish_date": "2025-03-27 12:00:00 UTC",
             "first_seen": "2025-03-20 17:00:42 UTC"
+        },
+        {
+            "id": "6bfab967-9caf-4bba-afd4-262734c141f8",
+            "domain": "www.georgehay.co.uk",
+            "status": "countdown",
+            "countdown_remaining": {
+                "countdown_text": "1h 11m 19s",
+                "days": 0,
+                "hours": 1,
+                "minutes": 11,
+                "seconds": 19
+            },
+            "updated": "2025-02-26 12:58:21",
+            "estimated_publish_date": "2025-03-20 19:00:01 UTC",
+            "first_seen": "2025-03-20 17:48:42 UTC"
         }
     ],
-    "last_updated": "2025-03-20 17:38:36 UTC",
-    "total_count": 643
+    "last_updated": "2025-03-20 17:48:42 UTC",
+    "total_count": 644
 }
