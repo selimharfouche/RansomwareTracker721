@@ -21965,9 +21965,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "522e4acf-b0e5-4f99-9529-877d90b943db",
+      "domain": "www.mslglobalexp.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-17 11:36:52 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "7D 13h 16m 24s",
+        "days": 7,
+        "hours": 13,
+        "minutes": 16,
+        "seconds": 24
+      },
+      "estimated_publish_date": "2025-03-28 12:00:01 UTC",
+      "first_seen": "2025-03-20 22:43:37 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-20 22:31:50 UTC",
-  "total_count": 1212,
+  "last_updated": "2025-03-20 22:44:30 UTC",
+  "total_count": 1213,
   "description": "Complete archive of all discovered ransomware entities"
 }
