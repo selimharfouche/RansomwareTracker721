@@ -25497,8 +25497,29 @@
       "id": "6bfab967-9caf-4bba-afd4-262734c141f8",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.mslglobalexp.com",
+      "geography": {
+        "country_code": "US",
+        "region": "CA",
+        "city": "Los Angeles"
+      },
+      "organization": {
+        "name": "MSL Global Express",
+        "industry": "Logistics",
+        "sub_industry": "Freight Forwarding"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Active",
+      "id": "522e4acf-b0e5-4f99-9529-877d90b943db",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1214,
-  "last_updated": "2025-03-20 17:50:02 UTC"
+  "total_count": 1215,
+  "last_updated": "2025-03-20 22:44:58 UTC"
 }
