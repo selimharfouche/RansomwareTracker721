@@ -21917,9 +21917,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "58e0e2a0-31aa-4dfb-90df-da2b4862b6a8",
+      "domain": "georghay.co.uk",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-20 16:57:20 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "6D 18h 59m 18s",
+        "days": 6,
+        "hours": 18,
+        "minutes": 59,
+        "seconds": 18
+      },
+      "estimated_publish_date": "2025-03-27 12:00:00 UTC",
+      "first_seen": "2025-03-20 17:00:42 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-20 16:51:49 UTC",
-  "total_count": 1210,
+  "last_updated": "2025-03-20 17:01:34 UTC",
+  "total_count": 1211,
   "description": "Complete archive of all discovered ransomware entities"
 }
