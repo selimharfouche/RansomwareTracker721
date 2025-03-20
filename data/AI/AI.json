@@ -7265,9 +7265,15 @@
       "domain": "georghay.co.uk",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "6bfab967-9caf-4bba-afd4-262734c141f8",
+      "domain": "www.georgehay.co.uk",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1211,
-  "last_updated": "2025-03-20 17:01:34 UTC",
+  "total_count": 1212,
+  "last_updated": "2025-03-20 17:49:32 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

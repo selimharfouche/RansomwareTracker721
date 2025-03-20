@@ -25476,8 +25476,29 @@
       "id": "58e0e2a0-31aa-4dfb-90df-da2b4862b6a8",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.georgehay.co.uk",
+      "geography": {
+        "country_code": "GB",
+        "region": "Scotland",
+        "city": "Glasgow"
+      },
+      "organization": {
+        "name": "George Hay Ltd",
+        "industry": "Manufacturing",
+        "sub_industry": "Industrial Tools & Components"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "1-10M GBP"
+      },
+      "status": "active",
+      "id": "6bfab967-9caf-4bba-afd4-262734c141f8",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1213,
-  "last_updated": "2025-03-20 17:02:02 UTC"
+  "total_count": 1214,
+  "last_updated": "2025-03-20 17:50:02 UTC"
 }
