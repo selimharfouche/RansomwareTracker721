@@ -21893,9 +21893,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "c41f4ee9-4edb-4b84-b8d4-cb4d1037db29",
+      "domain": "www.janvier-labs.com",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-20 15:49:37 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "1D 3h 26m 32s",
+        "days": 1,
+        "hours": 3,
+        "minutes": 26,
+        "seconds": 32
+      },
+      "estimated_publish_date": "2025-03-21 20:00:00 UTC",
+      "first_seen": "2025-03-20 16:33:29 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-20 16:34:22 UTC",
-  "total_count": 1209,
+  "last_updated": "2025-03-20 16:51:44 UTC",
+  "total_count": 1210,
   "description": "Complete archive of all discovered ransomware entities"
 }
