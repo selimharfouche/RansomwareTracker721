@@ -7277,9 +7277,117 @@
       "domain": "www.mslglobalexp.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "fc457d5d-62ec-4e82-b6b6-eae54ca6e10b",
+      "domain": "www.oneupinnovations.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "5ed458ee-3eaa-45bf-9023-69b224eb963f",
+      "domain": "www.avalonapparel.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "4e171f4a-d049-40d3-8842-5f1037c1ff19",
+      "domain": "www.esquirebrands.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "9d6caa1d-f8ba-4412-a275-69b8009b8579",
+      "domain": "www.core-1.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "a22fd528-64fd-4fa9-814f-150d4afa3b4f",
+      "domain": "www.gcsnet.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "d6d3de55-ab20-4039-98ea-2a49d250e423",
+      "domain": "www.njcalwe.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "9a2b66a9-c43d-4bae-b5a0-e2f151979047",
+      "domain": "www.allstarhealthcaresolutions.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "a70791ba-5714-4c86-8954-4e506e394f8e",
+      "domain": "www.solinst.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "2df2b16a-3c97-487c-a335-8839d69813c3",
+      "domain": "www.parklandmanufacturing.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "6d1b026d-6c4f-4b12-ad9f-5d08f59d21d4",
+      "domain": "www.broadmoormethodist.org",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "d576c6d0-f21c-4374-b235-bb6c026e5285",
+      "domain": "www.sinkdirect.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "0133c797-8438-456f-8507-be6daeedd38d",
+      "domain": "www.elizajennings.org",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "b1d5f46b-ffdd-4d7f-aec7-63a4b86863f0",
+      "domain": "www.ahmadiyya.ca",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "111192d5-95f1-40bd-948e-d5bb91180b8f",
+      "domain": "www.accessfinanceonline.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "aa1a90d9-3352-4df3-81b3-e28d04ea34ee",
+      "domain": "www.abmenviro.ca",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "dda616cf-726e-444d-8d7b-c34384067f72",
+      "domain": "www.engines.man.eu",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "ad075a4b-3a06-401a-9a51-a2fe46294ada",
+      "domain": "www.gestionquintessence.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
+    },
+    {
+      "id": "42c5d532-2175-4d08-a7d4-4036a36d945c",
+      "domain": "www.scpautomation.com",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1213,
-  "last_updated": "2025-03-20 22:44:30 UTC",
+  "total_count": 1231,
+  "last_updated": "2025-03-21 17:20:55 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

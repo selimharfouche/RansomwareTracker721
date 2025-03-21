@@ -25518,8 +25518,386 @@
       "id": "522e4acf-b0e5-4f99-9529-877d90b943db",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.oneupinnovations.com",
+      "geography": {
+        "country_code": "US",
+        "region": "California",
+        "city": "San Francisco"
+      },
+      "organization": {
+        "name": "OneUp Innovations Inc.",
+        "industry": "Technology",
+        "sub_industry": "Software Development"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$5M-$10M"
+      },
+      "status": "Active",
+      "id": "fc457d5d-62ec-4e82-b6b6-eae54ca6e10b",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.avalonapparel.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New York",
+        "city": "New York City"
+      },
+      "organization": {
+        "name": "Avalon Apparel Ltd.",
+        "industry": "Fashion",
+        "sub_industry": "Apparel Retail"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "5ed458ee-3eaa-45bf-9023-69b224eb963f",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.esquirebrands.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New York",
+        "city": "New York City"
+      },
+      "organization": {
+        "name": "Esquire Brands Inc.",
+        "industry": "Consumer Goods",
+        "sub_industry": "Fashion Accessories"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Active",
+      "id": "4e171f4a-d049-40d3-8842-5f1037c1ff19",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.core-1.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Texas",
+        "city": "Austin"
+      },
+      "organization": {
+        "name": "Core-1 Solutions Inc.",
+        "industry": "Technology",
+        "sub_industry": "Cloud Services"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$5M-$10M"
+      },
+      "status": "Active",
+      "id": "9d6caa1d-f8ba-4412-a275-69b8009b8579",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.gcsnet.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New Jersey",
+        "city": "Newark"
+      },
+      "organization": {
+        "name": "GCS Networks Inc.",
+        "industry": "Communication",
+        "sub_industry": "IT Services"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "a22fd528-64fd-4fa9-814f-150d4afa3b4f",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.njcalwe.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New Jersey",
+        "city": "Newark"
+      },
+      "organization": {
+        "name": "NJ CalWe Solutions",
+        "industry": "Construction",
+        "sub_industry": "Civil Engineering"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "status": "Active",
+      "id": "d6d3de55-ab20-4039-98ea-2a49d250e423",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.allstarhealthcaresolutions.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Florida",
+        "city": "Miami"
+      },
+      "organization": {
+        "name": "AllStar Healthcare Solutions Inc.",
+        "industry": "Healthcare",
+        "sub_industry": "Healthcare Services"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$50M-$100M"
+      },
+      "status": "Active",
+      "id": "9a2b66a9-c43d-4bae-b5a0-e2f151979047",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.solinst.com",
+      "geography": {
+        "country_code": "CA",
+        "region": "Ontario",
+        "city": "Mississauga"
+      },
+      "organization": {
+        "name": "Solinst Canada Inc.",
+        "industry": "Environmental Services",
+        "sub_industry": "Instrumentation"
+      },
+      "size": {
+        "employees_range": "201-500",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "a70791ba-5714-4c86-8954-4e506e394f8e",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.parklandmanufacturing.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Michigan",
+        "city": "Detroit"
+      },
+      "organization": {
+        "name": "Parkland Manufacturing Inc.",
+        "industry": "Manufacturing",
+        "sub_industry": "Industrial Equipment"
+      },
+      "size": {
+        "employees_range": "501-1000",
+        "revenue_range": "$100M-$500M"
+      },
+      "status": "Active",
+      "id": "2df2b16a-3c97-487c-a335-8839d69813c3",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.broadmoormethodist.org",
+      "geography": {
+        "country_code": "US",
+        "region": "Colorado",
+        "city": "Aurora"
+      },
+      "organization": {
+        "name": "Broadmoor Methodist Hospital",
+        "industry": "Healthcare",
+        "sub_industry": "Hospital"
+      },
+      "size": {
+        "employees_range": "1001-5000",
+        "revenue_range": "Non-Profit"
+      },
+      "status": "Active",
+      "id": "6d1b026d-6c4f-4b12-ad9f-5d08f59d21d4",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.sinkdirect.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Indiana",
+        "city": "Indianapolis"
+      },
+      "organization": {
+        "name": "SinkDirect LLC",
+        "industry": "Retail",
+        "sub_industry": "Home Improvement"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "d576c6d0-f21c-4374-b235-bb6c026e5285",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.elizajennings.org",
+      "geography": {
+        "country_code": "US",
+        "region": "Massachusetts",
+        "city": "Boston"
+      },
+      "organization": {
+        "name": "Elizabeth Jennings Foundation",
+        "industry": "Non-profit",
+        "sub_industry": "Social Services"
+      },
+      "size": {
+        "employees_range": "1-10",
+        "revenue_range": "Under $1M"
+      },
+      "status": "Active",
+      "id": "0133c797-8438-456f-8507-be6daeedd38d",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.ahmadiyya.ca",
+      "geography": {
+        "country_code": "CA",
+        "region": "Ontario",
+        "city": "Toronto"
+      },
+      "organization": {
+        "name": "Ahmadiyya Muslim Association of Canada",
+        "industry": "Religious / Non-profit",
+        "sub_industry": "Community Organization"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "Non-Profit"
+      },
+      "status": "Active",
+      "id": "b1d5f46b-ffdd-4d7f-aec7-63a4b86863f0",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.accessfinanceonline.com",
+      "geography": {
+        "country_code": "US",
+        "region": "New York",
+        "city": "New York City"
+      },
+      "organization": {
+        "name": "Access Finance Online Inc.",
+        "industry": "Finance",
+        "sub_industry": "Fintech"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "$5M-$10M"
+      },
+      "status": "Active",
+      "id": "111192d5-95f1-40bd-948e-d5bb91180b8f",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.abmenviro.ca",
+      "geography": {
+        "country_code": "CA",
+        "region": "Alberta",
+        "city": "Calgary"
+      },
+      "organization": {
+        "name": "ABM Enviro Solutions Inc.",
+        "industry": "Environmental Services",
+        "sub_industry": "Waste Management"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "aa1a90d9-3352-4df3-81b3-e28d04ea34ee",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.engines.man.eu",
+      "geography": {
+        "country_code": "NL",
+        "region": "North Holland",
+        "city": "Amsterdam"
+      },
+      "organization": {
+        "name": "MAN Engines Europe",
+        "industry": "Automotive",
+        "sub_industry": "Engine Manufacturing"
+      },
+      "size": {
+        "employees_range": "501-1000",
+        "revenue_range": "€100M-€500M"
+      },
+      "status": "Active",
+      "id": "dda616cf-726e-444d-8d7b-c34384067f72",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.gestionquintessence.com",
+      "geography": {
+        "country_code": "FR",
+        "region": "Île-de-France",
+        "city": "Paris"
+      },
+      "organization": {
+        "name": "Gestion Quintessence",
+        "industry": "Consulting",
+        "sub_industry": "Business Consulting"
+      },
+      "size": {
+        "employees_range": "11-50",
+        "revenue_range": "€5M-€10M"
+      },
+      "status": "Active",
+      "id": "ad075a4b-3a06-401a-9a51-a2fe46294ada",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "www.scpautomation.com",
+      "geography": {
+        "country_code": "US",
+        "region": "Ohio",
+        "city": "Columbus"
+      },
+      "organization": {
+        "name": "SCP Automation Inc.",
+        "industry": "Technology",
+        "sub_industry": "Industrial Automation"
+      },
+      "size": {
+        "employees_range": "51-200",
+        "revenue_range": "$10M-$50M"
+      },
+      "status": "Active",
+      "id": "42c5d532-2175-4d08-a7d4-4036a36d945c",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1215,
-  "last_updated": "2025-03-20 22:44:58 UTC"
+  "total_count": 1233,
+  "last_updated": "2025-03-21 17:21:35 UTC"
 }
