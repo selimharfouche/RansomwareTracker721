@@ -22421,9 +22421,33 @@
       "last_view": null,
       "visits": null,
       "class": null
+    },
+    {
+      "id": "2faaff67-8622-4a4c-ba4b-adfac485cafc",
+      "domain": "gbsn.com.br",
+      "status": "countdown",
+      "description_preview": null,
+      "updated": "2025-03-20 08:44:50 UTC",
+      "views": null,
+      "countdown_remaining": {
+        "countdown_text": "5D 14h 37m 56s",
+        "days": 5,
+        "hours": 14,
+        "minutes": 37,
+        "seconds": 56
+      },
+      "estimated_publish_date": "2025-03-27 12:00:01 UTC",
+      "first_seen": "2025-03-21 21:22:05 UTC",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub",
+      "country": null,
+      "data_size": null,
+      "last_view": null,
+      "visits": null,
+      "class": null
     }
   ],
-  "last_updated": "2025-03-21 21:22:54 UTC",
-  "total_count": 1231,
+  "last_updated": "2025-03-21 21:33:24 UTC",
+  "total_count": 1232,
   "description": "Complete archive of all discovered ransomware entities"
 }
