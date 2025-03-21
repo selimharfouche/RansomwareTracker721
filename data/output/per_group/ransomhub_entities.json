@@ -5,11 +5,11 @@
             "domain": "idcconstruction.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "10D 2h 6m 11s",
+                "countdown_text": "10D 1h 46m 37s",
                 "days": 10,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-14 14:53:56",
             "estimated_publish_date": "2025-03-31 12:00:01 UTC",
@@ -20,11 +20,11 @@
             "domain": "jennyyoo.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 2h 6m 11s",
+                "countdown_text": "3D 1h 46m 37s",
                 "days": 3,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-14 12:15:55",
             "estimated_publish_date": "2025-03-24 12:00:01 UTC",
@@ -4445,11 +4445,11 @@
             "domain": "www.ameda.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "6D 2h 6m 11s",
+                "countdown_text": "6D 1h 46m 37s",
                 "days": 6,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-15 17:47:43",
             "estimated_publish_date": "2025-03-27 12:00:01 UTC",
@@ -4519,11 +4519,11 @@
             "domain": "www.baxterlaboratories.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "4D 2h 6m 11s",
+                "countdown_text": "4D 1h 46m 37s",
                 "days": 4,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-17 19:06:34",
             "estimated_publish_date": "2025-03-25 12:00:01 UTC",
@@ -4534,11 +4534,11 @@
             "domain": "ccktech.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "3D 2h 6m 11s",
+                "countdown_text": "3D 1h 46m 37s",
                 "days": 3,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-17 19:47:37",
             "estimated_publish_date": "2025-03-24 12:00:01 UTC",
@@ -4556,11 +4556,11 @@
             "domain": "www.janvier-labs.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "10h 6m 11s",
+                "countdown_text": "9h 46m 37s",
                 "days": 0,
-                "hours": 10,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 9,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-20 15:49:37",
             "estimated_publish_date": "2025-03-21 20:00:01 UTC",
@@ -4593,17 +4593,17 @@
             "domain": "www.mslglobalexp.com",
             "status": "countdown",
             "countdown_remaining": {
-                "countdown_text": "7D 2h 6m 11s",
+                "countdown_text": "7D 1h 46m 37s",
                 "days": 7,
-                "hours": 2,
-                "minutes": 6,
-                "seconds": 11
+                "hours": 1,
+                "minutes": 46,
+                "seconds": 37
             },
             "updated": "2025-03-17 11:36:52",
             "estimated_publish_date": "2025-03-28 12:00:01 UTC",
             "first_seen": "2025-03-20 22:43:37 UTC"
         }
     ],
-    "last_updated": "2025-03-21 09:53:50 UTC",
+    "last_updated": "2025-03-21 10:13:24 UTC",
     "total_count": 645
 }
