@@ -7385,9 +7385,15 @@
       "domain": "www.scpautomation.com",
       "ransomware_group": "RansomHub",
       "group_key": "ransomhub"
+    },
+    {
+      "id": "2faaff67-8622-4a4c-ba4b-adfac485cafc",
+      "domain": "gbsn.com.br",
+      "ransomware_group": "RansomHub",
+      "group_key": "ransomhub"
     }
   ],
-  "total_count": 1231,
-  "last_updated": "2025-03-21 17:20:55 UTC",
+  "total_count": 1232,
+  "last_updated": "2025-03-21 21:22:54 UTC",
   "description": "Extracted fields from ransomware entities for AI processing"
 }

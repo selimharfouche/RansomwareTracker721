@@ -25896,8 +25896,29 @@
       "id": "42c5d532-2175-4d08-a7d4-4036a36d945c",
       "group_key": "ransomhub",
       "ransomware_group": "RansomHub"
+    },
+    {
+      "domain": "gbsn.com.br",
+      "geography": {
+        "country_code": "BR",
+        "region": "São Paulo",
+        "city": "São Paulo"
+      },
+      "organization_details": {
+        "name": "Global Business School Network Brasil",
+        "industry": "Education",
+        "sub_industry": "Higher Education Network"
+      },
+      "size_information": {
+        "employees_range": "11-50",
+        "revenue_range": "$1M-$5M"
+      },
+      "organization_status": "Active",
+      "id": "2faaff67-8622-4a4c-ba4b-adfac485cafc",
+      "group_key": "ransomhub",
+      "ransomware_group": "RansomHub"
     }
   ],
-  "total_count": 1233,
-  "last_updated": "2025-03-21 17:21:35 UTC"
+  "total_count": 1234,
+  "last_updated": "2025-03-21 21:23:19 UTC"
 }
